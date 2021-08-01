@@ -1,0 +1,60 @@
+! special
+*.font: xft:firamono:size=14:antialias=true
+*.foreground:   #d3d0c8
+*.background:   #2d2d2d
+*.cursorColor:  #d3d0c8
+
+! black
+*.color0:       #2d2d2d
+*.color8:       #747369
+
+! red
+*.color1:       #f2777a
+*.color9:       #f2777a
+
+! green
+*.color2:       #99cc99
+*.color10:      #99cc99
+
+! yellow
+*.color3:       #ffcc66
+*.color11:      #ffcc66
+
+! blue
+*.color4:       #6699cc
+*.color12:      #6699cc
+
+! magenta
+*.color5:       #cc99cc
+*.color13:      #cc99cc
+
+! cyan
+*.color6:       #66cccc
+*.color14:      #66cccc
+
+! white
+*.color7:       #d3d0c8
+*.color15:      #f2f0ec
+
+!! URXVT
+URxvt.depth: 32
+URxvt.background: rgba:2d00/2d00/2d00/a500
+URxvt.letterSpace: -1
+URxvt.lineSpace: 0
+URxvt.scrollBar: false
+URxvt.scrollBar_right: false
+!! Functions
+URxvt.perl-ext-common: default,clipboard,resize-font,url-select,keyboard-select
+URxvt,keysym.C-M-v: perl:clipboard:paste
+URxvt.keysym.C-M-c: perl:clipboard:copy
+URxvt.clipboard.autocopy: true
+URxvt.keysym.C-M-Up: resize-font:bigger
+URxvt.keysym.C-M-Down: resize-font:smaller
+URxvt.keysym.C-u: perl:url-select:select_next
+URxvt.url-select.launcher: qutebrowser
+!URxvt.url-select.autocopy: true
+URxvt.url-select.underline: true
+URxvt.url-select.button: 1
+URxvt.keysym.M-q: perl:keyboard-select:activate
+URxvt.keysym.M-s: perl:keyboard-select:search
+URxvt.keyboard-select.clipboard: true
