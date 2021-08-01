@@ -1,0 +1,25 @@
+set default-bg "#2d2d2d"
+set default-fg "#d3d0c8"
+set font "firamono normal 14"
+
+set inputbar-bg "#2d2d2d"
+set inputbar-fg "#d3d0c8"
+
+set completion-group-bg "#747369"
+set completion-group-fg "#d3d0c8"
+
+set completion-highlight-bg "#cc99cc"
+set completion-highlight-fg "#2d2d2d"
+
+set statusbar-bg "#2d2d2d"
+set statusbar-fg "#d3d0c8"
+
+set notification-bg "#cc99cc"
+set notification-fg "#2d2d2d"
+
+set notification-error-bg "#f2777a"
+set notification-error-fg "#2d2d2d"
+
+set notification-warning-bg "#ffcc66"
+set notification-warning-fg "#2d2d2d"
+
