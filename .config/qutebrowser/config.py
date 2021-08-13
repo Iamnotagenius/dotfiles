@@ -1,4 +1,7 @@
 import subprocess
+#HINT GROUPS
+with config.pattern('*://youtube.com/') as y:
+	y.hints.selectors['thumbnails'] = ['#thumbnail']
 
 def read_xresources(prefix):
     props = {}
