@@ -1,0 +1,27 @@
+alias \
+	shutdown="doas shutdown now" \
+	reboot="doas reboot" \
+	ftp="doas ftp" \
+	record-audio="~/scripts/ffmpeg/audio.sh" \
+	myip="curl ip.me" \
+	weather="curl wttr.in" \
+	ports="netstat -tulpan" \
+	untar="tar -zxvf" \
+	mkdir="mkdir -p" \
+	mkinst="doas make install" \
+	mkclinst="doas make clean install" \
+	lspkgs="pacman -Qqe" \
+	cppass="pass -c" \
+	cppassg="pass -c Main/Google.com" \
+	du="du -sh" \
+	df="df -h" \
+	c="xclip -i -selection clipboard" \
+	p="xclip -o -selection clipboard" \
+	mntphone="go-mtpfs /media/Android && disown"
+	
+
+alias \
+	grep="grep --color=auto" \
+	ls="ls --color=auto" \
+	diff="diff --color=auto"
+
