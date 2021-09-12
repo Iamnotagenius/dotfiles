@@ -1,0 +1,18 @@
+set v15-compat
+# or many servers will expire the session
+set imap-keepalive=240
+set imap-cache=~/.imap_cache
+
+set inbox=imaps://kazakk9:GooglePleaseDoNotWatchMeISwearIAmNotATerrorist@imap.gmail.com:993
+if "$features" !% ,+filter-html-tagsoup,
+  #SET PIPE-TEXT/HTML='?* ELINKS -FORCE-HTML -DUMP 1'
+  set pipe-text/html='?* lynx -stdin -dump -force_html'
+  # Display HTML as plain text instead
+  #set pipe-text/html=?t
+endif
+mimetype ?t application/mathml+xml mathml
+wysh set pipe-application/pdf='?&=? \
+  trap "rm -f \"${MAILX_FILENAME_TEMPORARY}\"" EXIT;\
+  trap "trap \"\" INT QUIT TERM; exit 1" INT QUIT TERM;\
+  zathura "${MAILX_FILENAME_TEMPORARY}"'
+set mta=smtps://kazakk9:GooglePleaseDoNotWatchMeISwearIAmNotATerrorist@smtp.gmail.com:465
