@@ -1,9 +1,13 @@
 set v15-compat
 # or many servers will expire the session
-set imap-keepalive=240
-set imap-cache=~/.imap_cache
-
-set inbox=imaps://kazakk9:GooglePleaseDoNotWatchMeISwearIAmNotATerrorist@imap.gmail.com:993
+#set imap-keepalive=240
+#set imap-cache=~/.imap_cache
+set netrc-lookup
+account Gmail {
+	set from='Казаков Андрей <kazakk9@gmail.com>'
+	set mta=smtps://smtp.gmail.com:465
+	set inbox=imaps://imap.gmail.com:993
+}
 if "$features" !% ,+filter-html-tagsoup,
   #SET PIPE-TEXT/HTML='?* ELINKS -FORCE-HTML -DUMP 1'
   set pipe-text/html='?* lynx -stdin -dump -force_html'
@@ -15,4 +19,17 @@ wysh set pipe-application/pdf='?&=? \
   trap "rm -f \"${MAILX_FILENAME_TEMPORARY}\"" EXIT;\
   trap "trap \"\" INT QUIT TERM; exit 1" INT QUIT TERM;\
   zathura "${MAILX_FILENAME_TEMPORARY}"'
-set mta=smtps://kazakk9:GooglePleaseDoNotWatchMeISwearIAmNotATerrorist@smtp.gmail.com:465
+
+if terminal && "$features" =% ,+colour,
+   colour iso view-msginfo ft=bold,fg=green
+   colour iso view-header ft=bold,fg=red (from|subject) # regex
+   colour iso view-header fg=red
+
+   #uncolour iso view-header from,subject
+   colour iso view-header ft=bold,fg=magenta,bg=cyan
+   colour 256 view-header ft=bold,fg=208,bg=230 "subject,from"
+   colour mono view-header ft=bold
+   colour mono view-header ft=bold,ft=reverse subject,from
+endif
+
+ac Gmail

@@ -31,9 +31,13 @@ settings:
     global: dark
   content.notifications.enabled:
     https://cotorrminatorcom1627589283903.thevtk.com: false
+    https://www.avito.ru: false
+    https://www.dns-shop.ru: false
     https://www.pcworld.com: false
     https://www.reddit.com: false
     https://www.youtube.com: true
+  content.pdfjs:
+    global: false
   content.register_protocol_handler:
     https://mail.google.com?extsrc=mailto&url=%25s: true
   fonts.default_family:

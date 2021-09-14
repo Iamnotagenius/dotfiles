@@ -1,3 +1,4 @@
+MYGITHUB=https://github.com/Iamnotagenius
 alias \
 	shutdown="doas shutdown now" \
 	reboot="doas reboot" \
@@ -12,16 +13,37 @@ alias \
 	mkclinst="doas make clean install" \
 	lspkgs="pacman -Qqe" \
 	cppass="pass -c" \
-	cppassg="pass -c Main/Google.com" \
+	cppassg="pass -c Main/google.com" \
 	du="du -sh" \
 	df="df -h" \
 	c="xclip -i -selection clipboard" \
 	p="xclip -o -selection clipboard" \
-	mntphone="go-mtpfs /media/Android && disown"
-	
+	mntphone="go-mtpfs /media/Android" \
+	sysleep="systemctl suspend"
 
 alias \
 	grep="grep --color=auto" \
 	ls="ls --color=auto" \
 	diff="diff --color=auto"
 
+latcomp() {
+	if [ -z $1 ]; then
+		DIR=~/Conspects
+	else
+		DIR=$1
+	fi
+	for file in $(ls $DIR/*.tex); do
+		pdflatex -output-directory=$DIR/compiled $file
+	done
+}
+mktex() {
+	if [ -z $1 ]; then
+		echo Название где ёпты
+		return 1
+	fi
+	file=${1%.tex}.tex
+	touch $file
+		echo   "\documentclass{article}\n\\\usepackage{amsmath,amsfonts}\n\\\usepackage[utf8]{inputenc}\n\\\usepackage[english,russian]{babel}\n\\\begin{document}\n\n\\\end{document}" > $file
+
+	vim +6 $file
+}
