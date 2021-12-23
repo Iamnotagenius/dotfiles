@@ -2,7 +2,6 @@ MYGITHUB=https://github.com/Iamnotagenius
 alias \
 	shutdown="doas shutdown now" \
 	reboot="doas reboot" \
-	ftp="doas ftp" \
 	record-audio="~/scripts/ffmpeg/audio.sh" \
 	myip="curl ip.me" \
 	weather="curl wttr.in" \
@@ -19,31 +18,39 @@ alias \
 	c="xclip -i -selection clipboard" \
 	p="xclip -o -selection clipboard" \
 	mntphone="go-mtpfs /media/Android" \
-	sysleep="systemctl suspend"
+	sysleep="systemctl suspend" \
+	ipadr="ip -color -brief -4 addr" \
+	vim="nvim"
 
+mkcd() {
+    mkdir "$1" && cd "$1"
+}
+topdf () {
+	[ $2 ] && dir=$2 || [ $pdfdir ] && dir=$pdfdir || dir=compiled 
+	pdflatex --output-directory=$dir $1 && rm $dir/${1%.tex}.aux $dir/${1%.tex}.log
+}
 alias \
 	grep="grep --color=auto" \
-	ls="ls --color=auto" \
+	ls="ls --color=auto --group-directories-first" \
 	diff="diff --color=auto"
 
-latcomp() {
-	if [ -z $1 ]; then
-		DIR=~/Conspects
-	else
-		DIR=$1
-	fi
-	for file in $(ls $DIR/*.tex); do
-		pdflatex -output-directory=$DIR/compiled $file
-	done
+function br {
+    local cmd cmd_file code
+    cmd_file=$(mktemp)
+    if broot --outcmd "$cmd_file" "$@"; then
+        cmd=$(<"$cmd_file")
+        rm -f "$cmd_file"
+        eval "$cmd"
+    else
+        code=$?
+        rm -f "$cmd_file"
+        return "$code"
+    fi
 }
-mktex() {
-	if [ -z $1 ]; then
-		echo Название где ёпты
-		return 1
+ftp () {
+	doas ftp $1
+	if [[ $1 == "start" ]]; then
+		mylip=$(ip -brief addr | grep UP | awk '{ print $3 }' | cut -d'/' -f1)
+		echo -e "Your ip is \e[32;4m$mylip"
 	fi
-	file=${1%.tex}.tex
-	touch $file
-		echo   "\documentclass{article}\n\\\usepackage{amsmath,amsfonts}\n\\\usepackage[utf8]{inputenc}\n\\\usepackage[english,russian]{babel}\n\\\begin{document}\n\n\\\end{document}" > $file
-
-	vim +6 $file
 }

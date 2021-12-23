@@ -1,19 +1,17 @@
 set v15-compat
 # or many servers will expire the session
-#set imap-keepalive=240
-#set imap-cache=~/.imap_cache
-set netrc-lookup
+set showlast
+set imap-keepalive=240
+set imap-cache=~/.imap_cache
+set headline='%>%m [%a] %d %35f: %-s'
 account Gmail {
+    set netrc-lookup
 	set from='Казаков Андрей <kazakk9@gmail.com>'
 	set mta=smtps://smtp.gmail.com:465
 	set inbox=imaps://imap.gmail.com:993
 }
-if "$features" !% ,+filter-html-tagsoup,
-  #SET PIPE-TEXT/HTML='?* ELINKS -FORCE-HTML -DUMP 1'
-  set pipe-text/html='?* lynx -stdin -dump -force_html'
-  # Display HTML as plain text instead
-  #set pipe-text/html=?t
-endif
+
+set pipe-text/html='?* lynx -stdin -dump -force_html -display_charset=utf8'
 mimetype ?t application/mathml+xml mathml
 wysh set pipe-application/pdf='?&=? \
   trap "rm -f \"${MAILX_FILENAME_TEMPORARY}\"" EXIT;\
@@ -21,15 +19,14 @@ wysh set pipe-application/pdf='?&=? \
   zathura "${MAILX_FILENAME_TEMPORARY}"'
 
 if terminal && "$features" =% ,+colour,
-   colour iso view-msginfo ft=bold,fg=green
-   colour iso view-header ft=bold,fg=red (from|subject) # regex
-   colour iso view-header fg=red
+  colour 256 view-msginfo ft=bold,fg=green
+  colour 256 view-header ft=bold,fg=red (from|subject) # regex
+  colour 256 view-header fg=red
 
-   #uncolour iso view-header from,subject
-   colour iso view-header ft=bold,fg=magenta,bg=cyan
-   colour 256 view-header ft=bold,fg=208,bg=230 "subject,from"
-   colour mono view-header ft=bold
-   colour mono view-header ft=bold,ft=reverse subject,from
+  colour 256 mle-prompt fg=blue,ft=bold
+  colour 256 mle-error fg=red,ft=bold
+  colour 256 sum-dotmark fg=brown
+  colour 256 sum-header ft=bold,fg=brown dot
 endif
 
 ac Gmail

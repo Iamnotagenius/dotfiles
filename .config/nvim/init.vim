@@ -27,6 +27,8 @@ set nu
 set rnu
 set showcmd
 set noshowmode
+set nohlsearch
+set guifont=Fira\ Mono:h15
 colorscheme one
 set background=dark
 let &t_SI = "\e[5 q"
@@ -69,11 +71,20 @@ let g:vimtex_syntax_conceal = {
       \ 'styles': 1,
 \}
 
+let g:neovide_cursor_vfx_mode = "ripple"
 
-let g:airline_symbols_ascii = 1
+"let g:airline_symbols_ascii = 1
+let g:airline_powerline_fonts = 1
 let g:airline_theme='one'
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#xkblayout#enabled = 1
+
+let g:ConqueGdb_SrcSplit = 'left'
+command! -nargs=1 -complete=file GG ConqueGdb <args>
+command! -nargs=1 -complete=file Ga ConqueGdbCommand set args <args>
+command! -nargs=1 -complete=file Gf ConqueGdbCommand file <args>
+command! -nargs=1 G ConqueGdbCommand <args>
+command! -nargs=1 Gp ConqueGdbCommand p <args>
 
 inoremap <silent><expr> <TAB>
       \ pumvisible() ? "\<C-n>" :
@@ -114,10 +125,44 @@ nnoremap <F12> :call ShellEscape()<CR>
 function! ShellEscape()
     if g:vimtex_compiler_latexmk.options[0] ==# '-shell-escape'
         call remove(g:vimtex_compiler_latexmk.options, 0)
-        echo "shell escape disabled"
+        call vimtex#log#info("Shell escape disabled!")
     else
         call insert(g:vimtex_compiler_latexmk.options, '-shell-escape', 0)
-        echo "shell escape enabled"
+        call vimtex#log#info("Shell escape enabled!")
     endif
     VimtexReload
 endfunction
+
+" vim -b : edit binary using xxd-format!
+augroup Binary
+    au!
+    au BufReadPre  *.bin,*.mp3,*.bmp let &bin=1
+    au BufReadPost *.bin,*.mp3,*.bmp if &bin | %!xxd -u -g 1
+    au BufReadPost *.bin,*.mp3,*.bmp set ft=xxd | endif
+    au BufWritePre *.bin,*.mp3,*.bmp if &bin | %!xxd -r
+    au BufWritePre *.bin,*.mp3,*.bmp endif
+    au BufWritePost *.bin,*.mp3,*.bmp if &bin | %!xxd -u -g 1
+    au BufWritePost *.bin,*.mp3,*.bmp set nomod | endif
+augroup END
+augroup Make
+    au BufReadPre *.c,*.cpp,*.h,*.hpp command! M silent make | cw
+    au BufReadPre *.c,*.cpp,*.h,*.hpp command! Md silent make debug | cw
+augroup END
+au BufEnter *.tex hi! link Conceal Operator
+
+let g:MatrixMode = 0
+function MatrixMode()
+    if g:MatrixMode
+        iunmap <Space>
+        inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+        echo "Matrix mode disabled"
+        let g:MatrixMode = 0
+    else
+        inoremap <Space> <Space>&<Space>
+        inoremap <CR> <Space>\\<CR>
+        let g:MatrixMode = 1
+        echo "Matrix mode enabled"
+    endif
+endfunction
+command M :call MatrixMode()
