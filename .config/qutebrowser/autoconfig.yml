@@ -14,6 +14,7 @@ settings:
         ',dca': :spawn urxvt -e youtube-dl -x {url}
         ',dv': hint thumbnails spawn urxvt -e youtube-dl {hint-url}
         ',m': hint thumbnails spawn urxvt -e mpv --no-video {hint-url}
+        ',p': spawn --userscript pcms
         ',v': hint thumbnails spawn mpv {hint-url}
   colors.webpage.bg:
     global: white
@@ -29,6 +30,8 @@ settings:
     global: 1
   colors.webpage.preferred_color_scheme:
     global: dark
+  content.geolocation:
+    https://www.ozon.ru: true
   content.notifications.enabled:
     https://cotorrminatorcom1627589283903.thevtk.com: false
     https://www.avito.ru: false
@@ -40,8 +43,10 @@ settings:
     global: false
   content.register_protocol_handler:
     https://mail.google.com?extsrc=mailto&url=%25s: true
+  downloads.prevent_mixed_content:
+    global: false
   fonts.default_family:
-    global: firamono
+    global: Iosevka
   fonts.default_size:
     global: 14pt
   scrolling.bar:

@@ -5,6 +5,9 @@ set font "firamono normal 14"
 set inputbar-bg "#2d2d2d"
 set inputbar-fg "#d3d0c8"
 
+set highlight-color "#2d2d2d"
+set highlight-fg "#d3d0c8"
+
 set completion-group-bg "#747369"
 set completion-group-fg "#d3d0c8"
 
@@ -22,4 +25,10 @@ set notification-error-fg "#2d2d2d"
 
 set notification-warning-bg "#ffcc66"
 set notification-warning-fg "#2d2d2d"
+
+set recolor-darkcolor "#ABB2BF"
+set recolor-lightcolor "#282C34"
+set recolor-keephue
+
+set recolor true
 

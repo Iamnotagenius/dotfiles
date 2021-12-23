@@ -11,9 +11,18 @@ def read_xresources(prefix):
         prop, _, value = line.partition(':\t')
         props[prop] = value
     return props
-
+c.url.searchengines = {
+    'DEFAULT': 'https://duckduckgo.com/?q={}', 
+    'aw': 'https://wiki.archlinux.org/?search={}', 
+    're': 'https://www.reddit.com/r/{}', 
+    'ub': 'https://www.urbandictionary.com/define.php?term={}', 
+    'wiki': 'https://en.wikipedia.org/wiki/{}', 
+    'yt': 'https://www.youtube.com/results?search_query={}',
+    'ozon': 'https://www.ozon.ru/search/?from_global=true&text={}',
+    'gh': 'https://www.github.com/{}',
+    'cd': 'https://dictionary.cambridge.org/dictionary/english-russian/{}'
+}
 config.load_autoconfig('*')
-
 xresources = read_xresources('')
 # HINT COLORS
 c.colors.hints.bg = xresources['*.background']

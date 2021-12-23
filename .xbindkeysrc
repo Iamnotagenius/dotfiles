@@ -1,0 +1,14 @@
+"amixer set Master 400-"
+	Shift + F9
+
+"amixer set Master 400+"
+	Shift + F10
+
+"amixer set Master toggle"
+	Shift + F11
+
+"davis toggle"
+    Shift + F12
+
+"~/scripts/emojis.sh"
+    Control + Alt + u
