@@ -20,7 +20,10 @@ alias \
 	mntphone="go-mtpfs /media/Android" \
 	sysleep="systemctl suspend" \
 	ipadr="ip -color -brief -4 addr" \
-	vim="nvim"
+	vim="nvim" \
+    gvim="neovide" \
+    dcam="droidcam-cli" \
+    mail="neomutt"
 
 mkcd() {
     mkdir "$1" && cd "$1"

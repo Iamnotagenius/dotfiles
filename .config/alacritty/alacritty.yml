@@ -268,18 +268,18 @@ colors:
 
   # Normal colors
   normal:
-    black:   '#1d1f21'
+    black:   '#2d2d2d'
     red:     '#e06c75'
     green:   '#98c379'
     yellow:  '#d19a66'
     blue:    '#61afef'
     magenta: '#c678dd'
     cyan:    '#56b6c2'
-    white:   '#1d1f21'
+    white:   '#d3d0c8'
 
   # Bright colors
   #bright:
-  #  black:   '#666666'
+    black:   '#282c34'
   #  red:     '#d54e53'
   #  green:   '#b9ca4a'
   #  yellow:  '#e7c547'
@@ -792,7 +792,6 @@ key_bindings:
   #- { key: Return, mods: Shift,   mode: Search|~Vi, action: SearchFocusPrevious   }
 
   # (Windows, Linux, and BSD only)
-  - { key: V,              mods: Control|Alt, mode: ~Vi,        action: Paste            }
   - { key: C,              mods: Control|Alt,                   action: Copy             }
   - { key: F,              mods: Control|Alt, mode: ~Search,    action: SearchForward    }
   - { key: S,              mods: Alt,         mode: ~Search,    action: SearchBackward   }

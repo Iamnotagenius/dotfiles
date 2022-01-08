@@ -32,3 +32,4 @@ set recolor-keephue
 
 set recolor true
 
+map i set recolor

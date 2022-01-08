@@ -1,0 +1,20 @@
+# vim: filetype=neomuttrc
+source /usr/share/mutt-wizard/mutt-wizard.muttrc
+source /home/iamnotagenius/.config/mutt/accounts/1-kazakk9@gmail.com.muttrc
+macro index,pager i1 '<sync-mailbox><enter-command>source /home/iamnotagenius/.config/mutt/accounts/1-kazakk9@gmail.com.muttrc<enter><change-folder>!<enter>;<check-stats>' "switch to kazakk9@gmail.com"
+
+color index blue default '.*'
+color index_author magenta default '.*'
+color index_subject green default '.*'
+
+color index brightblue default '~N'
+color index_author brightmagenta default '~N'
+color index_subject brightgreen default '~N'
+
+color header brightgreen default "^(Subject)"
+
+color indicator black brightmagenta
+color sidebar_highlight brightmagenta black
+color sidebar_flagged red default
+color sidebar_new green default
+color status brightmagenta black
