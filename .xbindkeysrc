@@ -11,13 +11,13 @@
     Shift + F12
 
 "~/scripts/emojis.sh"
-    Control + Alt + e
+    Mod4 + e
 
 "~/scripts/online_pdf.sh `xclip -selection clipboard`"
-    Control + Alt + z
+    Mod4 + z
 
 "~/scripts/passmenu.sh"
-    Control + Alt + p
+    Control + Mod4 + p
 
 "~/scripts/manpdf.sh"
-    Control + Alt + m
+    Control + Mod4 + m

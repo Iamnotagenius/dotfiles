@@ -4,6 +4,7 @@ Plug 'vim-airline/vim-airline'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'vim-airline/vim-airline-themes'
 Plug 'jreybert/vimagit'
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 call plug#end()
 
 if (empty($TMUX))
@@ -166,3 +167,25 @@ function MatrixMode()
     endif
 endfunction
 command M :call MatrixMode()
+
+" Templates
+nmap ,make :r ~/.vim/templates/Makefile<CR>kdd2jf=a<Space>
+nmap ,tex :r ~/.vim/templates/template.tex<CR>kdd4jo
+
+"Useful maps
+nmap c; ct;
+nmap d; dt;
+nmap y; yt;
+
+nmap c] ct_
+nmap d] dt_
+nmap y] yt_
+
+nmap c, \(\u\|\s\|(\|)\|:\|;\|[\|]\)<CR>
+
+nmap yp c/\u<CR>
+nmap <Tab> :norm I<Tab><ESC>
+nmap <S-Tab> :norm 04x<CR>
+
+vmap <Tab> :norm I<Tab><ESC>gv
+vmap <S-Tab> :norm 04x<CR>gv

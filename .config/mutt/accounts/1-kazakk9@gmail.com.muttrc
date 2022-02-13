@@ -1,0 +1,28 @@
+# vim: filetype=neomuttrc
+# muttrc file for account kazakk9@gmail.com
+set realname = "Андрей Казаков"
+set from = "kazakk9@gmail.com"
+set sendmail = "msmtp -a kazakk9@gmail.com"
+alias me Андрей Казаков <kazakk9@gmail.com>
+set folder = "/home/iamnotagenius/.local/share/mail/kazakk9@gmail.com"
+set header_cache = /home/iamnotagenius/.cache/mutt-wizard/kazakk9@gmail.com/headers
+set message_cachedir = /home/iamnotagenius/.cache/mutt-wizard/kazakk9@gmail.com/bodies
+set mbox_type = Maildir
+
+
+bind index,pager gg noop
+bind index,pager g noop
+bind index,pager M noop
+bind index,pager C noop
+bind index gg first-entry
+unmailboxes *
+unalternates *
+unset signature
+unmacro index o
+macro index o "<shell-escape>mw -y kazakk9@gmail.com<enter>" "run mbsync to sync kazakk9@gmail.com"
+
+mailboxes "=INBOX" "=[Gmail]/Starred" "=[Gmail]/Sent Mail"
+macro index,pager gi "<change-folder>=INBOX<enter>" "go to inbox"
+macro index,pager Mi ";<save-message>=INBOX<enter>" "move mail to inbox"
+macro index,pager Ci ";<copy-message>=INBOX<enter>" "copy mail to inbox"
+set spoolfile = "+INBOX"
