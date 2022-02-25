@@ -5,6 +5,7 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'vim-airline/vim-airline-themes'
 Plug 'jreybert/vimagit'
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+Plug 'octol/vim-cpp-enhanced-highlight'
 call plug#end()
 
 if (empty($TMUX))
@@ -41,6 +42,7 @@ autocmd VimEnter * :normal :startInsert :stopInsert
 augroup END
 set clipboard=unnamedplus
 
+" VIMTEX
 filetype plugin indent on
 syntax enable
 let g:vimtex_compiler_latexmk = {
@@ -72,9 +74,24 @@ let g:vimtex_syntax_conceal = {
       \ 'styles': 1,
 \}
 
-let g:neovide_cursor_vfx_mode = "ripple"
+let g:tabbed_doc_xid = ""
+let g:vimtex_doc_handlers = ['MyHandler']
+function! MyHandler(context)
+    call vimtex#doc#make_selection(a:context)
+    if !empty(a:context.selected)
+        call system('~/scripts/mytexdoc.sh ' . shellescape(a:context.selected))
+    endif
+    return 1
+endfunction
 
-"let g:airline_symbols_ascii = 1
+let g:neovide_cursor_vfx_mode = "torpedo"
+
+let g:cpp_class_scope_highlight = 1
+let g:cpp_member_variable_highlight = 1
+let g:cpp_class_decl_highlight = 1
+let g:cpp_experimental_simple_template_highlight = 1
+let g:cpp_concepts_highlight = 1
+
 let g:airline_powerline_fonts = 1
 let g:airline_theme='one'
 let g:airline#extensions#tabline#enabled = 1
@@ -87,11 +104,15 @@ command! -nargs=1 -complete=file Gf ConqueGdbCommand file <args>
 command! -nargs=1 G ConqueGdbCommand <args>
 command! -nargs=1 Gp ConqueGdbCommand p <args>
 
+let g:coc_default_semantic_highlight_groups = 1
 inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
+    \ pumvisible() ? "\<C-n>" :
+    \ coc#expandableOrJumpable() ?
+    \ "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
+    \ <SID>check_back_space() ? "\<TAB>" :
+    \ coc#refresh()
 inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+nnoremap <silent> <leader>h :call CocActionAsync('doHover')<cr>
 
 function! s:check_back_space() abort
   let col = col('.') - 1
@@ -120,7 +141,20 @@ nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 
-nmap <leader>rn <Plug>(coc-rename)
+xmap if <Plug>(coc-funcobj-i)
+omap if <Plug>(coc-funcobj-i)
+xmap af <Plug>(coc-funcobj-a)
+omap af <Plug>(coc-funcobj-a)
+
+xmap ic <Plug>(coc-classobj-i)
+omap ic <Plug>(coc-classobj-i)
+xmap ac <Plug>(coc-classobj-a)
+omap ac <Plug>(coc-classobj-a)
+
+
+nmap <F2> <Plug>(coc-rename)
+autocmd User CocJumpPlaceholder call
+    \ CocActionAsync('showSignatureHelp')
 " Create mapping to toggle compiling with shell escape or not
 nnoremap <F12> :call ShellEscape()<CR>
 function! ShellEscape()
@@ -189,3 +223,24 @@ nmap <S-Tab> :norm 04x<CR>
 
 vmap <Tab> :norm I<Tab><ESC>gv
 vmap <S-Tab> :norm 04x<CR>gv
+
+command Python exe 'rightbelow 45vs term://python' | set syntax=python | norm a
+tnoremap <ESC> <C-\><C-N>
+
+function! SynStack()
+  if !exists("*synstack")
+    return
+  endif
+  echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
+endfunc
+
+"Semantic highlight
+hi CocSem_namespace gui=italic guifg=LightRed
+hi Macro gui=Bold
+hi Include gui=Bold
+hi cInclude gui=Bold
+hi CocSem_variable guifg=#56b6c2
+hi CocSem_property guifg=#e06c75
+hi CocSem_parameter guifg=#56b6c2 gui=italic
+hi CocSem_typeParameter guifg=#e5c07b gui=italic
+

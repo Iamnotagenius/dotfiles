@@ -1,11 +1,8 @@
-
-
-
 IMAPStore kazakk9@gmail.com-remote
 Host imap.gmail.com
 Port 993
 User kazakk9@gmail.com
-PassCmd "cat .config/msmtp/.passwd"
+PassCmd "cat ~/.config/msmtp/.passwd"
 AuthMechs LOGIN
 SSLType IMAPS
 CertificateFile /etc/ssl/certs/ca-certificates.crt
