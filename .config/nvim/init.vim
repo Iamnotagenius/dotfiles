@@ -1,3 +1,5 @@
+"file-specific startup scripts
+autocmd BufAdd,BufEnter *.tex ++once source ~/.config/nvim/tex.vim
 call plug#begin(stdpath('data') . '/plugged')
 Plug 'lervag/vimtex'
 Plug 'vim-airline/vim-airline'
@@ -73,6 +75,41 @@ let g:vimtex_syntax_conceal = {
       \ 'sections': 1,
       \ 'styles': 1,
 \}
+call vimtex#imaps#add_map({
+  \ 'lhs' : '<m-i>',
+  \ 'rhs' : '\item ',
+  \ 'leader' : '',
+  \ 'wrapper' : 'vimtex#imaps#wrap_environment',
+  \ 'context' : ["itemize", "enumerate"],
+  \})
+
+call vimtex#imaps#add_map({
+    \ 'lhs': 'mx',
+    \ 'rhs': '\begin{bmatrix}<CR>',
+    \ 'wrapper': 'vimtex#imaps#wrap_math',
+    \})
+
+call vimtex#imaps#add_map({
+    \ 'lhs': 'vx',
+    \ 'rhs': '\begin{vmatrix}<CR>',
+    \ 'wrapper': 'vimtex#imaps#wrap_math',
+    \})
+
+call vimtex#imaps#add_map({
+    \ 'lhs': '<Space>',
+    \ 'rhs': ' & ',
+    \ 'leader': '',
+    \ 'wrapper': 'vimtex#imaps#wrap_environment',
+    \ 'context': ['vmatrix', 'bmatrix'],
+    \})
+
+call vimtex#imaps#add_map({
+    \ 'lhs': '<CR>',
+    \ 'rhs': ' \\',
+    \ 'leader': '',
+    \ 'wrapper': 'vimtex#imaps#wrap_environment',
+    \ 'context': ['vmatrix', 'bmatrix'],
+    \})
 
 let g:tabbed_doc_xid = ""
 let g:vimtex_doc_handlers = ['MyHandler']
@@ -168,6 +205,7 @@ function! ShellEscape()
     VimtexReload
 endfunction
 
+
 " vim -b : edit binary using xxd-format!
 augroup Binary
     au!
@@ -184,23 +222,6 @@ augroup Make
     au BufReadPre *.c,*.cpp,*.h,*.hpp command! Md silent make debug | cw
 augroup END
 au BufEnter *.tex hi! link Conceal Operator
-
-let g:MatrixMode = 0
-function MatrixMode()
-    if g:MatrixMode
-        iunmap <Space>
-        inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
-                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-        echo "Matrix mode disabled"
-        let g:MatrixMode = 0
-    else
-        inoremap <Space> <Space>&<Space>
-        inoremap <CR> <Space>\\<CR>
-        let g:MatrixMode = 1
-        echo "Matrix mode enabled"
-    endif
-endfunction
-command M :call MatrixMode()
 
 " Templates
 nmap ,make :r ~/.vim/templates/Makefile<CR>kdd2jf=a<Space>
