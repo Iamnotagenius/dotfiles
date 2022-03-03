@@ -30,7 +30,7 @@ set rnu
 set showcmd
 set noshowmode
 set nohlsearch
-set guifont=Fira\ Mono:h15
+set guifont=Fira\ Mono:h10
 colorscheme one
 set background=dark
 let &t_SI = "\e[5 q"
@@ -235,12 +235,13 @@ function! SynStack()
 endfunc
 
 "Semantic highlight
-hi CocSem_namespace gui=italic guifg=LightRed
 hi Macro gui=Bold
 hi Include gui=Bold
 hi cInclude gui=Bold
-hi CocSem_variable guifg=#56b6c2
-hi CocSem_property guifg=#e06c75
-hi CocSem_parameter guifg=#56b6c2 gui=italic
-hi CocSem_typeParameter guifg=#e5c07b gui=italic
+hi CocSemNamespace gui=italic guifg=LightRed
+hi CocSemVariable guifg=#56b6c2
+hi CocSemProperty guifg=#e06c75
+hi CocSemParameter guifg=#56b6c2 gui=italic
+hi CocSemClass guifg=#e5c07b 
+hi CocSemTypeParameter guifg=#e5c07b gui=italic
 
