@@ -1,0 +1,3 @@
+#!/bin/bash
+chosen=$(man -k . | dmenu -p man -l 35 | sed -E 's/(\S+)\s\((\S+)\).*/\2 \1/')
+[ -n "$chosen" ] && man -Tpdf $chosen | zathura -
