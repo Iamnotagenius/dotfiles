@@ -24,6 +24,7 @@ hl('CocInfoHighlight',      { undercurl = true, sp = '#61afef' })
 hl('CocHintHighlight',      { undercurl = true, sp = '#98c379' })
 hl('Search',                { bg = '#3e4452', fg = 'none' })
 hl('IncSearch',             { bg = 'none', fg = 'none' })
+hl('CocMenuSel',            { bg = '#3e4452' })
 
 function SyntaxStack()
     local synstack = vim.fn.synstack

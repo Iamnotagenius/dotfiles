@@ -18,7 +18,9 @@ local function omap(key, func)
     vim.keymap.set('o', key, func)
 end
 
-imap('<c-space>', vim.fn['coc#refresh'], { expr = true, silent = true })
+local expr_and_silent = { expr = true, silent = true }
+
+imap('<c-space>', vim.fn['coc#refresh'], expr_and_silent)
 map( '<leader>a', '<Plug>(coc-codeaction)')
 vmap('<leader>a', '<Plug>(Coc-codeaction-selected)')
 map( '[g',        '<Plug>(coc-diagnostic-prev)')
@@ -38,3 +40,5 @@ omap('ac',        '<Plug>(coc-classobj-a)')
 map( '<F2>',      '<Plug>(coc-rename)')
 map( 'gl',        '<Plug>(coc-openlink)')
 map('<leader>h',  function () vim.fn.CocActionAsync('doHover') end)
+imap('<c-n>', function () vim.fn['coc#pum#next'](false) end, expr_and_silent)
+imap('<c-p>', function () vim.fn['coc#pum#prev'](false) end, expr_and_silent)
