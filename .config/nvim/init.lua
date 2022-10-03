@@ -39,6 +39,35 @@ g['airline#extensions#tabline#enabled'] = true
 
 g.UltiSnipsSnippetStorageDirectoryForUltiSnipsEdit = '~/.config/nvim/snippets'
 
+vim.keymap.set({'n', 't'}, '<M-=>', function ()
+    if not vim.g.term_buffer then
+        vim.cmd [[below 10%split +terminal]]
+        vim.g.term_buffer = api.nvim_get_current_buf()
+        for _, chan in ipairs(api.nvim_list_chans()) do
+            if chan.buffer == vim.g.term_buffer then
+                api.nvim_create_user_command('T', function (command)
+                    api.nvim_chan_send(chan.id, command.args .. '\n')
+                end, {
+                desc = "Send command to virtual terminal",
+                nargs = 1
+            })
+            end
+        end
+        vim.cmd 'startinsert'
+        return
+    end
+    for _, win in ipairs(api.nvim_tabpage_list_wins(0)) do
+        local buf = api.nvim_win_get_buf(win)
+        if vim.g.term_buffer and vim.g.term_buffer == buf then
+            api.nvim_win_hide(win)
+            return
+        end
+    end
+    vim.cmd [[below 10%split]]
+    api.nvim_win_set_buf(api.nvim_get_current_win(), vim.g.term_buffer)
+    vim.cmd 'startinsert'
+end)
+
 -- Switch between vim keymaps
 vim.keymap.set({ 'i', 'n', 'v' }, '<m-l>', function ()
     opt.keymap = opt.keymap:get() == '' and 'russian' or ''
