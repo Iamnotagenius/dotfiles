@@ -12,9 +12,10 @@ opt.nu = true
 opt.rnu = true
 opt.showcmd = true
 opt.showmode = false
+opt.wrap = false
 opt.clipboard = 'unnamedplus'
 opt.langmap = 'ФИСВУАПРШОЛДЬТЩЗЙКЫЕГМЦЧНЯ;ABCDEFGHIJKLMNOPQRSTUVWXYZ,фисвуапршолдьтщзйкыегмцчня;abcdefghijklmnopqrstuvwxyz'
-opt.guifont = 'Fira Code Light:h16,FiraCode Nerd Font:h16'
+opt.guifont = { 'Fira Code Light:h16', 'FiraCode Nerd Font:h16' }
 opt.background = 'dark'
 g.netrw_liststyle = 3
 require('onedark').load()
@@ -30,7 +31,13 @@ augroup END
 ]])
 
 if g.neovide then
-    require('neovide')
+    opt.mouse = 'a'
+    g.neovide_cursor_vfx_mode = "torpedo"
+    g.neovide_refresh_rate = 72
+    g.neovide_cursor_vfx_opacity = 120.0
+    g.neovide_cursor_vfx_particle_density = 20.0
+    g.neovide_cursor_vfx_particle_lifetime = 2.3
+    g.neovide_transparency = 0.9
 end
 
 g.airline_powerline_fonts = true
@@ -78,4 +85,27 @@ vim.keymap.set({ 'i', 'n', 'v' }, '<m-l>', function ()
     if api.nvim_get_mode().mode == 'i' then
         api.nvim_feedkeys('a', 'nt', false)
     end
+end)
+
+vim.g.font_step = 1
+vim.keymap.set('n', '<C-=>', function ()
+    local changed = {}
+    for _, font in ipairs(opt.guifont:get()) do
+        local size = string.match(font, ":h(%d+)")
+        local new = string.gsub(font, size, tostring(tonumber(size) + vim.g.font_step), 1)
+        table.insert(changed, new)
+    end
+
+    opt.guifont = changed
+end)
+
+vim.keymap.set('n', '<C-->', function ()
+    local changed = {}
+    for _, font in ipairs(opt.guifont:get()) do
+        local size = string.match(font, ":h(%d+)")
+        local new = string.gsub(font, size, tostring(tonumber(size) - vim.g.font_step), 1)
+        table.insert(changed, new)
+    end
+
+    opt.guifont = changed
 end)

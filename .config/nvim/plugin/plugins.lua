@@ -229,7 +229,7 @@ return require('packer').startup(function(use)
         'neoclide/coc.nvim', branch = 'release',
         config = function ()
             require('cockeys')
-            vim.g.coc_default_semantic_highlight_groups = 1
+            vim.g.coc_default_semantic_highlight_groups = true
         end
     }
 
@@ -243,7 +243,7 @@ return require('packer').startup(function(use)
     }
 
     use {
-        "kylechui/nvim-surround",
+        "kylechui/nvim-surround", tag = "*",
         config = function()
             require("nvim-surround").setup({
                 -- Configuration here, or leave empty to use defaults
@@ -264,7 +264,8 @@ return require('packer').startup(function(use)
                         "c",
                         "cpp",
                         "help",
-                        "man"
+                        "man",
+                        "cs"
                     }
                 },
                 rainbow = {
@@ -294,12 +295,16 @@ return require('packer').startup(function(use)
 
             telescope.setup {
                 defaults = {
-                    layout_strategy = 'horizontal',
+                    layout_strategy = 'flex',
                     layout_config = {
+                        flex = {
+                            flip_columns = 85
+                        },
                         width = 0.9,
-                        preview_cutoff = 25,
-                        horizontal = {
-                            preview_width = 80,
+                        preview_cutoff = 10,
+                        vertical = {
+                            mirror = true,
+                            prompt_position = 'top'
                         }
                     },
                 },
@@ -330,18 +335,11 @@ return require('packer').startup(function(use)
             local funcs = require('telescope.builtin')
             vim.keymap.set('n', '<leader>ff', function ()
                 telescope.extensions.file_browser.file_browser {
-                    grouped = true
+                    grouped = true,
+                    cwd = vim.fn.expand('%:p:h')
                 }
             end, opts)
-            vim.keymap.set('n', '<leader>fr', function ()
-                funcs.oldfiles {
-                    layout_strategy = 'center',
-                    layout_config = {
-                        anchor = 'N'
-                    }
-                }
-            end, opts)
-            vim.keymap.set('n', '<leader>fF',
+            vim.keymap.set('n', '<leader>fr', funcs.oldfiles, opts) vim.keymap.set('n', '<leader>fF',
             function ()
                 require('telescope.builtin').find_files {
                     search_dirs = { '~/scripts', '~/.config', '~/Sources', '~/Writing' }
@@ -366,9 +364,14 @@ return require('packer').startup(function(use)
             opts)
             vim.keymap.set('n', '<leader>fb', funcs.buffers, opts)
             vim.keymap.set('n', '<leader>fh', funcs.help_tags, opts)
-            vim.keymap.set('n', '<leader>fs', funcs.current_buffer_fuzzy_find, opts)
             vim.keymap.set('n', '<leader>fm', funcs.man_pages, opts)
-            vim.keymap.set('n', '<leader>fe', telescope.extensions.glyph.glyph, opts)
+            vim.keymap.set('n', '<leader>fe', function () telescope.extensions.glyph.glyph {
+                layout_strategy = 'cursor',
+                layout_config = {
+                    height = 0.25,
+                    width = 0.4
+                }
+            } end, opts)
             vim.keymap.set('n', '<leader>ft', funcs.treesitter, opts)
         end
     }
@@ -385,5 +388,7 @@ return require('packer').startup(function(use)
             ["icons"] = { "█", "" },
         }
     end,
+
+    use 'fatih/vim-go'
 }
 end)
