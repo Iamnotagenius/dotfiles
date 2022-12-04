@@ -3,6 +3,7 @@ return require('packer').startup(function(use)
     use 'wbthomason/packer.nvim'
 
     use_rocks 'luafilesystem'
+    use_rocks 'xml2lua'
 
     use {
         "lukas-reineke/indent-blankline.nvim",
@@ -201,7 +202,7 @@ return require('packer').startup(function(use)
                         {
                             'filename',
                             newfile_status = true,
-                            path = 3,
+                            path = 1,
                             symbols = {
                                 modified = ' ',
                                 readonly = ' ',
@@ -385,10 +386,65 @@ return require('packer').startup(function(use)
             vim.keymap.set("n", "<leader>c", "<cmd>PickColor<cr>", opts)
             vim.keymap.set("i", "<M-c>", "<cmd>PickColorInsert<cr>", opts)
             require("color-picker").setup { -- for changing icons & mappings
-            ["icons"] = { "█", "" },
-        }
-    end,
+                ["icons"] = { "█", "" },
+            }
+        end,
+    }
+
+    use {
+        "mfussenegger/nvim-dap",
+        config = function ()
+            vim.fn.sign_define('DapBreakpoint', {text='', texthl='Identifier', linehl='', numhl='Title'})
+            vim.fn.sign_define('DapBreakpointRejected', {text='', texthl='ErrorMsg', linehl='', numhl=''})
+            vim.fn.sign_define('DapLogPoint', {text='', texthl='Question', linehl='', numhl=''})
+            vim.fn.sign_define('DapStopped', {text='', texthl='String', linehl='CocBold', numhl=''})
+
+            vim.keymap.set('n', '<leader>db', require('dap').toggle_breakpoint)
+            vim.keymap.set('n', '<leader>dc', require('dap').continue)
+            vim.keymap.set('n', '<leader>dn', require('dap').step_over)
+            vim.keymap.set('n', '<leader>dsj', require('dap').step_into)
+            vim.keymap.set('n', '<leader>dsk', require('dap').step_out)
+            vim.keymap.set('n', '<leader>dk', require('dap').up)
+            vim.keymap.set('n', '<leader>dj', require('dap').down)
+            vim.keymap.set('n', '<leader>dr', require('dap').run_to_cursor)
+
+            local dap = require('dap')
+            dap.adapters.coreclr = {
+                type = 'executable',
+                command = 'netcoredbg',
+                args = {'--interpreter=vscode'}
+            }
+
+            dap.configurations.cs = {
+                {
+                    type = "coreclr",
+                    name = "launch - netcoredbg",
+                    request = "launch",
+                    program = function()
+                        local proj = vim.g.cs_exe_proj
+                        if proj == nil then
+                            error("No executable project")
+                        end
+                        return proj.dir .. '/bin/Debug/' .. proj.framework .. '/' .. proj.name .. '.dll'
+                    end,
+                },
+            }
+        end
+    }
+
+    use {
+        "rcarriga/nvim-dap-ui",
+        requires = {"mfussenegger/nvim-dap"},
+        config = function ()
+            require('dapui').setup()
+
+            vim.keymap.set('n', '<leader>du', require('dapui').toggle)
+            vim.keymap.set({'n', 'v'}, '<leader>dh',
+                function()
+                    require('dapui').eval(nil, {enter = true})
+                end)
+        end
+    }
 
     use 'fatih/vim-go'
-}
 end)
