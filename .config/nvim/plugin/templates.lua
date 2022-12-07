@@ -76,11 +76,9 @@ local templates = {
     cs = {
         text = function(context)
             local lfs = require("lfs")
-            local dirs = {}
             local namespace = ""
             local class = string.match('/' .. context.file, ".*/(.+)%.cs$")
             for dir, comp in up_dirs(context.match:gsub("(.*)/.+", "%1")) do
-                table.insert(dirs, dir)
                 namespace = comp .. '.' .. namespace
                 for filename in lfs.dir(dir .. '/' .. comp) do
                     if filename:match(".+%.csproj$") then

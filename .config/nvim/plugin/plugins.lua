@@ -198,6 +198,15 @@ return require('packer').startup(function(use)
                     }
                 },
                 sections = {
+                    lualine_b = {
+                        'branch',
+                        'diff',
+                        {
+                            'diagnostics',
+                            sources = { 'coc', 'ale' }
+                        }
+
+                    },
                     lualine_c = {
                         {
                             'filename',
@@ -447,4 +456,58 @@ return require('packer').startup(function(use)
     }
 
     use 'fatih/vim-go'
+
+    use {
+        'OmniSharp/omnisharp-vim', ft = { 'cs', 'csproj' },
+        requires = 'dense-analysis/ale',
+        config = function ()
+            vim.g.ale_linters = {
+                cs = { 'OmniSharp' }
+            }
+            vim.g.ale_disable_lsp = true
+            vim.g.ale_sign_error = ''
+            vim.g.ale_sign_warning = ''
+            vim.g.ale_echo_cursor = false
+            vim.g.ale_virtualtext_cursor = 2
+            vim.g.ale_virtualtext_prefix = '<- '
+            vim.g.ale_lint_on_text_changed = 'always'
+
+            vim.g.OmniSharp_server_use_net6 = true
+            vim.g.OmniSharp_highlighting = 3
+            vim.g.OmniSharp_popup_options = {
+                winblend = 40,
+                border = 'rounded'
+            }
+            vim.g.OmniSharp_highlight_groups = {
+                ClassName = '@type',
+                ConstantName = '@constant',
+                ControlKeyword = '@conditional',
+                DelegateName = '@type',
+                EnumMemberName = '@constant',
+                EnumName = '@enum',
+                EventName = '@type',
+                ExtensionMethodName = '@ext.method',
+                FieldName = '@variable',
+                InterfaceName = '@interface',
+                Keyword = '@keyword',
+                LocalName = '@variable',
+                MethodName = '@method',
+                NamespaceName = '@namespace',
+                ParameterName = '@parameter',
+                PropertyName = '@property',
+                StructName = '@struct',
+                TypeParameterName = '@type.parameter',
+            }
+
+            vim.keymap.set('n', 'gd', '<Plug>(omnisharp_go_to_definition)')
+            vim.keymap.set('n', 'gy', '<Plug>(omnisharp_preview_definition)')
+            vim.keymap.set('n', 'gs', '<Plug>(omnisharp_signature_help)')
+            vim.keymap.set('n', 'gr', '<Plug>(omnisharp_find_usages)')
+            vim.keymap.set('n', 'gh', '<Plug>(omnisharp_documentation)')
+            vim.keymap.set('n', ']g', '<Plug>(ale_next_wrap)')
+            vim.keymap.set('n', '[g', '<Plug>(ale_previous_wrap)')
+
+            vim.api.nvim_create_autocmd('CursorHoldI', { callback = vim.fn['OmniSharp#actions#signature#SignatureHelp'] })
+        end
+    }
 end)
