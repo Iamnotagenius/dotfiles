@@ -1,0 +1,15 @@
+#!/bin/sh
+
+workspace="$(swaymsg -t get_workspaces | jq -r '..|try select(.focused == true)|.num')"
+
+case "$1" in
+    next) workspace=$(( $workspace + 1 )) ;;
+    prev) workspace=$(( $workspace - 1 )) ;;
+    *) echo "Wrong command"; exit 1 ;;
+esac
+
+[ "$workspace" -le "0" ] && workspace=4
+[ "$workspace" -ge "5" ] && workspace=1
+echo $workspace
+
+swaymsg workspace number $workspace

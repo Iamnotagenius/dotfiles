@@ -1,0 +1,262 @@
+/* Keyframes */
+
+@keyframes blink-critical {
+	to {
+		/*color: @white;*/
+		color: @critical;
+	}
+}
+
+
+/* Styles */
+
+/* Colors (gruvbox) */
+@define-color black	#282C34;
+@define-color red	#E06C75;
+@define-color green	#98C379;
+@define-color yellow	#E5C078;
+@define-color blue	#61AFEF;
+@define-color purple	#C678DD;
+@define-color aqua	#56B6C2;
+@define-color gray	#a89984;
+@define-color brgray	#928374;
+@define-color brred	#fb4934;
+@define-color brgreen	#b8bb26;
+@define-color bryellow	#fabd2f;
+@define-color brblue	#83a598;
+@define-color brpurple	#d3869b;
+@define-color braqua	#8ec07c;
+@define-color white	#ABB2BF;
+@define-color bg2	#504945;
+
+
+@define-color warning 	@bryellow;
+@define-color critical	@red;
+@define-color mode	@black;
+@define-color unfocused	@black;
+@define-color focused	@blue;
+@define-color inactive	@purple;
+@define-color sound	@brpurple;
+@define-color network	@red;
+@define-color memory	@blue;
+@define-color cpu	@aqua;
+@define-color temp	@brgreen;
+@define-color layout	@purple;
+@define-color battery	@yellow;
+@define-color date	@black;
+@define-color time	@white;
+@define-color window @green;
+
+/* Reset all styles */
+* {
+	border: none;
+	border-radius: 0;
+	min-height: 0;
+	margin: 0;
+	padding: 0;
+	box-shadow: none;
+	text-shadow: none;
+}
+
+/* The whole bar */
+#waybar {
+	background: transparent; /* #282828e0 */
+	color: @white;
+	font-family: Iosevka Nerd Font;
+	font-size: 14pt;
+	/*font-weight: bold;*/
+}
+
+/* Each module */
+#battery,
+#clock,
+#cpu,
+#language,
+#memory,
+#mode,
+#network,
+#pulseaudio,
+#temperature,
+#custom-alsa,
+#sndio,
+#window,
+#tray {
+	padding-left: 8pt;
+	padding-right: 8pt;
+}
+
+/* Each critical module */
+#mode,
+#memory.critical,
+#cpu.critical,
+#temperature.critical,
+#battery.critical.discharging {
+	animation-timing-function: linear;
+	animation-iteration-count: infinite;
+	animation-direction: alternate;
+	animation-name: blink-critical;
+	animation-duration: 1s;
+}
+
+/* Each warning */
+#network.disconnected,
+#memory.warning,
+#cpu.warning,
+#temperature.warning,
+#battery.warning.discharging {
+	color: @warning;
+}
+
+/* And now modules themselves in their respective order */
+
+/* Current sway mode (resize etc) */
+#mode {
+	color: @white;
+	background: @mode;
+}
+
+/* Workspaces stuff */
+#workspaces button {
+	/*font-weight: bold;*/
+	padding-left: 4pt;
+	padding-right: 4pt;
+	color: @white;
+	background: @unfocused;
+}
+
+/* Inactive (on unfocused output) */
+#workspaces button.visible {
+	color: @white;
+	background: @inactive;
+}
+
+/* Active (on focused output) */
+#workspaces button.focused {
+	color: @black;
+	background: @focused;
+}
+
+/* Contains an urgent window */
+#workspaces button.urgent {
+	color: @black;
+	background: @warning;
+}
+
+/* Style when cursor is on the button */
+#workspaces button:hover {
+	background: @black;
+	color: @white;
+}
+
+#window {
+    background: @window;
+    color: @black;
+}
+
+#network {
+	background: @network;
+	color: @black;
+}
+
+#memory {
+	background: @memory;
+	color: @black;
+}
+
+#cpu {
+	background: @cpu;
+	color: @black;
+}
+
+#temperature {
+	background: @temp;
+	color: @black;
+}
+
+#language {
+	background: @layout;
+	color: @black;
+}
+
+#battery {
+	background: @battery;
+	color: @black;
+}
+
+#tray {
+	background: @date;
+}
+
+#clock.date {
+	background: @date;
+	color: @white;
+}
+
+#clock.time {
+	background: @time;
+	color: @black;
+}
+
+
+#custom-arrow2,
+#custom-arrow3,
+#custom-arrow4,
+#custom-arrow5,
+#custom-arrow6,
+#custom-arrow7,
+#custom-arrow8,
+#custom-arrow9,
+#custom-arrow10,
+#custom-arrow11 {
+    font-size: 16pt;
+}
+
+#custom-arrow2 {
+	color: @network;
+	background: transparent;
+}
+
+#custom-arrow3 {
+	color: @memory;
+	background: @network;
+}
+
+#custom-arrow4 {
+	color: @cpu;
+	background: @memory;
+}
+
+#custom-arrow5 {
+	color: @temp;
+	background: @cpu;
+}
+
+#custom-arrow6 {
+	color: @battery;
+	background: @cpu;
+}
+
+#custom-arrow7 {
+	color: @layout;
+	background: @battery;
+}
+
+#custom-arrow8 {
+	color: @date;
+	background: @layout;
+}
+
+#custom-arrow9 {
+	color: @time;
+	background: @date;
+}
+
+#custom-arrow10 {
+	color: @unfocused;
+	background: @window;
+}
+
+#custom-arrow11 {
+	color: @window;
+	background: transparent;
+}
