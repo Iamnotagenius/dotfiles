@@ -1,4 +1,3 @@
-local indent = require "indent"
 local g = vim.g
 local opt = vim.opt
 local cmd = vim.cmd
@@ -13,9 +12,10 @@ opt.nu = true
 opt.rnu = true
 opt.showcmd = true
 opt.showmode = false
+opt.wrap = false
 opt.clipboard = 'unnamedplus'
 opt.langmap = 'ФИСВУАПРШОЛДЬТЩЗЙКЫЕГМЦЧНЯ;ABCDEFGHIJKLMNOPQRSTUVWXYZ,фисвуапршолдьтщзйкыегмцчня;abcdefghijklmnopqrstuvwxyz'
-opt.guifont = 'Fira Code Light:h16,FiraCode Nerd Font:h16'
+opt.guifont = { 'Fura Mono Regular:h16', 'FiraCode Nerd Font:h16' }
 opt.background = 'dark'
 g.netrw_liststyle = 3
 require('onedark').load()
@@ -31,7 +31,13 @@ augroup END
 ]])
 
 if g.neovide then
-    require('neovide')
+    opt.mouse = 'a'
+    g.neovide_cursor_vfx_mode = "torpedo"
+    g.neovide_refresh_rate = 72
+    g.neovide_cursor_vfx_opacity = 120.0
+    g.neovide_cursor_vfx_particle_density = 20.0
+    g.neovide_cursor_vfx_particle_lifetime = 2.3
+    g.neovide_transparency = 0.9
 end
 
 g.airline_powerline_fonts = true
@@ -40,11 +46,34 @@ g['airline#extensions#tabline#enabled'] = true
 
 g.UltiSnipsSnippetStorageDirectoryForUltiSnipsEdit = '~/.config/nvim/snippets'
 
-
-vim.keymap.set('n', '<Tab>', indent.prepend_indent_current_line)
-vim.keymap.set('n', '<S-Tab>', indent.remove_indent_current_line)
-vim.keymap.set('v', '<Tab>', indent.prepend_indent_visual)
-vim.keymap.set('v', '<S-Tab>', indent.remove_indent_visual)
+vim.keymap.set({'n', 't'}, '<M-=>', function ()
+    if not vim.g.term_buffer then
+        vim.cmd [[below 10%split +terminal]]
+        vim.g.term_buffer = api.nvim_get_current_buf()
+        for _, chan in ipairs(api.nvim_list_chans()) do
+            if chan.buffer == vim.g.term_buffer then
+                api.nvim_create_user_command('T', function (command)
+                    api.nvim_chan_send(chan.id, command.args .. '\n')
+                end, {
+                desc = "Send command to virtual terminal",
+                nargs = 1
+            })
+            end
+        end
+        vim.cmd 'startinsert'
+        return
+    end
+    for _, win in ipairs(api.nvim_tabpage_list_wins(0)) do
+        local buf = api.nvim_win_get_buf(win)
+        if vim.g.term_buffer and vim.g.term_buffer == buf then
+            api.nvim_win_hide(win)
+            return
+        end
+    end
+    vim.cmd [[below 10%split]]
+    api.nvim_win_set_buf(api.nvim_get_current_win(), vim.g.term_buffer)
+    vim.cmd 'startinsert'
+end)
 
 -- Switch between vim keymaps
 vim.keymap.set({ 'i', 'n', 'v' }, '<m-l>', function ()
@@ -56,4 +85,27 @@ vim.keymap.set({ 'i', 'n', 'v' }, '<m-l>', function ()
     if api.nvim_get_mode().mode == 'i' then
         api.nvim_feedkeys('a', 'nt', false)
     end
+end)
+
+vim.g.font_step = 1
+vim.keymap.set('n', '<C-=>', function ()
+    local changed = {}
+    for _, font in ipairs(opt.guifont:get()) do
+        local size = string.match(font, ":h(%d+)")
+        local new = string.gsub(font, size, tostring(tonumber(size) + vim.g.font_step), 1)
+        table.insert(changed, new)
+    end
+
+    opt.guifont = changed
+end)
+
+vim.keymap.set('n', '<C-->', function ()
+    local changed = {}
+    for _, font in ipairs(opt.guifont:get()) do
+        local size = string.match(font, ":h(%d+)")
+        local new = string.gsub(font, size, tostring(tonumber(size) - vim.g.font_step), 1)
+        table.insert(changed, new)
+    end
+
+    opt.guifont = changed
 end)
