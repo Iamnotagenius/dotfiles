@@ -1,0 +1,10 @@
+#!/bin/sh
+
+workspace="$(swaymsg -t get_workspaces | jq -r '..|try select(.focused == true)|.num')"
+
+case "$workspace" in
+    1) exec alacritty ;;
+    2) exec neovide ;;
+    3) exec telegram-desktop ;;
+    4) exec qutebrowser ;;
+esac
