@@ -1,7 +1,7 @@
+#!/bin/bash
 MYGITHUB=https://github.com/Iamnotagenius
 alias \
-	shutdown="doas shutdown now" \
-	reboot="doas reboot" \
+    shutdown="shutdown 0" \
 	record-audio="~/scripts/ffmpeg/audio.sh" \
 	myip="curl ip.me" \
 	weather="curl wttr.in" \
