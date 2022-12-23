@@ -22,10 +22,15 @@
   # Set your time zone.
   time.timeZone = "Europe/Moscow";
   
-  i18n.supportedLocales = [
+  i18n = {
+    supportedLocales = [
     "en_US.UTF-8/UTF-8"
     "ru_RU.UTF-8/UTF-8"
-  ];
+    ];
+    extraLocaleSettings = {
+      LC_TIME = "ru_RU.UTF-8";
+    };
+  };
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
@@ -60,6 +65,13 @@
   security = {
     sudo.enable = false;
     doas.enable = true;
+    doas.extraRules = [
+      {
+        groups = [ "wheel" ];
+        noPass = false;
+        keepEnv = true;
+      }
+    ];
   };
 
   # Configure keymap in X11
@@ -126,6 +138,7 @@
     gnupg
     pinentry-curses
     dunst
+    killall
   ];
 
   # Some programs need SUID wrappers, can be configured further or are

@@ -24,7 +24,7 @@
     # dynamic width from 0 to 300
     # width = (0, 300)
     # constant width of 300
-    width = (100, 500)
+    width = (50, 500)
 
     # The maximum height of a single notification, excluding the frame.
     height = 500
@@ -151,7 +151,7 @@
     #   %n  progress value if set without any extra characters
     #   %%  Literal %
     # Markup is allowed
-    format = "<big><b>%s</b></big>\n%b\n"
+    format = "<b>%s</b>\n%b\n"
 
     # Alignment of message text.
     # Possible values are "left", "center" and "right".
@@ -326,6 +326,17 @@
     foreground = "#282c34"
     format = "<span color='#765288' style='italic'>%s</span>\n%b"
     timeout = 7
+
+[cal]
+    # IMPORTANT: colors have to be defined in quotation marks.
+    # Otherwise the "#" and following would be interpreted as a comment.
+    appname = "cal"
+    alignment = left
+    background = "#282c34"
+    foreground = "#abb2bf"
+    timeout = 9
+    # Icon for notifications with low urgency, uncomment to enable
+    #default_icon = /path/to/icon
 
 
 # Every section that isn't one of the above is interpreted as a rules to
