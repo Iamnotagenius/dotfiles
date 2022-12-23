@@ -57,6 +57,11 @@
     };
   };
 
+  security = {
+    sudo.enable = false;
+    doas.enable = true;
+  };
+
   # Configure keymap in X11
   # services.xserver.layout = "us";
   services.xserver.xkbOptions = [
@@ -91,6 +96,9 @@
       pass
       pinentry-bemenu
       libreoffice
+      neomutt
+      msmtp
+      isync
     ];
   };
 
@@ -117,6 +125,7 @@
     htop
     gnupg
     pinentry-curses
+    dunst
   ];
 
   # Some programs need SUID wrappers, can be configured further or are

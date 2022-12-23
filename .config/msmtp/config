@@ -1,0 +1,12 @@
+account kazakk9@gmail.com
+host smtp.gmail.com
+port 465
+from kazakk9@gmail.com
+user kazakk9@gmail.com
+passwordeval "cat ~/.config/msmtp/.passwd"
+auth on
+tls on
+tls_trust_file	/etc/ssl/certs/ca-certificates.crt
+tls_starttls off
+logfile /home/iamnotagenius/.config/msmtp/msmtp.log
+
