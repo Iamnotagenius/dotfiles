@@ -44,6 +44,7 @@
 
   programs = {
     sway.enable = true;
+    light.enable = true;
     zsh = {
       enable = true;
       syntaxHighlighting.enable = true;
@@ -75,7 +76,7 @@
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.iamnotagenius = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "networkmanager" ]; # Enable ‘sudo’ for the user.
+    extraGroups = [ "wheel" "networkmanager" "video" ]; # Enable ‘sudo’ for the user.
     shell = pkgs.zsh;
     packages = with pkgs; [
       brave
@@ -89,6 +90,7 @@
       nodejs
       pass
       pinentry-bemenu
+      libreoffice
     ];
   };
 
@@ -129,6 +131,7 @@
 
   services = { 
     openssh.enable = true;
+    getty.autologinUser = "iamnotagenius";
   };
 
   # Open ports in the firewall.

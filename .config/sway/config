@@ -182,6 +182,9 @@ bindsym --to-code {
     $mod+minus scratchpad show
 
     $mod+r mode "resize"
+
+    XF86MonBrightnessUp exec light -A 10
+    XF86MonBrightnessDown exec light -U 10
 #
 }
 
