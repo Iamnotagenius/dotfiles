@@ -70,6 +70,7 @@
         groups = [ "wheel" ];
         noPass = false;
         keepEnv = true;
+	persist = true;
       }
     ];
   };
@@ -103,7 +104,6 @@
       nix-zsh-completions
       neovide
       ranger
-      texlive.combined.scheme-medium
       nodejs
       pass
       pinentry-bemenu
@@ -111,6 +111,13 @@
       neomutt
       msmtp
       isync
+
+      # List latex packages here
+      (texlive.combine {
+        inherit (texlive)
+	scheme-tetex
+	collection-binextra;
+      })
     ];
   };
 

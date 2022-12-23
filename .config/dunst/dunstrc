@@ -328,15 +328,11 @@
     timeout = 7
 
 [cal]
-    # IMPORTANT: colors have to be defined in quotation marks.
-    # Otherwise the "#" and following would be interpreted as a comment.
     appname = "cal"
     alignment = left
     background = "#282c34"
     foreground = "#abb2bf"
     timeout = 9
-    # Icon for notifications with low urgency, uncomment to enable
-    #default_icon = /path/to/icon
 
 
 # Every section that isn't one of the above is interpreted as a rules to
