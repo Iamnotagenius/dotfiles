@@ -18,11 +18,11 @@
 @define-color blue	#61AFEF;
 @define-color purple	#C678DD;
 @define-color aqua	#56B6C2;
-@define-color gray	#a89984;
+@define-color gray	#3e4258;
 @define-color brgray	#928374;
-@define-color brred	#fb4934;
+@define-color brred	#e4321d;
 @define-color brgreen	#b8bb26;
-@define-color bryellow	#fabd2f;
+@define-color bryellow	#ae7100;
 @define-color brblue	#83a598;
 @define-color brpurple	#d3869b;
 @define-color braqua	#8ec07c;
@@ -31,10 +31,11 @@
 
 
 @define-color warning 	@bryellow;
-@define-color critical	@red;
+@define-color critical	@brred;
 @define-color mode	@black;
 @define-color unfocused	@black;
-@define-color focused	@blue;
+@define-color focused	#1a1d27;
+@define-color hovered	@gray;
 @define-color inactive	@purple;
 @define-color sound	@brpurple;
 @define-color network	@red;
@@ -118,8 +119,10 @@
 /* Workspaces stuff */
 #workspaces button {
 	/*font-weight: bold;*/
+    letter-spacing: -2pt;
+    min-width: 16pt;
 	padding-left: 4pt;
-	padding-right: 4pt;
+	padding-right: 6pt;
 	color: @white;
 	background: @unfocused;
 }
@@ -132,8 +135,9 @@
 
 /* Active (on focused output) */
 #workspaces button.focused {
-	color: @black;
+	color: @white;
 	background: @focused;
+    border-bottom: 1pt solid @green;
 }
 
 /* Contains an urgent window */
@@ -144,8 +148,9 @@
 
 /* Style when cursor is on the button */
 #workspaces button:hover {
-	background: @black;
+	background: @hovered;
 	color: @white;
+    border-bottom: 1pt solid @green;
 }
 
 #window {
@@ -209,7 +214,7 @@
 #custom-arrow9,
 #custom-arrow10,
 #custom-arrow11 {
-    font-size: 17pt;
+    font-size: 22px;
 }
 
 #custom-arrow2 {

@@ -42,9 +42,8 @@
 			"warning": 30,
 			"critical": 15
 		},
-		"format-time": "{H}:{M:02}",
-		"format": "{icon} {capacity}% ({time})",
-		"format-charging": " {capacity}% ({time})",
+		"format": "{icon} {capacity}%",
+		"format-charging": " {capacity}%",
 		"format-charging-full": " {capacity}%",
 		"format-full": "{icon} {capacity}%",
 		"format-alt": "{icon} {power}W",
@@ -59,7 +58,7 @@
 	},
 
 	"clock#time": {
-		"interval": 10,
+		"interval": 1,
 		"format": "{:%T}",
 		"tooltip": false
 	},
@@ -68,7 +67,10 @@
 		"interval": 20,
 		"format": "{:%a, %e %b %Y}",
         "locale": "ru_RU.UTF-8",
-		"tooltip": false
+		"tooltip": false,
+        "on-click": "~/scripts/calendar curr",
+        "on-click-right": "~/scripts/calendar next",
+        "on-click-middle": "~/scripts/calendar prev"
 		//"tooltip-format": "{:%e %B %Y}"
 	},
 
@@ -84,7 +86,7 @@
 	},
 
 	"sway/language": {
-		"format": "  {}",
+		"format": "  {}",
 		"min-length": 5,
 		"on-click": "swaymsg 'input * xkb_switch_layout next'",
 		"tooltip": false
@@ -128,9 +130,9 @@
             "4": [], // Always show a workspace with name '3', on all outputs if it does not exists
         },
         "format-icons": {
-            "1": "",
-            "2": "",
-            "3": "切",
+            "1": " ",
+            "2": " ",
+            "3": " ",
             "4": " "
         }
 
