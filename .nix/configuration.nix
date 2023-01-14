@@ -38,6 +38,8 @@ in
 
   # Set your time zone.
   time.timeZone = "Europe/Moscow";
+
+  documentation.man.generateCaches = true;
   
   # Select internationalisation properties.
   i18n = {

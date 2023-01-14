@@ -188,6 +188,8 @@ bindsym --to-code {
 
     Print exec grimshot --notify copy area
     Shift+Print exec grimshot --notify copy screen
+
+    $mod+Control+p exec ~/scripts/passmenu
 #
 }
 
