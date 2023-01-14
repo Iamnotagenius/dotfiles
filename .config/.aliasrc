@@ -18,6 +18,8 @@ alias \
 	c="xclip -i -selection clipboard" \
 	p="xclip -o -selection clipboard" \
 	mntphone="go-mtpfs /media/Android" \
+    mount="udiskie-mount" \
+    umount="udiskie-umount" \
 	sysleep="systemctl suspend" \
 	ipadr="ip -color -brief -4 addr" \
 	vim="nvim" \

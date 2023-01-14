@@ -11,7 +11,6 @@
     ];
 
   # Use the systemd-boot EFI boot loader.
-  boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
   networking.hostName = "NixOSBook"; # Define your hostname.
@@ -22,30 +21,38 @@
   # Set your time zone.
   time.timeZone = "Europe/Moscow";
   
+  # Select internationalisation properties.
   i18n = {
+    defaultLocale = "en_US.UTF-8";
     supportedLocales = [
-    "en_US.UTF-8/UTF-8"
-    "ru_RU.UTF-8/UTF-8"
+      "en_US.UTF-8/UTF-8"
+      "ru_RU.UTF-8/UTF-8"
     ];
     extraLocaleSettings = {
       LC_TIME = "ru_RU.UTF-8";
     };
   };
 
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
+  boot.loader.grub.theme = pkgs.fetchFromGitHub {
+    owner = "imGabe";
+    repo = "fallout-grub-theme";
+    rev = "1636fbca54ec86e44bfc4c93b0d2e17b39d844b3";
+    sha256 = "sha256-+yY9RlyjV6jcMmWHsNALIqr26cNJp+odXPOwfrPwnXI=";
+  };
 
-  # Select internationalisation properties.
-  i18n.defaultLocale = "en_US.UTF-8";
-  # console = {
-  #   font = "Lat2-Terminus16";
-  #   keyMap = "us";
-  #   useXkbConfig = true; # use xkbOptions in tty.
+  # boot.loader.grub.theme = pkgs.stdenv.mkDerivation {
+    # pname = "distro-grub-themes";
+    # version = "3.1";
+    # src = pkgs.fetchFromGitHub {
+      # owner = "AdisonCavani";
+      # repo = "distro-grub-themes";
+      # rev = "v3.1";
+      # hash = "sha256-ZcoGbbOMDDwjLhsvs77C7G7vINQnprdfI37a9ccrmPs=";
+    # };
+    # installPhase = "cp -r customize/nixos $out";
   # };
 
-  # Enable the X11 windowing system.
-  # services.xserver.enable = true;
+  # boot.loader.grub.theme = pkgs.nixos-grub2-theme;
 
   programs = {
     sway.enable = true;
@@ -70,26 +77,10 @@
         groups = [ "wheel" ];
         noPass = false;
         keepEnv = true;
-	persist = true;
+        persist = true;
       }
     ];
   };
-
-  # Configure keymap in X11
-  # services.xserver.layout = "us";
-  services.xserver.xkbOptions = [
-    "caps:escape" # map caps to escape.
-  ];
-
-  # Enable CUPS to print documents.
-  # services.printing.enable = true;
-
-  # Enable sound.
-  # sound.enable = true;
-  # hardware.pulseaudio.enable = true;
-
-  # Enable touchpad support (enabled default in most desktopManager).
-  # services.xserver.libinput.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.iamnotagenius = {
@@ -98,25 +89,26 @@
     shell = pkgs.zsh;
     packages = with pkgs; [
       brave
-      qutebrowser
-      tdesktop
-      yadm
-      nix-zsh-completions
+      isync
+      libreoffice
+      msmtp
+      neomutt
       neovide
-      ranger
+      nix-zsh-completions
       nodejs
       pass
       pinentry-bemenu
-      libreoffice
-      neomutt
-      msmtp
-      isync
+      qutebrowser
+      ranger
+      sway-contrib.grimshot
+      tdesktop
+      yadm
 
       # List latex packages here
       (texlive.combine {
         inherit (texlive)
-	scheme-tetex
-	collection-binextra;
+        scheme-tetex
+        collection-binextra;
       })
     ];
   };
@@ -128,46 +120,34 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    neovim
-    zathura
-    tor-browser-bundle-bin
-    wget
     alacritty
-    waybar
-    wl-clipboard
     bemenu
-    indent
-    fzf
-    gnumake
-    gcc
-    jq
-    htop
-    gnupg
-    pinentry-curses
     dunst
+    fzf
+    gcc
+    gnumake
+    gnupg
+    htop
+    indent
+    jq
     killall
+    neovim
+    pinentry-curses
+    tor-browser-bundle-bin
+    udiskie
+    waybar
+    wget
+    wl-clipboard
+    zathura
   ];
 
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
-
   # List services that you want to enable:
-
   services = { 
     openssh.enable = true;
     getty.autologinUser = "iamnotagenius";
+    udisks2.enable = true;
+    udev.extraRules = "ENV{ID_FS_USAGE}==\"filesystem|other|crypto\", ENV{UDISKS_FILESYSTEM_SHARED}=\"1\"";
   };
-
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
 
   # Copy the NixOS configuration file and link it from the resulting system
   # (/run/current-system/configuration.nix). This is useful in case you

@@ -185,6 +185,9 @@ bindsym --to-code {
 
     XF86MonBrightnessUp exec light -A 10
     XF86MonBrightnessDown exec light -U 10
+
+    Print exec grimshot --notify copy area
+    Shift+Print exec grimshot --notify copy screen
 #
 }
 
@@ -217,3 +220,6 @@ mode "resize" bindsym --to-code {
 bar swaybar_command waybar
 
 include /etc/sway/config.d/*
+
+exec alacritty
+exec udiskie
