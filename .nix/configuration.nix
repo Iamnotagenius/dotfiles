@@ -10,9 +10,6 @@
       ./hardware-configuration.nix
     ];
 
-  # Use the systemd-boot EFI boot loader.
-  boot.loader.efi.canTouchEfiVariables = true;
-
   networking.hostName = "NixOSBook"; # Define your hostname.
   # Pick only one of the below networking options.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -33,11 +30,21 @@
     };
   };
 
-  boot.loader.grub.theme = pkgs.fetchFromGitHub {
-    owner = "imGabe";
-    repo = "fallout-grub-theme";
-    rev = "1636fbca54ec86e44bfc4c93b0d2e17b39d844b3";
-    sha256 = "sha256-+yY9RlyjV6jcMmWHsNALIqr26cNJp+odXPOwfrPwnXI=";
+  boot.loader = {
+    efi = {
+      canTouchEfiVariables = true;
+    };
+    grub = {
+      efiSupport = true;
+      device = "nodev";
+      theme = pkgs.fetchFromGitHub {
+        owner = "imGabe";
+        repo = "fallout-grub-theme";
+        rev = "1636fbca54ec86e44bfc4c93b0d2e17b39d844b3";
+        sha256 = "sha256-+yY9RlyjV6jcMmWHsNALIqr26cNJp+odXPOwfrPwnXI=";
+      };
+      gfxmodeEfi = "1920x1080";
+    };
   };
 
   # boot.loader.grub.theme = pkgs.stdenv.mkDerivation {
@@ -161,6 +168,5 @@
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "22.11"; # Did you read the comment?
-
 }
 
