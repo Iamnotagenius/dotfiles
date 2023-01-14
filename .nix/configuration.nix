@@ -4,6 +4,27 @@
 
 { config, pkgs, ... }:
 
+let
+grubThemes = { 
+  mikuChristmas = pkgs.stdenv.mkDerivation {
+    pname = "miku-christmas-grub-theme";
+    version = "1.3";
+    src = pkgs.fetchFromGitHub {
+      owner = "13atm01";
+      repo = "GRUB-Theme";
+      rev = "FSN-v1.3";
+      hash = "sha256-miodp8rRZkhqVF/CIR0z8ADIw1OlodQJFjdKTsg0ZRs=";
+    };
+    installPhase = "cp -r \"Miku (Christmas Version)/Miku-Christmas-Version\" $out";
+  };
+  fallout = pkgs.fetchFromGitHub {
+    owner = "imGabe";
+    repo = "fallout-grub-theme";
+    rev = "1636fbca54ec86e44bfc4c93b0d2e17b39d844b3";
+    sha256 = "sha256-+yY9RlyjV6jcMmWHsNALIqr26cNJp+odXPOwfrPwnXI=";
+  };
+};
+in
 {
   imports =
     [ # Include the results of the hardware scan.
@@ -37,29 +58,10 @@
     grub = {
       efiSupport = true;
       device = "nodev";
-      theme = pkgs.fetchFromGitHub {
-        owner = "imGabe";
-        repo = "fallout-grub-theme";
-        rev = "1636fbca54ec86e44bfc4c93b0d2e17b39d844b3";
-        sha256 = "sha256-+yY9RlyjV6jcMmWHsNALIqr26cNJp+odXPOwfrPwnXI=";
-      };
+      theme = grubThemes.mikuChristmas;
       gfxmodeEfi = "1920x1080";
     };
   };
-
-  # boot.loader.grub.theme = pkgs.stdenv.mkDerivation {
-    # pname = "distro-grub-themes";
-    # version = "3.1";
-    # src = pkgs.fetchFromGitHub {
-      # owner = "AdisonCavani";
-      # repo = "distro-grub-themes";
-      # rev = "v3.1";
-      # hash = "sha256-ZcoGbbOMDDwjLhsvs77C7G7vINQnprdfI37a9ccrmPs=";
-    # };
-    # installPhase = "cp -r customize/nixos $out";
-  # };
-
-  # boot.loader.grub.theme = pkgs.nixos-grub2-theme;
 
   programs = {
     sway.enable = true;
@@ -169,4 +171,3 @@
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "22.11"; # Did you read the comment?
 }
-
