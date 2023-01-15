@@ -4,27 +4,6 @@
 
 { config, pkgs, ... }:
 
-let
-grubThemes = { 
-  mikuChristmas = pkgs.stdenv.mkDerivation {
-    pname = "miku-christmas-grub-theme";
-    version = "1.3";
-    src = pkgs.fetchFromGitHub {
-      owner = "13atm01";
-      repo = "GRUB-Theme";
-      rev = "FSN-v1.3";
-      hash = "sha256-miodp8rRZkhqVF/CIR0z8ADIw1OlodQJFjdKTsg0ZRs=";
-    };
-    installPhase = "cp -r \"Miku (Christmas Version)/Miku-Christmas-Version\" $out";
-  };
-  fallout = pkgs.fetchFromGitHub {
-    owner = "imGabe";
-    repo = "fallout-grub-theme";
-    rev = "1636fbca54ec86e44bfc4c93b0d2e17b39d844b3";
-    sha256 = "sha256-+yY9RlyjV6jcMmWHsNALIqr26cNJp+odXPOwfrPwnXI=";
-  };
-};
-in
 {
   imports =
     [ # Include the results of the hardware scan.
@@ -60,7 +39,25 @@ in
     grub = {
       efiSupport = true;
       device = "nodev";
-      theme = grubThemes.mikuChristmas;
+      theme = let
+        mikuChristmas = pkgs.stdenv.mkDerivation {
+          pname = "miku-christmas-grub-theme";
+          version = "1.3";
+          src = pkgs.fetchFromGitHub {
+            owner = "13atm01";
+            repo = "GRUB-Theme";
+            rev = "FSN-v1.3";
+            hash = "sha256-miodp8rRZkhqVF/CIR0z8ADIw1OlodQJFjdKTsg0ZRs=";
+          };
+          installPhase = "cp -r \"Miku (Christmas Version)/Miku-Christmas-Version\" $out";
+        };
+        fallout = pkgs.fetchFromGitHub {
+          owner = "imGabe";
+          repo = "fallout-grub-theme";
+          rev = "1636fbca54ec86e44bfc4c93b0d2e17b39d844b3";
+          sha256 = "sha256-+yY9RlyjV6jcMmWHsNALIqr26cNJp+odXPOwfrPwnXI=";
+        };
+      in mikuChristmas;
       gfxmodeEfi = "1920x1080";
     };
   };
@@ -136,6 +133,7 @@ in
     dunst
     fzf
     gcc
+    gh
     gnumake
     gnupg
     htop
@@ -144,6 +142,7 @@ in
     killall
     neovim
     pinentry-curses
+    seatd
     tor-browser-bundle-bin
     udiskie
     waybar
