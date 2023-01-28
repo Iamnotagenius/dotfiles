@@ -2,18 +2,25 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
-
+{ config, pkgs, ... }: let
+  flake-compat = builtins.fetchTarball "https://github.com/edolstra/flake-compat/archive/master.tar.gz";
+  hyprland = (import flake-compat {
+    src = builtins.fetchTarball "https://github.com/hyprwm/Hyprland/archive/master.tar.gz";
+  }).defaultNix;
+in 
 {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      hyprland.nixosModules.default
     ];
 
   networking.hostName = "NixOSBook"; # Define your hostname.
   # Pick only one of the below networking options.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
   networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
+
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   # Set your time zone.
   time.timeZone = "Europe/Moscow";
@@ -63,7 +70,11 @@
   };
 
   programs = {
-    sway.enable = true;
+    hyprland = {
+      enable = true;
+      package = hyprland.packages.${pkgs.system}.default;
+    };
+    waybar.enable = true;
     light.enable = true;
     zsh = {
       enable = true;
@@ -109,8 +120,9 @@
       qutebrowser
       ranger
       sway-contrib.grimshot
-      tdesktop
+      kotatogram-desktop
       yadm
+      wbg
 
       # List latex packages here
       (texlive.combine {
@@ -129,22 +141,26 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     alacritty
+    bat
     bemenu
+    btop
     dunst
     fzf
     gcc
     gh
+    gojq
     gnumake
     gnupg
     htop
     indent
-    jq
     killall
     neovim
     pinentry-curses
     seatd
+    socat
     tor-browser-bundle-bin
     udiskie
+    vimiv-qt
     waybar
     wget
     wl-clipboard
@@ -153,6 +169,7 @@
 
   # List services that you want to enable:
   services = { 
+    pipewire.enable = true;
     openssh.enable = true;
     getty.autologinUser = "iamnotagenius";
     udisks2.enable = true;
