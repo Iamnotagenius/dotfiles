@@ -1,10 +1,9 @@
-MYGITHUB=https://github.com/Iamnotagenius
+#!/bin/bash
 alias \
 	shutdown="doas shutdown now" \
 	reboot="doas reboot" \
 	record-audio="~/scripts/ffmpeg/audio.sh" \
 	myip="curl ip.me" \
-	weather="curl wttr.in" \
 	ports="netstat -tulpan" \
 	untar="tar -zxvf" \
 	mkdir="mkdir -p" \
@@ -20,10 +19,29 @@ alias \
 	mntphone="go-mtpfs /media/Android" \
 	sysleep="systemctl suspend" \
 	ipadr="ip -color -brief -4 addr" \
-	vim="neovide --nofork" \
-    gvim="neovide" \
+	vim="neovide --nofork --novsync --" \
+    gvim="neovide --novsync" \
     dcam="droidcam-cli" \
-    mail="neomutt"
+    mail="neomutt" \
+    mv="mv -i" \
+    rm="rm -i" \
+    cp="cp -i" \
+    la="ls -a" \
+    ll="ls -l" \
+    lf=". ranger" \
+    ga="git add" \
+    gs="git status" \
+    gc="git checkout" \
+    gcm="git commit -m" \
+    gb="git branch" \
+    py="python" \
+    ipy="ptipython" \
+    pip="python -m pip" \
+    mount="udiskie-mount" \
+    umount="udiskie-umount" \
+    ta="tmux attach" \
+    sctl="systemctl" \
+    sctlu="systemctl --user"
 
 mkcd() {
     mkdir "$1" && cd "$1"
@@ -34,8 +52,17 @@ topdf () {
 }
 alias \
 	grep="grep --color=auto" \
-	ls="ls --color=auto --group-directories-first" \
+	ls="lsd" \
+    ll="ls -l" \
+    la="ls -a" \
+    lla="ls -la" \
+    lt="ls --tree" \
+    lu="ll --total-size" \
 	diff="diff --color=auto"
+
+ympc() {
+    mpc add `yt-dlp -f b -g "$1"`
+}
 
 function br {
     local cmd cmd_file code
@@ -56,4 +83,14 @@ ftp () {
 		mylip=$(ip -brief addr | grep UP | awk '{ print $3 }' | cut -d'/' -f1)
 		echo -e "Your ip is \e[32;4m$mylip"
 	fi
+}
+
+alias mpcrw="curl http://retrowave.ru/api/v1/tracks?limit=1 | jq .body.tracks[0].streamUrl | xargs -iid mpc add https://retrowave.ruid"
+
+pcmslab() {
+    curl http://neerc.ifmo.ru/teaching/disalgo/problems/problems$1.pdf | zathura --fork -
+}
+
+weather() {
+	curl wttr.in/$1
 }
