@@ -1,10 +1,11 @@
 #!/bin/sh
 
-workspace="$(swaymsg -t get_workspaces | jq -r '..|try select(.focused == true)|.num')"
+#workspace="$(swaymsg -t get_workspaces | jq -r '..|try select(.focused == true)|.num')"
+workspace="$(hyprctl -j monitors | gojq -r '.[] | select(.focused == true).activeWorkspace.name')"
 
 case "$workspace" in
     1) exec alacritty ;;
     2) exec neovide ;;
-    3) exec telegram-desktop ;;
+    3) exec kotatogram-desktop ;;
     4) exec qutebrowser ;;
 esac
