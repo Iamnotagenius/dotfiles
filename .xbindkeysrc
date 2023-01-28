@@ -10,14 +10,35 @@
 "davis toggle"
     Shift + F12
 
-"~/scripts/emojis.sh"
+"emojis"
     Mod4 + e
 
-"~/scripts/online_pdf.sh `xclip -selection clipboard`"
+"online_pdf `xclip -selection clipboard`"
     Mod4 + z
 
-"~/scripts/passmenu.sh"
+"startgame"
+    Mod4 + g
+
+"ffmpeg -f x11grab -select_region 1 -i :0 -frames:v 1 -c:v png -f image2pipe - | xclip -selection clipboard -t image/png"
+    Print
+
+"screencast"
+    Shift + Print
+
+"~/scripts/passmenu"
     Control + Mod4 + p
 
-"~/scripts/manpdf.sh"
+"manpdf"
     Control + Mod4 + m
+
+"toggle_wallpaper"
+    Control + Mod4 + w
+
+"ytplay"
+    Control + Shift + y
+
+"shadowplay dragon-drop"
+    Control + Shift + d
+
+"alacritty -t Calc -e calc -d"
+    XF86Calculator
