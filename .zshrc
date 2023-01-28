@@ -7,13 +7,23 @@ unsetopt beep extendedglob nomatch
 bindkey -v
 bindkey '^ ' autosuggest-accept
 
+fpath+=~/.config/functions
 zstyle :compinstall filename '/home/iamnotagenius/.zshrc'
 zstyle ':completion:*' menu select
 zmodload zsh/complist
 autoload -Uz compinit
 compinit
 _comp_options+=(globdots)
+# zsh parameter completion for the dotnet CLI
 
+_dotnet_zsh_complete()
+{
+  local completions=("$(dotnet complete "$words")")
+
+  reply=( "${(ps:\n:)completions}" )
+}
+
+compctl -K _dotnet_zsh_complete dotnet
 autoload -U colors && colors
 setopt prompt_subst
 autoload -Uz vcs_info
@@ -33,17 +43,69 @@ vcs_info_wrapper() {
   fi
 }
 #RPROMPT='$(vcs_info_wrapper)'
-export PS1='$(vcs_info_wrapper)%F{magenta}%~ %B%F{%(?.green.red)}$%f%b '
-export PATH=$PATH:~/scripts
+export PS1='$(vcs_info_wrapper)%F{magenta}%~ %B%F{%(?.green.red)}%(?..)%f%b '
+export PS2='%B%F{yellow}%_ %F{blue}%b%f '
 export VISUAL="nvim"
 export EDITOR="nvim"
-fpath+=~/.config/functions
-_ftp () {
-	_describe 'command' "('start:Start bftpd server' 'stop:Stop bftpd server' 'restart:Restart bftpd server')"
+export MANPAGER="sh -c 'col -bx | bat --theme=default -l man -p -'"
+
+# tab complete mod
+bindkey -M menuselect 'h' vi-backward-char
+bindkey -M menuselect 'k' vi-up-line-or-history
+bindkey -M menuselect 'l' vi-forward-char
+bindkey -M menuselect 'j' vi-down-line-or-history
+bindkey -v '^?' backward-delete-char
+
+# M-u: up-directory
+up-directory() {
+    builtin cd .. && zle reset-prompt
 }
-compdef _ftp ftp
-# aliases
-[ -f "$HOME/.config/.aliasrc" ] && source "$HOME/.config/.aliasrc"
+
+prev-directory() {
+    builtin cd - > /dev/null && zle reset-prompt
+}
+
+cdnext() {
+    local dirs i
+    dirs=(${PWD%/*}/*(nN-/))
+    
+    if (($#dirs <= 1)); then
+        return 1
+    fi
+    
+    i=$dirs[(Ie)$PWD]
+    ((i++))
+    ((i <= $#dirs)) || i=1
+    ((i >= 1 ))     || i=-1
+    
+    cd $dirs[i]
+    zle reset-prompt
+}
+cdprev() {
+    local dirs i
+    dirs=(${PWD%/*}/*(nN-/))
+    
+    if (($#dirs <= 1)); then
+        return 1
+    fi
+    
+    i=$dirs[(Ie)$PWD]
+    ((i--))
+    ((i <= $#dirs)) || i=1
+    ((i >= 1 ))     || i=-1
+    
+    cd $dirs[i]
+    zle reset-prompt
+}
+zle -N up-directory
+bindkey '^[u' up-directory
+zle -N prev-directory
+bindkey '^[p' prev-directory
+zle -N cdprev
+bindkey '^[[1;3D' cdprev
+zle -N cdnext
+bindkey '^[[1;3C' cdnext
+
 # tab complete mod
 bindkey -M menuselect 'h' vi-backward-char
 bindkey -M menuselect 'k' vi-up-line-or-history
@@ -73,42 +135,60 @@ _fix_cursor() {
 }
 precmd_functions+=(_fix_cursor)
 
+# Coloring stderr.
+STDERRED_ESC_CODE=$'\e[31;1m'
+zmodload zsh/system
+color_stderr_red() {
+    # Sysread & syswrite are part of `zsh/system'.
+    emulate -LR zsh
+    while sysread; do
+        syswrite -o 2 "$STDERRED_ESC_CODE$REPLY$terminfo[sgr0]"
+    done
+}
+
+#exec 2> >( color_stderr_red )
+
 source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh 2 > /dev/null
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2 > /dev/null
 source ~/.gitflow.zsh
 
-### NNN CONFIG
-export NNN_FIFO="/tmp/nnn.fifo"
-export NNN_FCOLORS='c1e2e431006033f7c6d6abc4'
-export NNN_PLUG='p:preview-tabbed;c:x2sel;i:-!xclip -selection clipboard -t image/png $nnn*'
-export NNN_TRASH=0
-n ()
-{
-    # Block nesting of nnn in subshells
-    if [ -n $NNNLVL ] && [ "${NNNLVL:-0}" -ge 1 ]; then
-        echo "nnn is already running"
-        return
-    fi
-
-    # The default behaviour is to cd on quit (nnn checks if NNN_TMPFILE is set)
-    # To cd on quit only on ^G, remove the "export" as in:
-    #     NNN_TMPFILE="${XDG_CONFIG_HOME:-$HOME/.config}/nnn/.lastd"
-    NNN_TMPFILE="${XDG_CONFIG_HOME:-$HOME/.config}/nnn/.lastd"
-
-    # Unmask ^Q (, ^V etc.) (if required, see `stty -a`) to Quit nnn
-    # stty start undef
-    # stty stop undef
-    # stty lwrap undef
-    # stty lnext undef
-
-    nnn "$@" -xeu
-
-    if [ -f "$NNN_TMPFILE" ]; then
-            . "$NNN_TMPFILE"
-            rm -f "$NNN_TMPFILE" > /dev/null
-    fi
-}
-LS_COLORS='rs=0;35:di=01;35:ln=01;36:mh=00:pi=40;33:so=01;34:do=01;35:bd=01;33;04:cd=33;04:or=41;30;01;05:mi=00:su=37;41:sg=30;43:ca=30;41:tw=35;01:ow=35;01:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;34:*.jpeg=01;34:*.mjpg=01;34:*.mjpeg=01;34:*.gif=01;34:*.bmp=01;34:*.pbm=01;34:*.pgm=01;34:*.ppm=01;34:*.tga=01;34:*.xbm=01;34:*.xpm=01;34:*.tif=01;34:*.tiff=01;34:*.png=01;34:*.svg=01;34:*.svgz=01;34:*.mng=01;34:*.pcx=01;34:*.mov=01;34:*.mpg=01;34:*.mpeg=01;34:*.m2v=01;34:*.mkv=01;34:*.webm=01;34:*.webp=01;34:*.ogm=01;34:*.mp4=01;34:*.m4v=01;34:*.mp4v=01;34:*.vob=01;34:*.qt=01;34:*.nuv=01;34:*.wmv=01;34:*.asf=01;34:*.rm=01;34:*.rmvb=01;34:*.flc=01;34:*.avi=01;34:*.fli=01;34:*.flv=01;34:*.gl=01;34:*.dl=01;34:*.xcf=01;34:*.xwd=01;34:*.yuv=01;34:*.cgm=01;34:*.emf=01;34:*.ogv=01;34:*.ogx=01;34:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:*rc=04;35:*.log=04;35;02';
+LS_COLORS='rs=0;35:di=01;35:ln=01;36:mh=00:pi=40;33:so=01;34:do=01;35:bd=01;33;04:cd=33;04:or=41;30;01;05:mi=00:su=37;41:sg=30;43:ca=30;41:tw=35;01:ow=35;01:st=01;35;03:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;34:*.jpeg=01;34:*.mjpg=01;34:*.mjpeg=01;34:*.gif=01;34:*.bmp=01;34:*.pbm=01;34:*.pgm=01;34:*.ppm=01;34:*.tga=01;34:*.xbm=01;34:*.xpm=01;34:*.tif=01;34:*.tiff=01;34:*.png=01;34:*.svg=01;34:*.svgz=01;34:*.mng=01;34:*.pcx=01;34:*.mov=01;34:*.mpg=01;34:*.mpeg=01;34:*.m2v=01;34:*.mkv=01;34:*.webm=01;34:*.webp=01;34:*.ogm=01;34:*.mp4=01;34:*.m4v=01;34:*.mp4v=01;34:*.vob=01;34:*.qt=01;34:*.nuv=01;34:*.wmv=01;34:*.asf=01;34:*.rm=01;34:*.rmvb=01;34:*.flc=01;34:*.avi=01;34:*.fli=01;34:*.flv=01;34:*.gl=01;34:*.dl=01;34:*.xcf=01;34:*.xwd=01;34:*.yuv=01;34:*.cgm=01;34:*.emf=01;34:*.ogv=01;34:*.ogx=01;34:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:*rc=04;35:*.log=04;35;02';
 export LS_COLORS
 
-source /home/iamnotagenius/.config/broot/launcher/bash/br
+# FZF OPTIONS
+source /usr/share/fzf/completion.zsh
+source /usr/share/fzf/key-bindings.zsh
+export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS'
+--color=dark
+--color=fg:-1,bg:-1,hl:#c678dd,fg+:#ffffff,bg+:#4b5263,hl+:#d858fe
+--color=info:#98c379,prompt:#61afef,pointer:#be5046,marker:#e5c07b,spinner:#61afef,header:#61afef
+'
+fd() {
+  local dir
+  dir=$(find ${1:-.} -path '*/\.*' -prune \
+                  -o -type d -print 2> /dev/null | fzf +m) &&
+  cd "$dir"
+}
+# fda - including hidden directories
+fda() {
+  local dir
+  dir=$(find ${1:-.} -type d 2> /dev/null | fzf +m) && cd "$dir"
+}
+# Install packages using yay (change to pacman/AUR helper of your choice)
+function in() {
+    yay -Slq | fzf -q "$1" -m --preview 'yay -Si {1}' --ansi --preview-window=right,70% | xargs -ro yay -S
+}
+# Remove installed packages (change to pacman/AUR helper of your choice)
+function re() {
+    yay -Qq | fzf -q "$1" -m --preview 'yay -Qi {1}' --ansi | xargs -ro yay -Rns
+}
+
+#lf () {
+#	LF_TEMPDIR="$(mktemp -d -t lf-tempdir-XXXXXX)"
+#	LF_TEMPDIR="$LF_TEMPDIR" lf-run -last-dir-path="$LF_TEMPDIR/lastdir" "$@"
+#	if [ "$(cat "$LF_TEMPDIR/cdtolastdir" 2>/dev/null)" = "1" ]; then
+#		cd "$(cat "$LF_TEMPDIR/lastdir")"
+#	fi
+#	rm -rf "$LF_TEMPDIR"
+#	unset LF_TEMPDIR
+#}
