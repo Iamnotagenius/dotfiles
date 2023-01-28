@@ -51,13 +51,9 @@ handle_extension() {
     case "${FILE_EXTENSION_LOWER}" in
         ## Archive
         a|ace|alz|arc|arj|bz|bz2|cab|cpio|deb|gz|jar|lha|lz|lzh|lzma|lzo|\
-        rpm|rz|t7z|tar|tbz|tbz2|tgz|tlz|txz|tZ|tzo|war|xpi|xz|Z|zip)
+        rar|rpm|rz|t7z|tar|tbz|tbz2|tgz|tlz|txz|tZ|tzo|war|xpi|xz|Z|zip)
             atool --list -- "${FILE_PATH}" && exit 5
             bsdtar --list --file "${FILE_PATH}" && exit 5
-            exit 1;;
-        rar)
-            ## Avoid password prompt by providing empty password
-            unrar lt -p- -- "${FILE_PATH}" && exit 5
             exit 1;;
         7z)
             ## Avoid password prompt by providing empty password
@@ -181,7 +177,7 @@ handle_image() {
         #     exit 1;;
 
         ## Font
-        application/font*|application/*opentype)
+        application/font*|application/*opentype|font/*)
             preview_png="/tmp/$(basename "${IMAGE_CACHE_PATH%.*}").png"
             if fontimage -o "${preview_png}" \
                          --pixelsize "120" \
@@ -189,8 +185,11 @@ handle_image() {
                          --pixelsize "80" \
                          --text "  ABCDEFGHIJKLMNOPQRSTUVWXYZ  " \
                          --text "  abcdefghijklmnopqrstuvwxyz  " \
+                         --text "  АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЬЫЪЭЮЯ  " \
+                         --text "  абвгдеёжзийклмнопрстуфхцчшщьыъэюя  " \
                          --text "  0123456789.:,;(*!?') ff fl fi ffi ffl  " \
                          --text "  The quick brown fox jumps over the lazy dog.  " \
+                         --text "  Съешь ещё этих мягких французских булочек, да выпей чаю.  " \
                          "${FILE_PATH}";
             then
                 convert -- "${preview_png}" "${IMAGE_CACHE_PATH}" \
@@ -292,23 +291,24 @@ handle_mime() {
         ## Text
         text/* | */xml)
             ## Syntax highlight
-            if [[ "$( stat --printf='%s' -- "${FILE_PATH}" )" -gt "${HIGHLIGHT_SIZE_MAX}" ]]; then
-                exit 2
-            fi
-            if [[ "$( tput colors )" -ge 256 ]]; then
-                local pygmentize_format='terminal256'
-                local highlight_format='xterm256'
-            else
-                local pygmentize_format='terminal'
-                local highlight_format='ansi'
-            fi
-            env HIGHLIGHT_OPTIONS="${HIGHLIGHT_OPTIONS}" highlight \
-                --out-format="${highlight_format}" \
-                --force -- "${FILE_PATH}" && exit 5
-            env COLORTERM=8bit bat --color=always --style="plain" \
-                -- "${FILE_PATH}" && exit 5
-            pygmentize -f "${pygmentize_format}" -O "style=${PYGMENTIZE_STYLE}"\
-                -- "${FILE_PATH}" && exit 5
+            bat -nP --color=always "${FILE_PATH}" && exit 5
+            #if [[ "$( stat --printf='%s' -- "${FILE_PATH}" )" -gt "${HIGHLIGHT_SIZE_MAX}" ]]; then
+            #    exit 2
+            #fi
+            #if [[ "$( tput colors )" -ge 256 ]]; then
+            #    local pygmentize_format='terminal256'
+            #    local highlight_format='xterm256'
+            #else
+            #    local pygmentize_format='terminal'
+            #    local highlight_format='ansi'
+            #fi
+            #env HIGHLIGHT_OPTIONS="${HIGHLIGHT_OPTIONS}" highlight \
+            #    --out-format="${highlight_format}" \
+            #    --force -- "${FILE_PATH}" && exit 5
+            #env COLORTERM=8bit bat --color=always --style="plain" \
+            #    -- "${FILE_PATH}" && exit 5
+            #pygmentize -f "${pygmentize_format}" -O "style=${PYGMENTIZE_STYLE}"\
+            #    -- "${FILE_PATH}" && exit 5
             exit 2;;
 
         ## DjVu
