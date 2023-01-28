@@ -1,0 +1,9 @@
+#!/bin/bash
+mpv --profile=low-latency --no-cache "$1" &
+disown
+id=${1/v=/\/}
+id=${id##*\/}
+link="https://youtube.com/live_chat?v=$id" 
+echo "$link"
+chromium --app="https://youtube.com/live_chat?v=$id" &
+

@@ -1,0 +1,10 @@
+#!/bin/bash
+tool=$1
+loc="$2"
+loc=${loc#"file://"}
+echo "$2" > ~/opentui.log
+if [[ ! -e $loc ]]; then
+    loc=$(dirname "$loc")
+fi
+
+exec alacritty -e "$tool" "$loc"

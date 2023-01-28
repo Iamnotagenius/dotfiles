@@ -1,0 +1,12 @@
+SYMBOLS=('' '')
+IFS=$'\n'
+
+if ! cmus-remote -Q > /dev/null; then
+	exit 1
+fi
+data=(`cmus-remote -Q | grep -E "[^album]artist|title|status" | sed "s/tag \(artist\|title\) //"`)
+if [[ ${#data[@]} < 2 ]]; then
+	exit 1
+fi
+[[ "${data[0]}" =~ "playing" ]]
+echo ${data[2]} - ${data[1]} ${SYMBOLS[$?]}

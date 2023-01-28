@@ -1,0 +1,10 @@
+#!/bin/bash
+browsers=(qutebrowser librewolf chromium torbrowser-launcher brave surf dwb)
+
+existing=()
+for item in "${browsers[@]}"; do
+    if command -v "$item"; then existing+=("$item"); fi
+done
+
+choose=$(printf "%s\n" "${existing[@]}" | dmenu -l ${#browsers[@]})
+$choose

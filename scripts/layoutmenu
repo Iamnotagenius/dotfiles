@@ -1,0 +1,14 @@
+#!/bin/sh
+
+cat <<EOF | xmenu
+[]= Tiled	0
+><> Floating	1
+[M] Monocle	2
+|M| Centered Master	3
+>M> Centered Floating Master	4
+||| Columns	5
+[D] Deck	6
+DD" Double Deck	7
+TTT Bottom Stack	8
+=== Bottom Stack Horizontal	9
+EOF

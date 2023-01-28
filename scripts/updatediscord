@@ -1,0 +1,16 @@
+#!/bin/bash
+
+if [[ -z "$1" ]]; then
+    echo "Archive is not specified"
+    exit 1
+fi
+
+archive=$(basename "$1")
+
+mkdir "/tmp/$archive"
+tar xf "$1" -C "/tmp/$archive" 
+
+cp -rf /tmp/$archive/Discord/* /opt/discord
+
+rm -rf "/tmp/$archive"
+

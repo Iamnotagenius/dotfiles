@@ -1,0 +1,46 @@
+#!/bin/bash
+
+SHADOWPLAY_PID="/tmp/shadowplay.pid"
+SHADOWPLAY_DIR="/tmp/shadowplay.d"
+[ -e "$SHADOWPLAY_DIR" ] || mkdir "$SHADOWPLAY_DIR"
+
+case $1 in
+    start)
+        # To record a really fancy footage (saving last 10 segments with 7 seconds each)
+        # For some reason pavucontrol really needs to be started
+        lsof -c pavucontrol > /dev/null || setsid -f pavucontrol
+        rm -f "$SHADOWPLAY_DIR"/0*
+        sleep 2
+        ffmpeg -y -thread_queue_size 10000 \
+            -loglevel quiet -nostdin \
+            -hwaccel_output_format vaapi -hwaccel vaapi -vaapi_device /dev/dri/renderD128 \
+            -video_size hd1080 \
+            -f x11grab -i :0 \
+            -f pulse -sample_rate 44100 -i alsa_output.usb-C-Media_Electronics_Inc._USB_Audio_Device-00.analog-stereo.monitor \
+            -f segment -segment_time 5 -strftime 0 -segment_wrap 12 -reset_timestamps 1 \
+            -segment_list_flags live -segment_list $SHADOWPLAY_DIR/segments.ffconcat \
+            -preset veryfast "$SHADOWPLAY_DIR/%03d.mp4" &
+        echo "$!" > $SHADOWPLAY_PID
+        disown
+        ;;
+    stop)
+        [ ! -e $SHADOWPLAY_PID ] && echo "ShadowPlay isn't running" && exit 1
+        kill -s INT "$(cat $SHADOWPLAY_PID)"
+        rm $SHADOWPLAY_PID
+        if lsof -c pavucontrol > /dev/null; then
+            read -rp "Kill pavucontrol? [Y/n]: " -N 1 answer
+            [[ Nn =~ $answer && -n $answer ]] || pkill pavucontrol
+        fi
+        ;;
+    dragon-drop)
+        setsid -f dragon-drop $(ls -1t $SHADOWPLAY_DIR | grep -- ".mp4$")
+        ;;
+    full)
+        tail -n 11 $SHADOWPLAY_DIR/segments.ffconcat > last.ffconcat
+        ffmpeg -f concat -safe 0 -i last.ffconcat -c copy "$SHADOWPLAY_DIR/full_$(date +%d.%m.%y_%T).mp4"
+        ;;
+    *)
+        echo 'Usage: shadowplay [start|stop|dragon-drop|full]'
+        ;;
+esac
+

@@ -1,0 +1,42 @@
+#!/bin/bash
+TMP_FILE=/tmp/streaming-modules.list
+headphones="alsa_output.usb-C-Media_Electronics_Inc._USB_Audio_Device-00.analog-stereo"
+microphone="alsa_input.usb-C-Media_Electronics_Inc._USB_Audio_Device-00.mono-fallback"
+
+case "$1" in
+	start | on)
+		pactl load-module module-null-sink sink_name=Virtual1 >> $TMP_FILE
+		pactl load-module module-loopback source=$microphone sink=Virtual1 latency_msec=1 >> $TMP_FILE
+		#pactl load-module module-loopback source=Virtual1.monitor sink=$headphones >> $TMP_FILE
+		pactl load-module module-combine-sink sink_name=nullandmain slaves=$headphones,Virtual1 >> $TMP_FILE
+        
+        vcind=$(pactl -f json list source-outputs | \
+            jq "[.[] | {ind: .index, name: .properties.\"application.name\"}]" | \
+            jq "map(select(.name == \"WEBRTC VoiceEngine\"))[0].ind")
+        pactl move-source-output "$vcind" Virtual1
+
+
+		;;
+	stop | off)
+		if [ -e $TMP_FILE ]; then
+			cat $TMP_FILE | while read -r mod; do
+				pactl unload-module "$mod"
+			done
+		fi
+		rm $TMP_FILE
+		;;
+    to-vc | from-vc)
+        [ "$1" == "to-vc" ] && sink=0 || sink=$(pactl -f json list sinks | jq -r "map(select(.name == \"nullandmain\"))[0].index")
+        [ "$1" == "to-vc" ] && device=nullandmain || device=$headphones
+        inputs=$(pactl -f json list sink-inputs | jq "[.[]|{ind: .index, name: .properties|(if has(\"application.name\") then .\"application.name\" else .\"media.name\" end)}]")
+        name=$(echo "$inputs" | jq -r ".[].name" | fzf)
+        if [[ -z $name ]]; then
+            exit 0
+        fi
+        index=$(echo "$inputs" | jq -r "map(select(.name == \"$name\"))[0].ind")
+        pactl move-sink-input "$index" $device
+        ;;
+	*)
+		echo "Usage: $0 {[start | on] | [stop | off]}"
+		;;
+esac

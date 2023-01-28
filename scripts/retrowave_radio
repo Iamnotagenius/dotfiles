@@ -1,0 +1,10 @@
+#!/bin/sh
+songs=$1
+[ -z "$songs" ] && songs=100
+for url in $(curl "http://retrowave.ru/api/v1/tracks?limit=$songs" | jq .body.tracks[].streamUrl) 
+    do
+    url=${url#\"}
+    url=${url%\"}
+    mpc add "https://retrowave.ru$url"
+done
+mpc play

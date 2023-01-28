@@ -1,0 +1,10 @@
+#!/bin/sh
+mpduri="$(yt-dlp -g "$1")"
+#TAG=$(yt-dlp -i --get-filename "$1") 
+#cadena="{\"title\":\"$TAG\"}"
+#echo "$cadena"
+#mpduri="$mpduri#$cadena"
+#echo "$mpduri"
+mpc add "$mpduri"
+#mpc next
+mpc play

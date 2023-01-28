@@ -1,0 +1,5 @@
+#!/bin/sh
+theme=$(find /usr/share/icons ~/.local/share/icons ~/.icons -type d -name "cursors" | sed 's+.*/icons/\(.*\)/cursors+\1+' | fzf)
+sed -i "s/^\(Inherits=\).*\$/\1$theme/" ~/.icons/default/index.theme
+sed -i "s/^\(gtk-cursor-theme-name=\).*\$/\1$theme/" ~/.config/gtk-3.0/settings.ini
+

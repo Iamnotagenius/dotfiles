@@ -1,0 +1,22 @@
+#!/bin/bash
+
+if [ -z "$DMENU" ]; then
+    command -v dmenu > /dev/null && DMENU=dmenu
+    command -v rofi > /dev/null && DMENU="rofi -dmenu"
+fi
+
+DB_FILE=~/.passwords.kdbx
+
+if ! password="$($DMENU -p "Enter password to unlock ${DB_FILE/$HOME/\~}:" -P)"; then
+    exit 1;
+fi
+
+if ! echo "$password" | keepassxc-cli open "$DB_FILE"; then
+    notify-send KeePassXC "Error while reading the database: Invalid credentials were provided, please try again."
+    exit 1
+fi
+
+choice="$(echo "$password" | keepassxc-cli ls -Rf "$DB_FILE" | sed '/\/$/d' | $DMENU -l 15)"
+notify-send KeePassXC "<i><span color=\"#CC99CC\">$choice</span></i> copied to the clipboard."
+echo "$password" | keepassxc-cli clip "$DB_FILE" "$choice"
+notify-send KeePassXC "Clipboard cleared."

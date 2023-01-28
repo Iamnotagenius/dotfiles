@@ -1,0 +1,15 @@
+#! /bin/sh
+
+workspace="$(i3-msg -t get_workspaces | jq -r '..|try select(.focused == true)|.num')"
+#workspace="$(i3-msg -t get_workspaces| grep -Po '(?<=name":")([0-9]+)(?="[^{}]+focused":true)')"
+
+case "$1" in
+    next) workspace=$(( workspace + 1 )) ;;
+    prev) workspace=$(( workspace - 1 )) ;;
+    *) echo "Wrong command"; exit 1 ;;
+esac
+
+[ "$workspace" -lt "0" ] && workspace=0
+echo $workspace
+
+i3-msg workspace number $workspace

@@ -9,7 +9,6 @@ for manifest in $DIR/appmanifest*; do
 done
 selected=`for game in ${!Games[@]}; do echo ${game//_/ }; done | dmenu -l 15 -F | tr ' ' _`
 if [[ -n $selected ]]; then
-	echo 'view7' >> /tmp/dwm.fifo
 	steam -applaunch ${Games[$selected]} &
 	exit 0
 else

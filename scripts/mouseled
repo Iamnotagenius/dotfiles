@@ -1,0 +1,18 @@
+#!/bin/bash
+
+case $1 in
+    on)
+        ratbagctl "" led 0 set mode cycle
+        ratbagctl "" led 0 set duration 6000
+        ;;
+    off)
+        ratbagctl "" led 0 set mode off
+        ;;
+    toggle)
+        if [[ "$(ratbagctl "" led 0 get)" =~ off$ ]]; then
+            ratbagctl "" led 0 set mode cycle
+            ratbagctl "" led 0 set duration 6000
+        else
+            ratbagctl "" led 0 set mode off
+        fi
+esac
