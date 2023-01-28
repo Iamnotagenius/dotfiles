@@ -11,6 +11,7 @@ alias \
 	mkinst="doas make install" \
 	mkclinst="doas make clean install" \
 	lspkgs="pacman -Qqe" \
+    lf="ranger" \
 	cppass="pass -c" \
 	cppassg="pass -c Main/google.com" \
 	du="du -sh" \
@@ -25,7 +26,8 @@ alias \
 	vim="nvim" \
     gvim="neovide" \
     dcam="droidcam-cli" \
-    mail="neomutt"
+    mail="neomutt" \
+    jq="gojq"
 
 mkcd() {
     mkdir "$1" && cd "$1"
