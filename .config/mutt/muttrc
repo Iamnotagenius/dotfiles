@@ -18,3 +18,5 @@ color sidebar_highlight brightmagenta black
 color sidebar_flagged red default
 color sidebar_new green default
 color status brightmagenta black
+
+source maillist
