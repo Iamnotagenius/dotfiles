@@ -321,7 +321,7 @@
 
 
 [telegram]
-    desktop_entry = "telegramdesktop"
+    desktop_entry = "kotatogramdesktop"
     background = "#56b6c2"
     foreground = "#282c34"
     format = "<span color='#765288' style='italic'>%s</span>\n%b"
