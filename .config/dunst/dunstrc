@@ -312,6 +312,13 @@
     # Icon for notifications with critical urgency, uncomment to enable
     #default_icon = /path/to/icon
 
+[cal]
+    appname = "cal"
+    alignment = left
+    background = "#282c34"
+    foreground = "#abb2bf"
+    timeout = 9
+
 # Every section that isn't one of the above is interpreted as a rules to
 # override settings for certain messages.
 #
