@@ -9,12 +9,14 @@ settings:
   bindings.commands:
     global:
       normal:
+        ',P': hint --rapid thumbnails spawn umpv {hint-url}
         ',c': spawn mpv {url}
         ',da': hint thumbnails spawn urxvt -e youtube-dl -x {hint-url}
         ',dca': :spawn urxvt -e youtube-dl -x {url}
         ',dv': hint thumbnails spawn urxvt -e youtube-dl {hint-url}
         ',m': hint thumbnails spawn urxvt -e mpv --no-video {hint-url}
-        ',p': spawn --userscript pcms
+        ',p': hint thumbnails spawn umpv {hint-url}
+        ',u': spawn --userscript pcms
         ',v': hint thumbnails spawn mpv {hint-url}
   colors.webpage.bg:
     global: white
@@ -45,6 +47,13 @@ settings:
     https://mail.google.com?extsrc=mailto&url=%25s: true
   downloads.prevent_mixed_content:
     global: false
+  editor.command:
+    global:
+    - neovide
+    - '{file}'
+    - --
+    - -c
+    - normal {line}j{column0}l
   fonts.default_family:
     global: Iosevka
   fonts.default_size:
