@@ -1,3 +1,4 @@
+local M = {}
 local api = vim.api
 
 local function up_dirs(path)
@@ -15,16 +16,6 @@ local function up_dirs(path)
     end,
     nil,
     path
-end
-
-local function table_from_iter(iter, s, val)
-    local res = {}
-    while true do
-        val = iter(s, val)
-        if val == nil then break end
-        table.insert(res, val)
-    end
-    return res
 end
 
 local templates = {
@@ -78,6 +69,12 @@ local templates = {
             local lfs = require("lfs")
             local namespace = ""
             local class = string.match('/' .. context.file, ".*/(.+)%.cs$")
+            local keyword
+            if class:sub(1, 1) == 'I' then
+                keyword = "interface"
+            else
+                keyword = "class"
+            end
             for dir, comp in up_dirs(context.match:gsub("(.*)/.+", "%1")) do
                 namespace = comp .. '.' .. namespace
                 for filename in lfs.dir(dir .. '/' .. comp) do
@@ -85,12 +82,8 @@ local templates = {
                         return {
                             'namespace ' .. namespace:sub(1, #namespace - 1) .. ';',
                             '',
-                            'public class ' .. class,
+                            'public ' .. keyword .. ' ' .. class,
                             '{',
-                            '    public ' .. class .. '()',
-                            '    {',
-                            '    ',
-                            '    }',
                             '}'
                         }, { 4, 1 }
                     end
@@ -112,21 +105,58 @@ local templates = {
 
 templates.hpp = templates.h
 
-local function set_template(context)
-    local template = templates[context.file:match('.+%.(.+)$')]
-    if template then
-        local text = template.text
-        if type(text) == "table" then
+function M.get_template_function(ext)
+    local template = templates[ext]
+
+    if not template then
+        return function ()
+        end
+    end
+
+    template.init_pos = template.init_pos or { 0, 0 }
+
+    local callback
+    if type(template.text) == "table" then
+        callback = function()
             api.nvim_put(template.text, '', false, false)
-        elseif type(text) == "function" then
+            api.nvim_win_set_cursor(0, template.init_pos)
+        end
+    elseif type(template.text) == "function" then
+        callback = function(context)
             local lines
             lines, template.init_pos = template.text(context)
+            template.init_pos = template.init_pos or { 0, 0 }
             api.nvim_put(lines, '', false, false)
-        end
-        if template.init_pos then
             api.nvim_win_set_cursor(0, template.init_pos)
         end
     end
+
+    return callback
 end
 
-api.nvim_create_autocmd('BufNewFile', { callback = set_template })
+function M.put_template(context)
+    context = context or {
+        event = 'BufNewFile',
+        buf = api.nvim_get_current_buf(),
+        file = vim.fn.expand('%'),
+        match = vim.fn.expand('%:p')
+    }
+    local ext = context.file:match(".+%.(.+)$")
+    M.get_template_function(ext)(context)
+end
+
+function M.create_autocmd()
+    local augroup = api.nvim_create_augroup("NewFileTemplates", {})
+    for ext, template in pairs(templates) do
+        template.init_pos = template.init_pos or { 0, 0 }
+        local callback = M.get_template_function(ext)
+        api.nvim_create_autocmd('BufNewFile', {
+            group = augroup,
+            pattern = "*." .. ext,
+            desc = "New file template for *." .. ext .. " files",
+            callback = callback
+        })
+    end
+end
+
+return M

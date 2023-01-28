@@ -29,6 +29,7 @@ hl('CocSemVariable',       { fg = '#56b6c2' })
 hl('CocSemProperty',       { fg = '#e06c75' })
 hl('CocSemParameter',      { fg = '#56b6c2', italic = true })
 hl('CocSemTypeParameter',  { fg = '#e5c07b', italic = true })
+hl('CocInlayHint',          { fg = '#444c6f', italic = true })
 hl('CocWarningHighlight',   { undercurl = true, sp = 'Orange' })
 hl('CocErrorHighlight',     { undercurl = true, sp = '#c70039' })
 hl('CocErrorSign',          { ctermfg = 1, fg = '#c70039', bold = true })
@@ -45,9 +46,12 @@ hl('DiagnosticVirtualTextInfo', { fg = '#2b6f77' })
 
 vim.cmd('hi link ALEWarning CocWarningHighlight')
 vim.cmd('hi link ALEError CocErrorHighlight')
+vim.cmd('hi link ALEInfo CocInfoHighlight')
 vim.cmd('hi link ALEVirtualTextError DiagnosticVirtualTextError')
 vim.cmd('hi link ALEVirtualTextWarning DiagnosticVirtualTextWarn')
 vim.cmd('hi link ALEVirtualTextInfo DiagnosticVirtualTextInfo')
+
+vim.cmd('hi link IncSearch Search')
 
 function SyntaxStack()
     local synstack = vim.fn.synstack

@@ -64,9 +64,9 @@ local opts = {silent = true, noremap = true, expr = true}
 -- NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
 -- other plugin before putting this into your config.
 vim.api.nvim_set_keymap("i", "<TAB>",
-                        [[coc#jumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" : coc#pum#visible() ? coc#pum#next(0) : "<TAB>"]], opts)
+                        [[coc#jumpable() ? "\<C-r>=coc#snippet#jump(1, 0)\<CR>" : coc#pum#visible() ? coc#pum#next(0) : "<TAB>"]], opts)
 vim.api.nvim_set_keymap("i", "<S-TAB>",
-                        [[coc#pum#visible() ? coc#pum#prev(0) : coc#expandableOrJumpable() ? coc#snippet#prev() : "\<C-h>"]], opts)
+                        [[coc#pum#visible() ? coc#pum#prev(0) : coc#expandableOrJumpable() ? \<C-r>=coc#snippet#jump(0, 0) : "\<C-h>"]], opts)
 
 -- Make <CR> to accept selected completion item or notify coc.nvim to format
 -- <C-g>u breaks current undo, please make your own choice.

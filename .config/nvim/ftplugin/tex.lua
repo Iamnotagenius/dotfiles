@@ -11,11 +11,14 @@ local function cmd_surround(cmd)
     }
 end
 
-local function env_surround(env)
+local function env_surround(env, close)
+    if not close then
+        close = env
+    end
     return {
-        add = { { "\\begin{" .. env .. "}" }, { "\\end{" .. env .. "}" } },
-        find = "\\begin{" .. env .. "}.-\\end{" .. env .. "}",
-        delete = "(\\begin{" .. env .. "})().-(\\end{" .. env .. "})()"
+        add = { { "\\begin{" .. env .. "}" }, { "\\end{" .. close .. "}" } },
+        find = "\\begin{" .. env .. "}.-\\end{" .. close .. "}",
+        delete = "(\\begin{" .. env .. "})().-(\\end{" .. close .. "})()"
     }
 end
 
@@ -49,7 +52,10 @@ require("nvim-surround").buffer_setup {
         ["b"] = cmd_surround("textbf"),
         ["i"] = cmd_surround("textit"),
         ["t"] = cmd_surround("texttt"),
-        ["C"] = env_surround("center")
+        ["C"] = env_surround("center"),
+        ["d"] = {
+            add = { "\\left(", "\\right)" }
+        }
     },
     aliases = {
         ["m"] = "$",

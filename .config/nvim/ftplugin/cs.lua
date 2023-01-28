@@ -21,6 +21,7 @@ end
 
 local function set_csproj(context)
     if vim.b[context.buf].csproj ~= nil then
+        vim.g.cs_exe_proj = vim.b[context.buf].csproj
         return
     end
 
@@ -43,10 +44,8 @@ local function set_csproj(context)
     end
 
     vim.b[context.buf].csproj = csproj
-    if csproj.output_type == "Exe" then
-        vim.g.cs_exe_proj = csproj
-    end
+    vim.g.cs_exe_proj = csproj
 end
 
 
-vim.api.nvim_create_autocmd({ "BufWinEnter", "BufAdd" }, { pattern = {"*.cs", "*.csproj"}, callback = set_csproj })
+vim.api.nvim_create_autocmd({ "BufEnter", "BufAdd" }, { pattern = {"*.cs", "*.csproj"}, callback = set_csproj })

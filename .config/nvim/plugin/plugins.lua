@@ -198,15 +198,6 @@ return require('packer').startup(function(use)
                     }
                 },
                 sections = {
-                    lualine_b = {
-                        'branch',
-                        'diff',
-                        {
-                            'diagnostics',
-                            sources = { 'coc', 'ale' }
-                        }
-
-                    },
                     lualine_c = {
                         {
                             'filename',
@@ -236,7 +227,8 @@ return require('packer').startup(function(use)
     }
 
     use {
-        'neoclide/coc.nvim', branch = 'release',
+        'neoclide/coc.nvim',
+        branch = 'master', run = 'yarn install --frozen-lockfile',
         config = function ()
             require('cockeys')
             vim.g.coc_default_semantic_highlight_groups = true
@@ -302,7 +294,11 @@ return require('packer').startup(function(use)
         config = function ()
             local telescope = require('telescope')
             local fb_actions = telescope.extensions.file_browser.actions
-
+            local create_with_template = function(prompt_bufnr)
+                local templates = require('templates')
+                fb_actions.create_from_prompt(prompt_bufnr)
+                templates.put_template()
+            end
             telescope.setup {
                 defaults = {
                     layout_strategy = 'flex',
@@ -327,10 +323,10 @@ return require('packer').startup(function(use)
                     file_browser = {
                         mappings = {
                             n = {
-                                c = fb_actions.create_from_prompt
+                                c = create_with_template
                             },
                             i = {
-                                ["<M-C>"] = fb_actions.create_from_prompt
+                                ["<S-CR>"] = create_with_template
                             }
                         }
                     }
@@ -410,6 +406,7 @@ return require('packer').startup(function(use)
 
             vim.keymap.set('n', '<leader>db', require('dap').toggle_breakpoint)
             vim.keymap.set('n', '<leader>dc', require('dap').continue)
+            vim.keymap.set('n', '<leader>dt', require('dap').terminate)
             vim.keymap.set('n', '<leader>dn', require('dap').step_over)
             vim.keymap.set('n', '<leader>dsj', require('dap').step_into)
             vim.keymap.set('n', '<leader>dsk', require('dap').step_out)
@@ -429,6 +426,10 @@ return require('packer').startup(function(use)
                     type = "coreclr",
                     name = "launch - netcoredbg",
                     request = "launch",
+                    env = {
+                        DOTNET_ENVIRONMENT = "Development",
+                        ASPNETCORE_URLS = "http://localhost:5170;https://localhost:7113"
+                    },
                     program = function()
                         local proj = vim.g.cs_exe_proj
                         if proj == nil then
@@ -459,7 +460,7 @@ return require('packer').startup(function(use)
 
     use {
         'OmniSharp/omnisharp-vim', ft = { 'cs', 'csproj' },
-        requires = 'dense-analysis/ale',
+        requires = {{'dense-analysis/ale', ft = { 'cs', 'csproj' }}},
         config = function ()
             vim.g.ale_linters = {
                 cs = { 'OmniSharp' }
@@ -471,13 +472,22 @@ return require('packer').startup(function(use)
             vim.g.ale_virtualtext_cursor = 2
             vim.g.ale_virtualtext_prefix = '<- '
             vim.g.ale_lint_on_text_changed = 'always'
+            vim.g.ale_lint_delay = 0
+            vim.g.ale_virtualtext_delay = 0
 
             vim.g.OmniSharp_server_use_net6 = true
             vim.g.OmniSharp_highlighting = 3
+            vim.g.OmniSharp_diagnostic_showid = true
             vim.g.OmniSharp_popup_options = {
                 winblend = 40,
                 border = 'rounded'
             }
+            vim.g.OmniSharp_diagnostic_overrides = {
+                SA1309 = { type = 'None' },
+                IDE0160 = { type = 'None' },
+                IDE0008 = { type = 'None' },
+            }
+
             vim.g.OmniSharp_highlight_groups = {
                 ClassName = '@type',
                 ConstantName = '@constant',
@@ -500,14 +510,18 @@ return require('packer').startup(function(use)
             }
 
             vim.keymap.set('n', 'gd', '<Plug>(omnisharp_go_to_definition)')
-            vim.keymap.set('n', 'gy', '<Plug>(omnisharp_preview_definition)')
-            vim.keymap.set('n', 'gs', '<Plug>(omnisharp_signature_help)')
-            vim.keymap.set('n', 'gr', '<Plug>(omnisharp_find_usages)')
-            vim.keymap.set('n', 'gh', '<Plug>(omnisharp_documentation)')
+            vim.keymap.set('n', '<leader>r', '<Plug>(omnisharp_run_test)')
+            vim.keymap.set('n', '<leader>R', '<Plug>(omnisharp_run_tests_in_file)')
+            vim.keymap.set('n', '<leader>y', '<Plug>(omnisharp_preview_definition)')
+            vim.keymap.set('n', '<leader>s', '<Plug>(omnisharp_signature_help)')
+            vim.keymap.set('n', '<leader>u', '<Plug>(omnisharp_find_usages)')
+            vim.keymap.set('n', '<leader>h', '<Plug>(omnisharp_documentation)')
+            vim.keymap.set('n', '<leader>i', '<Plug>(omnisharp_find_implementations)')
+            vim.keymap.set('n', '<leader>a', '<Plug>(omnisharp_code_actions)')
+            vim.keymap.set('n', '<F2>', '<Plug>(omnisharp_rename)')
             vim.keymap.set('n', ']g', '<Plug>(ale_next_wrap)')
             vim.keymap.set('n', '[g', '<Plug>(ale_previous_wrap)')
-
-            vim.api.nvim_create_autocmd('CursorHoldI', { callback = vim.fn['OmniSharp#actions#signature#SignatureHelp'] })
+            vim.keymap.set('i', '<C-s>', '<Plug>(omnisharp_signature_help)')
         end
     }
 end)
