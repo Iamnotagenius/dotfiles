@@ -2,6 +2,10 @@ set default-bg "#2d2d2d"
 set default-fg "#d3d0c8"
 set font "firamono normal 14"
 
+set window-title-basename
+set window-title-page
+set statusbar-home-tilde
+
 set inputbar-bg "#2d2d2d"
 set inputbar-fg "#d3d0c8"
 
