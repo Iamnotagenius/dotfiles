@@ -47,7 +47,6 @@ export PS1='$(vcs_info_wrapper)%F{magenta}%~ %B%F{%(?.green.red)}%(?..)%f%
 export PS2='%B%F{yellow}%_ %F{blue}%b%f '
 export VISUAL="nvim"
 export EDITOR="nvim"
-export MANPAGER="sh -c 'col -bx | bat --theme=default -l man -p -'"
 
 # tab complete mod
 bindkey -M menuselect 'h' vi-backward-char
