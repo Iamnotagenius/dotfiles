@@ -1,21 +1,24 @@
+local api = vim.api
 local g = vim.g
 local opt = vim.opt
 local cmd = vim.cmd
 local env = vim.env
-local api = vim.api
 
 opt.tabstop = 4
 opt.shiftwidth = 4
 opt.expandtab = true
-opt.hlsearch = true
+opt.hlsearch = false
+opt.incsearch = true
 opt.nu = true
 opt.rnu = true
 opt.showcmd = true
+opt.scrolloff = 10
+opt.updatetime = 50
 opt.showmode = false
 opt.wrap = false
 opt.clipboard = 'unnamedplus'
 opt.langmap = 'ФИСВУАПРШОЛДЬТЩЗЙКЫЕГМЦЧНЯ;ABCDEFGHIJKLMNOPQRSTUVWXYZ,фисвуапршолдьтщзйкыегмцчня;abcdefghijklmnopqrstuvwxyz'
-opt.guifont = { 'Fura Mono Regular:h16', 'FiraCode Nerd Font:h16' }
+opt.guifont = { 'Fira Code Light:h16', 'FiraCode Nerd Font:h16' }
 opt.background = 'dark'
 g.netrw_liststyle = 3
 require('onedark').load()
@@ -33,7 +36,7 @@ augroup END
 if g.neovide then
     opt.mouse = 'a'
     g.neovide_cursor_vfx_mode = "torpedo"
-    g.neovide_refresh_rate = 72
+    g.neovide_refresh_rate = 60
     g.neovide_cursor_vfx_opacity = 120.0
     g.neovide_cursor_vfx_particle_density = 20.0
     g.neovide_cursor_vfx_particle_lifetime = 2.3
@@ -41,10 +44,11 @@ if g.neovide then
 end
 
 g.airline_powerline_fonts = true
-g.airline_theme = 'one'
 g['airline#extensions#tabline#enabled'] = true
 
 g.UltiSnipsSnippetStorageDirectoryForUltiSnipsEdit = '~/.config/nvim/snippets'
+g.airline_theme = 'one'
+
 
 vim.keymap.set({'n', 't'}, '<M-=>', function ()
     if not vim.g.term_buffer then
@@ -109,3 +113,22 @@ vim.keymap.set('n', '<C-->', function ()
 
     opt.guifont = changed
 end)
+
+vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
+vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
+vim.keymap.set('n', 'J', "mzJ`z")
+vim.keymap.set('n', '<C-d>', "<C-d>zz")
+vim.keymap.set('n', '<C-u>', "<C-u>zz")
+vim.keymap.set("n", "<C-s>", ":%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>")
+
+vim.keymap.set('n', '<C-h>', '<C-w><C-h>')
+vim.keymap.set('n', '<C-l>', '<C-w><C-l>')
+vim.keymap.set('n', '<C-k>', '<C-w><C-k>')
+vim.keymap.set('n', '<C-j>', '<C-w><C-j>')
+vim.keymap.set('n', '<C-g>', '<C-w><C-w>')
+vim.keymap.set('n', '<C-t>', ':tabnew<CR>:Telescope buffers<CR>')
+
+
+
+require('templates').create_autocmd()
+
