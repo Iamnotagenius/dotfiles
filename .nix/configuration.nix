@@ -86,6 +86,7 @@ in
       defaultEditor = true;
       withNodeJs = true;
     };
+    java.enable = true;
   };
 
   security = {
@@ -110,6 +111,7 @@ in
       brave
       isync
       libreoffice
+      imv
       msmtp
       neomutt
       neovide
@@ -153,19 +155,28 @@ in
     gnupg
     htop
     indent
+    keepassxc
     killall
     neovim
+    nodejs
     pinentry-curses
+    python311
     seatd
     socat
+    stdenv.cc.cc.lib
     tor-browser-bundle-bin
     udiskie
     vimiv-qt
     waybar
     wget
     wl-clipboard
+    yarn
     zathura
   ];
+
+  environment.variables = with pkgs; {
+      LD_LIBRARY_PATH = "${lib.makeLibraryPath [stdenv.cc.cc]}";
+  };
 
   # List services that you want to enable:
   services = { 
