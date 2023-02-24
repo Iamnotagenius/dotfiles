@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+
+BASE_API=https://api.exchangerate.host
+
+base_cur=USD
+dest_curs=RUB
+
+symbols_pager() {
+    bat -pl yaml
+}
+
+show_symbols() {
+    curl -s $BASE_API/symbols | gojq -r ".symbols.[] | \"\(.code): \(.description)\"" | symbols_pager
+}
+
+while [[ "$1" =~ ^- && ! "$1" == "--" ]]; do case $1 in
+-h | --help )
+    cat <<EOF
+Currency converter. Usage: $0 [-s, --symbols | [-b, --base CUR] [-d, --dest CUR1,CUR2] [AMOUNT]]
+
+Available options:
+  --base, -b    -- Base currency (Default: $base_cur)
+  --dest, -d    -- Comma-separated destination currencies (Default: $dest_curs)
+  --symbols, -s -- Show supported currencies
+
+Result is multiplied by AMOUNT.
+EOF
+    exit
+    ;;
+-b | --base )
+    shift; base_cur=$1
+    ;;
+-d | --dest )
+    shift; dest_curs=$1
+    ;;
+-s | --symbols )
+    show_symbols
+    exit
+    ;;
+esac; shift; done
+if [[ "$1" == '--' ]]; then shift; fi
+
+curl -s "$BASE_API/latest?base=$base_cur&symbols=$dest_curs" | \
+    gojq -r ".rates | to_entries.[] | . |= {\
+    "code": .key, \
+    "rate": ( .value * 100 * ${1:-1} | round | . / 100 )} | \
+    \"\(.code): \(.rate)\"" | symbols_pager
