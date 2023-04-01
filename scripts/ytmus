@@ -1,28 +1,30 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # where music files should go
 LIB_DIR=~/EARGASM
 
-if [[ $# -lt 1 ]]; then
-    echo "Usage: $0 link_to_video"
-    exit 1
-fi
+url="${1:-$(wl-paste)}"
 
 # get the filename
-file=$(yt-dlp --no-warnings -f bestaudio --get-filename "$1")
+json=$(yt-dlp --no-warnings -f bestaudio -j "$url" | \
+    gojq '{filename, title: (if .track then "\(.uploader | rtrimstr(" - Topic")) - \(.track)" else .title end)}')
+[[ -z "$json" ]] && exit 1
+
+file="$(gojq -r '.filename' <<< "$json")"
 file=${file%.*}.mp3
 
 # download file (if it is not present)
 if [ -f "$file" ]; then 
     echo "File '$file' has already been downloaded"
-elif ! yt-dlp -x --audio-format mp3 -f bestaudio "$1"; then
+elif ! yt-dlp -x --audio-format mp3 -f bestaudio "$url"; then
     echo "Error downloaing file from '$1'"
     exit 1
 fi
 
-rel_file=${file##*/}
+name="$(gojq -r '.title' <<< "$json")"
 # asking user if file name is correct
-read -i "${rel_file%.*}" -rp "Enter track name: " name
+set -o vi
+read -i "$name" -p "Enter track name: " -re name
 new_file=${name}.mp3
 mv "$file" "$new_file"
 file=$new_file
