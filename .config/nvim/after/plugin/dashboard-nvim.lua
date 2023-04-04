@@ -147,6 +147,7 @@ local girls = {
     },
 
 }
+
 math.randomseed(os.time())
 local girl = girls[math.random(#girls)]
 require('dashboard').setup {

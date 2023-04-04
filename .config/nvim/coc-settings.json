@@ -1,10 +1,10 @@
 {
     "coc.source.vimtex.enable": true,
     "coc.preferences.formatOnSave": true,
+    "coc.preferences.formatOnType": true,
+    "coc.preferences.bracketEnterImprove": true,
+    "coc.preferences.currentFunctionSymbolAutoUpdate": true,
     "semanticTokens.enable": true,
-    "semanticTokens.filetypes": [
-        "*"
-    ],
     "semanticTokens.combinedModifiers": [
         "deprecated"
     ],
@@ -20,9 +20,10 @@
         "--header-insertion=never",
         "--background-index"
     ],
-    "sql.database": "mysql",
+    "sql.database": "postgresql",
     "sql.lintOnChange": true,
     "links.tooltip": true,
+    "rpc.enabled": false,
     "rpc.detailsViewing": "📂 {workspace_folder} {problems}",
     "rpc.detailsEditing": "📂 {workspace_folder} {problems}",
     "rpc.lowerDetailsEditing": "✏️ {file_name} ({current_line}/{total_lines})",
@@ -34,6 +35,14 @@
     "rpc.buttonInactiveLabel": "Go to my Github",
     "rpc.buttonInactiveUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     "rpc.largeImage": "I'm stuck in {LANG}",
+    "signature.enable": true,
+    "signature.hideOnTextChange": false,
+    "signature.triggerSignatureWait": 200,
+    "signature.floatConfig": {
+        "winblend": 40,
+        "border": true,
+        "rounded": true
+    },
     "diagnostic.floatConfig": {
         "winblend": 40,
         "border": true,
@@ -105,12 +114,27 @@
         "importShortcut": "Both"
     },
     // "languageserver": {
-    // "csharp": {
-    // "command": "omnisharp",
-    // "args": ["-lsp", "-e", "utf-8", "-s", "/home/iamnotagenius/Sources/My/Programming/Csharp/iamnotagenius/TemplateRepository.sln"],
-    // "filetypes": ["cs", "csproj"]
-    // }
+    //     "csharp": {
+    //         "command": "omnisharp",
+    //         "args": [
+    //             "-lsp",
+    //             "-e",
+    //             "utf-8",
+    //         ],
+    //         "filetypes": [
+    //             "cs",
+    //             "csproj"
+    //         ]
+    //     }
     // },
+    "languageserver": {
+        "kotlin": {
+            "command": "~/.lsp/kotlin/bin/kotlin-language-server",
+            "filetypes": [
+                "kotlin"
+            ]
+        }
+    },
     "snippets.ultisnips.pythonPrompt": false,
     "rust-analyzer.semanticHighlighting.strings.enable": true,
     "rust-analyzer.semanticHighlighting.punctuation.enable": true,
@@ -118,4 +142,9 @@
     "rust-analyzer.semanticHighlighting.operator.enable": true,
     "rust-analyzer.semanticHighlighting.punctuation.separate.macro.bang": true,
     "rust-analyzer.diagnostics.enable": true,
+    "java.format.onType.enabled": true,
+    "java.format.settings.url": "~/.gradle/eclipse-formatter.xml",
+    "java.jdt.ls.lombokSupport.enabled": true,
+    "java.jdt.ls.java.home": "/usr/lib/jvm/default-runtime",
+    "java.jdt.ls.vmargs": "-XX:+UseParallelGC -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true -Xmx4G -Xms100m -Xlog:disable",
 }

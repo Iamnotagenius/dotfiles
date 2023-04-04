@@ -26,8 +26,9 @@ local expr_and_silent = { expr = true, silent = true }
 
 imap('<c-space>', vim.fn['coc#refresh'], expr_and_silent)
 map( '<leader>a', '<Plug>(coc-codeaction)')
-vmap('<leader>a', '<Plug>(Coc-codeaction-selected)')
+vmap('<leader>a', '<Plug>(coc-codeaction-selected)')
 map( '<leader>g', '<Plug>(coc-diagnostic-info)')
+map( '<leader>r', '<Plug>(coc-refactor)')
 map( '[g',        '<Plug>(coc-diagnostic-prev)')
 map( ']g',        '<Plug>(coc-diagnostic-next)')
 map( 'gd',        '<Plug>(coc-definition)')
@@ -46,6 +47,9 @@ map( '<F2>',      '<Plug>(coc-rename)')
 map( 'gl',        '<Plug>(coc-openlink)')
 map('<leader>h',  function () vim.fn.CocActionAsync('doHover') end)
 map('<leader>s',  function () vim.fn.CocActionAsync('showSignatureHelp') end)
+map('<leader>i',  function () vim.fn.CocActionAsync('organizeImport') end)
+map('<leader>q',  ':CocList diagnostics<CR>')
+imap('<c-s>',  function () vim.fn.CocActionAsync('showSignatureHelp') end)
 imap('<c-n>', function () vim.fn['coc#pum#next'](false) end, expr_and_silent)
 imap('<c-p>', function () vim.fn['coc#pum#prev'](false) end, expr_and_silent)
 smap('<TAB>', vim.fn['coc#snippet#next'])
@@ -64,9 +68,9 @@ local opts = {silent = true, noremap = true, expr = true}
 -- NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
 -- other plugin before putting this into your config.
 vim.api.nvim_set_keymap("i", "<TAB>",
-                        [[coc#jumpable() ? "\<C-r>=coc#snippet#jump(1, 0)\<CR>" : coc#pum#visible() ? coc#pum#next(0) : "<TAB>"]], opts)
+                        [[coc#pum#visible() ? coc#pum#next(0) : coc#jumpable() ? "\<C-r>=coc#snippet#jump(1, 0)\<CR>" : "<TAB>"]], opts)
 vim.api.nvim_set_keymap("i", "<S-TAB>",
-                        [[coc#pum#visible() ? coc#pum#prev(0) : coc#expandableOrJumpable() ? \<C-r>=coc#snippet#jump(0, 0) : "\<C-h>"]], opts)
+                        [[coc#pum#visible() ? coc#pum#prev(0) : coc#jumpable() ? "\<C-r>=coc#snippet#jump(0, 0)\<CR>" : ""]], opts)
 
 -- Make <CR> to accept selected completion item or notify coc.nvim to format
 -- <C-g>u breaks current undo, please make your own choice.

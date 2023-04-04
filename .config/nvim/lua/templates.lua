@@ -3,19 +3,19 @@ local api = vim.api
 
 local function up_dirs(path)
     return
-    function (unused, path)
-        if path:find("/") then
-            local remaining, last = path:match("^(.*)/(.+)$")
-            if not remaining then
-                return nil
-            elseif remaining:len() == 0 then
-                return '/', last
+        function(unused, path)
+            if path:find("/") then
+                local remaining, last = path:match("^(.*)/(.+)$")
+                if not remaining then
+                    return nil
+                elseif remaining:len() == 0 then
+                    return '/', last
+                end
+                return remaining, last
             end
-            return remaining, last
-        end
-    end,
-    nil,
-    path
+        end,
+        nil,
+        path
 end
 
 local templates = {
@@ -100,6 +100,18 @@ local templates = {
                 '}'
             }, { 2, 1 }
         end
+    },
+    java = {
+        text = function(context)
+            local package = string.match(context.match, "src/.+/java/(.+)/.+"):gsub("/", ".")
+            local class = string.match(context.match, ".+/(.+)%..+$")
+            return {
+                'package ' .. package .. ';',
+                '',
+                'public class ' .. class .. ' {',
+                '}'
+            }, { 3, 0 }
+        end
     }
 }
 
@@ -109,7 +121,7 @@ function M.get_template_function(ext)
     local template = templates[ext]
 
     if not template then
-        return function ()
+        return function()
         end
     end
 

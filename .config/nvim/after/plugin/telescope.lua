@@ -36,6 +36,10 @@ telescope.setup {
                     ["<A-c>"] = create_with_template
                 }
             }
+        },
+        mvnsearch = {
+            rows = 50,
+            yank_register = '+'
         }
     }
 }
@@ -43,10 +47,12 @@ telescope.setup {
 telescope.load_extension('fzf')
 telescope.load_extension('glyph')
 telescope.load_extension('file_browser')
+telescope.load_extension('mvnsearch')
+telescope.load_extension('harpoon')
 
 local opts = { remap = false }
 local funcs = require('telescope.builtin')
-vim.keymap.set('n', '<leader>fd', function ()
+vim.keymap.set('n', '<leader>fd', function()
     telescope.extensions.file_browser.file_browser {
         grouped = true,
         cwd = vim.fn.expand('%:p:h')
@@ -55,33 +61,36 @@ end, opts)
 vim.keymap.set('n', '<leader>fr', funcs.oldfiles, opts)
 vim.keymap.set('n', '<leader>ff', funcs.find_files, opts)
 vim.keymap.set('n', '<leader>fF',
-function ()
-    funcs.find_files {
-        search_dirs = { '~/scripts', '~/.config', '~/Sources', '~/Writing' }
-    }
-end, opts)
-vim.keymap.set('n', '<leader>fg',
-function ()
-    require('telescope.builtin').live_grep {
-        grep_open_files = true
-    }
-end, opts)
-vim.keymap.set('n', '<leader>fG',
-function ()
-    require('telescope.builtin').live_grep {
-        search_dirs = {
-            '.', require('telescope.utils').buffer_dir()
+    function()
+        funcs.find_files {
+            search_dirs = { '~/scripts', '~/.config', '~/Sources', '~/Writing' }
         }
-    }
-end, opts)
+    end, opts)
+vim.keymap.set('n', '<leader>fg',
+    function()
+        require('telescope.builtin').live_grep {
+            grep_open_files = true
+        }
+    end, opts)
+vim.keymap.set('n', '<leader>fG',
+    function()
+        require('telescope.builtin').live_grep {
+            search_dirs = {
+                '.', require('telescope.utils').buffer_dir()
+            }
+        }
+    end, opts)
 vim.keymap.set('n', '<leader>fb', funcs.buffers, opts)
 vim.keymap.set('n', '<leader>fh', funcs.help_tags, opts)
 vim.keymap.set('n', '<leader>fm', funcs.man_pages, opts)
-vim.keymap.set('n', '<leader>fe', function () telescope.extensions.glyph.glyph {
-    layout_strategy = 'cursor',
-    layout_config = {
-        height = 0.25,
-        width = 0.4
+vim.keymap.set('n', '<leader>fe', function()
+    telescope.extensions.glyph.glyph {
+        layout_strategy = 'cursor',
+        layout_config = {
+            height = 0.25,
+            width = 0.4
+        }
     }
-} end, opts)
+end, opts)
 vim.keymap.set('n', '<leader>ft', funcs.treesitter, opts)
+vim.keymap.set('n', '<leader>m', telescope.extensions.harpoon.marks)
