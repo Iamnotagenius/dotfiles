@@ -3,14 +3,39 @@ return require('packer').startup(function(use)
     use 'wbthomason/packer.nvim'
 
     use_rocks 'luafilesystem'
-    use_rocks 'xml2lua'
+    use_rocks { 'xml2lua 1.5-1' }
 
     use "lukas-reineke/indent-blankline.nvim"
-
     use 'glepnir/dashboard-nvim'
-
-
     use 'lervag/vimtex'
+    use 'windwp/nvim-autopairs'
+    use 'NvChad/nvim-colorizer.lua'
+
+    vim.g.neo_tree_remove_legacy_commands = true
+    use {
+        "nvim-neo-tree/neo-tree.nvim",
+        branch = "v2.x",
+        requires = {
+            "nvim-lua/plenary.nvim",
+            "MunifTanjim/nui.nvim",
+        }
+    }
+
+    use {
+        'ThePrimeagen/harpoon',
+        requires = {
+            "nvim-lua/plenary.nvim",
+        }
+    }
+
+    use {
+        'untitled-ai/jupyter_ascending.vim',
+        ft = 'python',
+        config = function()
+            vim.api.nvim_set_keymap('n', '<leader>e', '<Plug>(JupyterExecuteAll)', {})
+            vim.api.nvim_set_keymap('n', '<leader>j', '<Plug>(JupyterExecute)', {})
+        end
+    }
 
     use {
         'nvim-lualine/lualine.nvim',
@@ -24,12 +49,8 @@ return require('packer').startup(function(use)
 
     use 'jreybert/vimagit'
     use 'octol/vim-cpp-enhanced-highlight'
-    use {
-        'navarasu/onedark.nvim',
-        run = function ()
-            require('onedark').setup()
-        end
-    }
+    use 'navarasu/onedark.nvim'
+
 
     use {
         "kylechui/nvim-surround", tag = "*",
@@ -41,8 +62,22 @@ return require('packer').startup(function(use)
     }
 
     use {
+        "echasnovski/mini.comment",
+        config = function()
+            require('mini.comment').setup()
+        end
+    }
+
+    use {
+        "echasnovski/mini.splitjoin",
+        config = function()
+            require('mini.splitjoin').setup()
+        end
+    }
+
+    use {
         'nvim-treesitter/nvim-treesitter',
-        requires = { 'p00f/nvim-ts-rainbow' },
+        requires = { 'HiPhish/nvim-ts-rainbow2', 'nvim-treesitter/nvim-treesitter-context' },
         run = ':TSUpdate',
     }
 
@@ -57,6 +92,12 @@ return require('packer').startup(function(use)
             {
                 'nvim-telescope/telescope-fzf-native.nvim',
                 run = 'make'
+            },
+            {
+                '/home/iamnotagenius/Sources/mvnsearch.nvim',
+                rocks = {
+                    'http', { 'xml2lua 1.5-1' }, 'Lua-cURL'
+                }
             }
         },
     }
@@ -68,10 +109,12 @@ return require('packer').startup(function(use)
 
     use {
         "rcarriga/nvim-dap-ui",
-        requires = {"mfussenegger/nvim-dap"},
+        requires = { "mfussenegger/nvim-dap" },
     }
 
     use 'fatih/vim-go'
+
+    use 'hkupty/iron.nvim'
 
     -- Kid's stuff
     use 'wakatime/vim-wakatime'

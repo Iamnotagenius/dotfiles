@@ -16,12 +16,13 @@ opt.scrolloff = 10
 opt.updatetime = 50
 opt.showmode = false
 opt.wrap = false
+opt.cursorline = true
 opt.clipboard = 'unnamedplus'
-opt.langmap = 'ФИСВУАПРШОЛДЬТЩЗЙКЫЕГМЦЧНЯ;ABCDEFGHIJKLMNOPQRSTUVWXYZ,фисвуапршолдьтщзйкыегмцчня;abcdefghijklmnopqrstuvwxyz'
+opt.langmap =
+'ФИСВУАПРШОЛДЬТЩЗЙКЫЕГМЦЧНЯ;ABCDEFGHIJKLMNOPQRSTUVWXYZ,фисвуапршолдьтщзйкыегмцчня;abcdefghijklmnopqrstuvwxyz'
 opt.guifont = { 'Fira Code Light:h16', 'FiraCode Nerd Font:h16' }
 opt.background = 'dark'
 g.netrw_liststyle = 3
-require('onedark').load()
 env.NVIM_TUI_ENABLE_TRUE_COLOR = true
 if opt.termguicolors then
     opt.termguicolors = true
@@ -49,19 +50,20 @@ g['airline#extensions#tabline#enabled'] = true
 g.UltiSnipsSnippetStorageDirectoryForUltiSnipsEdit = '~/.config/nvim/snippets'
 g.airline_theme = 'one'
 
+g.mapleader = ' '
 
-vim.keymap.set({'n', 't'}, '<M-=>', function ()
+vim.keymap.set({ 'n', 't' }, '<M-=>', function()
     if not vim.g.term_buffer then
         vim.cmd [[below 10%split +terminal]]
         vim.g.term_buffer = api.nvim_get_current_buf()
         for _, chan in ipairs(api.nvim_list_chans()) do
             if chan.buffer == vim.g.term_buffer then
-                api.nvim_create_user_command('T', function (command)
+                api.nvim_create_user_command('T', function(command)
                     api.nvim_chan_send(chan.id, command.args .. '\n')
                 end, {
-                desc = "Send command to virtual terminal",
-                nargs = 1
-            })
+                    desc = "Send command to virtual terminal",
+                    nargs = 1
+                })
             end
         end
         vim.cmd 'startinsert'
@@ -92,7 +94,7 @@ vim.keymap.set({ 'i', 'n', 'v' }, '<m-l>', function ()
 end)
 
 vim.g.font_step = 1
-vim.keymap.set('n', '<C-=>', function ()
+vim.keymap.set('n', '<C-=>', function()
     local changed = {}
     for _, font in ipairs(opt.guifont:get()) do
         local size = string.match(font, ":h(%d+)")
@@ -103,7 +105,7 @@ vim.keymap.set('n', '<C-=>', function ()
     opt.guifont = changed
 end)
 
-vim.keymap.set('n', '<C-->', function ()
+vim.keymap.set('n', '<C-->', function()
     local changed = {}
     for _, font in ipairs(opt.guifont:get()) do
         local size = string.match(font, ":h(%d+)")
@@ -120,15 +122,16 @@ vim.keymap.set('n', 'J', "mzJ`z")
 vim.keymap.set('n', '<C-d>', "<C-d>zz")
 vim.keymap.set('n', '<C-u>', "<C-u>zz")
 vim.keymap.set("n", "<C-s>", ":%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>")
+vim.keymap.set('n', '<leader>x', ':bd<CR>')
 
-vim.keymap.set('n', '<C-h>', '<C-w><C-h>')
-vim.keymap.set('n', '<C-l>', '<C-w><C-l>')
-vim.keymap.set('n', '<C-k>', '<C-w><C-k>')
-vim.keymap.set('n', '<C-j>', '<C-w><C-j>')
+local opts = { silent = true, noremap = true, expr = true }
+vim.keymap.set({ 'n', 'i' }, '<C-h>', '<C-w><C-h>')
+vim.keymap.set({ 'n', 'i' }, '<C-l>', '<C-w><C-l>')
+vim.keymap.set({ 'n', 'i' }, '<C-k>', [[coc#float#has_float() ? coc#float#scroll(0, 3) : "<C-w><C-k>"]], opts)
+vim.keymap.set({ 'n', 'i' }, '<C-j>', [[coc#float#has_float() ? coc#float#scroll(1, 3) : "<C-w><C-j>"]], opts)
 vim.keymap.set('n', '<C-g>', '<C-w><C-w>')
 vim.keymap.set('n', '<C-t>', ':tabnew<CR>:Telescope buffers<CR>')
 
 
 
 require('templates').create_autocmd()
-

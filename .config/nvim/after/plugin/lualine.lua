@@ -13,9 +13,9 @@ require('lualine').setup {
             {
                 'buffers',
                 symbols = {
-                    modified = ' ',      -- Text to show when the buffer is modified
+                    modified = ' ',     -- Text to show when the buffer is modified
                     alternate_file = ' ', -- Text to show to identify the alternate file
-                    directory =  '',     -- Text to show when the buffer is a directory
+                    directory = '',     -- Text to show when the buffer is a directory
                 }
             }
         }
@@ -35,7 +35,7 @@ require('lualine').setup {
             }
         },
         lualine_x = {
-            function ()
+            function()
                 local kmap = vim.opt.keymap:get()
                 if kmap == '' then
                     return ''
