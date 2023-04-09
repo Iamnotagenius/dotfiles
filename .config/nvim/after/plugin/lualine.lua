@@ -21,6 +21,23 @@ require('lualine').setup {
         }
     },
     sections = {
+        lualine_b = {
+            { 'b:gitsigns_head', icon = '' },
+            {
+                'diff',
+                source = function()
+                    local gitsigns = vim.b.gitsigns_status_dict
+                    if gitsigns then
+                        return {
+                            added = gitsigns.added,
+                            modified = gitsigns.changed,
+                            removed = gitsigns.removed
+                        }
+                    end
+                end
+            },
+            'diagnostics'
+        },
         lualine_c = {
             {
                 'filename',
@@ -42,6 +59,7 @@ require('lualine').setup {
                 end
                 return ' ' .. kmap
             end,
+            'fileformat',
             'filetype',
         }
     }
