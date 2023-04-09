@@ -10,6 +10,7 @@ return require('packer').startup(function(use)
     use 'lervag/vimtex'
     use 'windwp/nvim-autopairs'
     use 'NvChad/nvim-colorizer.lua'
+    use 'nvim-telescope/telescope-ui-select.nvim'
 
     vim.g.neo_tree_remove_legacy_commands = true
     use {
@@ -43,14 +44,34 @@ return require('packer').startup(function(use)
     }
 
     use {
-        'neoclide/coc.nvim',
-        branch = 'master', run = 'yarn install --frozen-lockfile',
+        'VonHeikemen/lsp-zero.nvim',
+        branch = 'v2.x',
+        requires = {
+            -- LSP Support
+            { 'neovim/nvim-lspconfig' }, -- Required
+            {
+                -- Optional
+                'williamboman/mason.nvim',
+                run = function()
+                    pcall(vim.cmd, 'MasonUpdate')
+                end,
+            },
+            { 'williamboman/mason-lspconfig.nvim' }, -- Optional
+
+            -- Autocompletion
+            { 'hrsh7th/nvim-cmp' }, -- Required
+            { 'hrsh7th/cmp-buffer' },
+            { 'hrsh7th/cmp-path' },
+            { 'hrsh7th/cmp-nvim-lsp' }, -- Required
+            { 'hrsh7th/cmp-nvim-lua' }, -- Required
+            { 'L3MON4D3/LuaSnip' },     -- Required
+            { 'onsails/lspkind.nvim' }
+        }
     }
 
     use 'jreybert/vimagit'
     use 'octol/vim-cpp-enhanced-highlight'
     use 'navarasu/onedark.nvim'
-
 
     use {
         "kylechui/nvim-surround", tag = "*",
@@ -101,6 +122,8 @@ return require('packer').startup(function(use)
             }
         },
     }
+
+    use 'mfussenegger/nvim-jdtls'
 
     use 'ghassan0/telescope-glyph.nvim'
     use 'honza/vim-snippets'

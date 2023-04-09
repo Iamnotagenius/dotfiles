@@ -29,20 +29,22 @@ require('onedark').setup {
         ["@type.parameter"] = { fg = "$yellow", fmt = "italic" },
         ["@conditional"] = { fg = "$purple", fmt = "italic" },
         ["@method"] = { fg = "$blue" },
+        ["@macro"] = { fg = "$blue", fmt = "bold" },
         ["@ext.method"] = { fg = "$blue", fmt = "italic" },
         ["@enum"] = { fg = "$saturated_yellow" },
         ["@struct"] = { fg = "$yellow" },
-        CocSemAnnotation = { fg = "$purple", fmt = "italic" },
-        CocSemLifetime = { fg = "$orange", fmt = "italic" },
-        CocSemDeclarationProperty = { fg = "$red", fmt = "italic" },
-        CocSemMacro = { fg = "$blue", fmt = "bold" },
-        CocInlayHint = { fg = "$light_purple", fmt = "italic" },
-        CocWarningHighlight = { fmt = "undercurl", sp = "$orange" },
-        CocErrorHighlight = { fmt = "undercurl", sp = "$red" },
-        CocErrorSign = { fg = "$red", bold = true },
-        CocInfoHighlight = { fmt = "undercurl", sp = "$blue" },
-        CocHintHighlight = { fmt = "undercurl", sp = "$green" },
-        CocMenuSel = { bg = "$grey" },
+        ["@lsp.type.annotation"] = { fg = "$purple", fmt = "italic" },
+        ["@lsp.type.lifetime"] = { fg = "$orange", fmt = "italic" },
+        ["@lsp.typemod.property.declaration"] = { fg = "$red", fmt = "italic" },
+        ["@lsp.mod.controlFlow"] = { fmt = "italic" },
+        ["@lsp.mod.deprecated"] = { fmt = "strikethrough" },
+        InlayHint = { fg = "$light_purple", fmt = "italic" },
+        WarningHighlight = { fmt = "undercurl", sp = "$orange" },
+        ErrorHighlight = { fmt = "undercurl", sp = "$red" },
+        ErrorSign = { fg = "$red", bold = true },
+        InfoHighlight = { fmt = "undercurl", sp = "$blue" },
+        HintHighlight = { fmt = "undercurl", sp = "$green" },
+        MenuSel = { bg = "$grey" },
         DiagnosticVirtualTextError = { fg = "$dark_red" },
         DiagnosticVirtualTextWarn = { fg = "$dark_yellow" },
         DiagnosticVirtualTextInfo = { fg = "$dark_cyan" },
@@ -59,43 +61,21 @@ require('onedark').setup {
 
 require('onedark').load()
 
-link('CocSemNamespace', '@namespace')
+link('@lsp.type.namespace', '@namespace')
+link('@lsp.type.keyword', '@keyword')
+link('@lsp.type.macro', '@macro')
 link('Macro', '@macro')
 link('Include', '@macro')
 link('cInclude', '@macro')
-link('CocSemVariable', '@variable')
-link('CocSemProperty', '@property')
-link('CocSemParameter', '@parameter')
-link('CocSemClass', '@type')
-link('CocSemInterface', '@interface')
-link('CocSemTypeParameter', '@type.parameter')
-link('CocSemEnum', '@enum')
-link('CocSemMethod', '@method')
-link('CocSemEnumMember', '@constant')
-link('CocSemModifier', '@keyword')
-
--- OmniSharp's CocSem groups
-link('CocSemClass_name', '@type')
-link('CocSemConstant_name', '@constant')
-link('CocSemDelegate_name', '@type')
-link('CocSemEnum_member_name', '@constant')
-link('CocSemEnum_name', '@enum')
-link('CocSemEvent_name', '@type')
-link('CocSemExtension_method_name', '@ext.method')
-link('CocSemField_name', '@variable')
-link('CocSemInterface_name', '@interface')
-link('CocSemKeyword', '@keyword')
-link('CocSemKeyword___control', '@conditional')
-link('CocSemLocal_name', '@variable')
-link('CocSemMethod_name', '@method')
-link('CocSemNamespace_name', '@namespace')
-link('CocSemParameter_name', '@parameter')
-link('CocSemProperty_name', '@property')
-link('CocSemString___escape_character', '@constant')
-link('CocSemStruct_name', '@struct')
-link('CocSemType_parameter_name', '@type.parameter')
-
-link('CocSemXml_doc_comment___name', '@keyword')
-link('CocSemXml_doc_comment___attribute_name', '@property')
-link('CocSemXml_doc_comment___attribute_quotes', 'String')
-link('CocSemXml_doc_comment___attribute_value', 'String')
+link('@lsp.type.variable', '@variable')
+link('@lsp.type.property', '@property')
+link('@lsp.type.parameter', '@parameter')
+link('@lsp.type.class', '@type')
+link('@lsp.type.interface', '@interface')
+link('@lsp.type.typeParameter', '@type.parameter')
+link('@lsp.type.enum', '@enum')
+link('@lsp.type.method', '@method')
+link('@lsp.type.enumMember', '@constant')
+link('@lsp.type.modifier', '@keyword')
+link('CmpItemKindInterface', '@interface')
+link('CmpItemEnumMember', '@constant')
