@@ -17,6 +17,7 @@ opt.updatetime = 50
 opt.showmode = false
 opt.wrap = false
 opt.cursorline = true
+opt.pumblend = 40
 opt.clipboard = 'unnamedplus'
 opt.langmap =
 'ФИСВУАПРШОЛДЬТЩЗЙКЫЕГМЦЧНЯ;ABCDEFGHIJKLMNOPQRSTUVWXYZ,фисвуапршолдьтщзйкыегмцчня;abcdefghijklmnopqrstuvwxyz'
@@ -127,8 +128,8 @@ vim.keymap.set('n', '<leader>x', ':bd<CR>')
 local opts = { silent = true, noremap = true, expr = true }
 vim.keymap.set({ 'n', 'i' }, '<C-h>', '<C-w><C-h>')
 vim.keymap.set({ 'n', 'i' }, '<C-l>', '<C-w><C-l>')
-vim.keymap.set({ 'n', 'i' }, '<C-k>', [[coc#float#has_float() ? coc#float#scroll(0, 3) : "<C-w><C-k>"]], opts)
-vim.keymap.set({ 'n', 'i' }, '<C-j>', [[coc#float#has_float() ? coc#float#scroll(1, 3) : "<C-w><C-j>"]], opts)
+vim.keymap.set({ 'n', 'i' }, '<C-k>', '<C-w><C-k>')
+vim.keymap.set({ 'n', 'i' }, '<C-j>', '<C-w><C-j>')
 vim.keymap.set('n', '<C-g>', '<C-w><C-w>')
 vim.keymap.set('n', '<C-t>', ':tabnew<CR>:Telescope buffers<CR>')
 

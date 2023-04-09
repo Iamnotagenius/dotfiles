@@ -40,6 +40,11 @@ telescope.setup {
         mvnsearch = {
             rows = 50,
             yank_register = '+'
+        },
+        ["ui-select"] = {
+            require('telescope.themes').get_dropdown {
+
+            }
         }
     }
 }
@@ -49,6 +54,7 @@ telescope.load_extension('glyph')
 telescope.load_extension('file_browser')
 telescope.load_extension('mvnsearch')
 telescope.load_extension('harpoon')
+telescope.load_extension('ui-select')
 
 local opts = { remap = false }
 local funcs = require('telescope.builtin')
