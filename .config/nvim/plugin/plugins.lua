@@ -40,6 +40,11 @@ return require('packer').startup(function(use)
     }
 
     use {
+        'TimUntersberger/neogit',
+        requires = 'nvim-lua/plenary.nvim'
+    }
+
+    use {
         'untitled-ai/jupyter_ascending.vim',
         ft = 'python',
         config = function()
@@ -79,7 +84,6 @@ return require('packer').startup(function(use)
         }
     }
 
-    use 'jreybert/vimagit'
     use 'octol/vim-cpp-enhanced-highlight'
     use 'navarasu/onedark.nvim'
 
