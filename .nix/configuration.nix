@@ -2,17 +2,12 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }: let
-  flake-compat = builtins.fetchTarball "https://github.com/edolstra/flake-compat/archive/master.tar.gz";
-  hyprland = (import flake-compat {
-    src = builtins.fetchTarball "https://github.com/hyprwm/Hyprland/archive/master.tar.gz";
-  }).defaultNix;
-in 
+{ config, pkgs, ... }: 
+
 {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      hyprland.nixosModules.default
     ];
 
   networking.hostName = "NixOSBook"; # Define your hostname.
@@ -64,7 +59,7 @@ in
           rev = "1636fbca54ec86e44bfc4c93b0d2e17b39d844b3";
           sha256 = "sha256-+yY9RlyjV6jcMmWHsNALIqr26cNJp+odXPOwfrPwnXI=";
         };
-      in mikuChristmas;
+      in fallout;
       gfxmodeEfi = "1920x1080";
     };
   };
@@ -72,7 +67,7 @@ in
   programs = {
     hyprland = {
       enable = true;
-      package = hyprland.packages.${pkgs.system}.default;
+      xwayland.hidpi = true;
     };
     waybar.enable = true;
     light.enable = true;
@@ -136,7 +131,7 @@ in
   };
 
   fonts.fonts = with pkgs; [
-    (nerdfonts.override { fonts = [ "FiraMono" "Iosevka" ]; })
+    (nerdfonts.override { fonts = [ "FiraMono" "Iosevka" "Hack" "Hermit" ]; })
   ];
 
   # List packages installed in system profile. To search, run:
@@ -161,6 +156,7 @@ in
     nodejs
     pinentry-curses
     python311
+    ripgrep
     seatd
     socat
     stdenv.cc.cc.lib

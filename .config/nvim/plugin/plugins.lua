@@ -129,7 +129,7 @@ return require('packer').startup(function(use)
                 run = 'make'
             },
             {
-                '/home/iamnotagenius/Sources/mvnsearch.nvim',
+                'Iamnotagenius/mvnsearch.nvim',
                 rocks = {
                     'http', { 'xml2lua 1.5-1' }, 'Lua-cURL'
                 }

@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+ongoing=~/Pictures/Wallpapers/ongoing
+watched=~/Pictures/Wallpapers/watched
+
+set_wallpaper() {
+    killall wbg
+    wbg "$1" &
+}
+
+[[ -d $ongoing ]] || exit 1
+
+chosen="$(find $ongoing -name "*.jpg" -o -name "*.png" | shuf -n 1)"
+
+if [[ -z "$chosen" ]]; then
+    rmdir $ongoing
+    mv $watched $ongoing
+    mkdir $watched
+    chosen="$(find $ongoing -name "*.jpg" -o -name "*.png" | shuf -n 1)"
+fi
+
+[[ -e "$chosen" ]] || echo Something went really wrong.
+
+mv "$chosen" "${chosen/$ongoing/$watched}"
+set_wallpaper "${chosen/$ongoing/$watched}"
