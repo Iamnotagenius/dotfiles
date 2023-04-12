@@ -18,6 +18,7 @@ local lsp = require('lsp-zero').preset {
 
 lsp.on_attach(function(client, bufnr)
     lsp.default_keymaps({ buffer = bufnr })
+    vim.keymap.set('n', '<leader>a', vim.lsp.buf.code_action, { buffer = bufnr })
 end)
 
 lsp.format_on_save({
@@ -29,6 +30,11 @@ lsp.format_on_save({
 
 -- (Optional) Configure lua language server for neovim
 require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
+
+-- Use nvim-jdtls for java lang server
+lsp.configure('jdtls', {
+    autostart = false,
+})
 
 lsp.setup()
 
@@ -48,7 +54,6 @@ lsp.set_sign_icons({
 cmp.event:on(
     'confirm_done',
     cmp_autopairs.on_confirm_done()
-
 )
 
 cmp.setup({
@@ -85,5 +90,3 @@ cmp.setup({
         end
     }
 })
-
-vim.keymap.set('n', '<leader>a', vim.lsp.buf.code_action)
