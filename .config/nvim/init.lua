@@ -17,11 +17,10 @@ opt.updatetime = 50
 opt.showmode = false
 opt.wrap = false
 opt.cursorline = true
-opt.pumblend = 40
 opt.clipboard = 'unnamedplus'
 opt.langmap =
 'ФИСВУАПРШОЛДЬТЩЗЙКЫЕГМЦЧНЯ;ABCDEFGHIJKLMNOPQRSTUVWXYZ,фисвуапршолдьтщзйкыегмцчня;abcdefghijklmnopqrstuvwxyz'
-opt.guifont = { 'Fira Code Light:h16', 'FiraCode Nerd Font:h16' }
+opt.guifont = { 'Hack Nerd Font:h14' }
 opt.background = 'dark'
 g.netrw_liststyle = 3
 env.NVIM_TUI_ENABLE_TRUE_COLOR = true
@@ -42,7 +41,31 @@ if g.neovide then
     g.neovide_cursor_vfx_opacity = 120.0
     g.neovide_cursor_vfx_particle_density = 20.0
     g.neovide_cursor_vfx_particle_lifetime = 2.3
-    g.neovide_transparency = 0.9
+    g.neovide_transparency = 1.0
+    opt.pumblend = 40
+
+    vim.g.font_step = 1
+
+    vim.keymap.set('n', '<C-->', function()
+        local changed = {}
+        for _, font in ipairs(opt.guifont:get()) do
+            local size = string.match(font, ":h(%d+)")
+            local new = string.gsub(font, size, tostring(tonumber(size) - vim.g.font_step), 1)
+            table.insert(changed, new)
+        end
+
+        opt.guifont = changed
+    end)
+    vim.keymap.set('n', '<C-=>', function()
+        local changed = {}
+        for _, font in ipairs(opt.guifont:get()) do
+            local size = string.match(font, ":h(%d+)")
+            local new = string.gsub(font, size, tostring(tonumber(size) + vim.g.font_step), 1)
+            table.insert(changed, new)
+        end
+
+        opt.guifont = changed
+    end)
 end
 
 g.airline_powerline_fonts = true
@@ -92,29 +115,6 @@ vim.keymap.set({ 'i', 'n', 'v' }, '<m-l>', function ()
     if api.nvim_get_mode().mode == 'i' then
         api.nvim_feedkeys('a', 'nt', false)
     end
-end)
-
-vim.g.font_step = 1
-vim.keymap.set('n', '<C-=>', function()
-    local changed = {}
-    for _, font in ipairs(opt.guifont:get()) do
-        local size = string.match(font, ":h(%d+)")
-        local new = string.gsub(font, size, tostring(tonumber(size) + vim.g.font_step), 1)
-        table.insert(changed, new)
-    end
-
-    opt.guifont = changed
-end)
-
-vim.keymap.set('n', '<C-->', function()
-    local changed = {}
-    for _, font in ipairs(opt.guifont:get()) do
-        local size = string.match(font, ":h(%d+)")
-        local new = string.gsub(font, size, tostring(tonumber(size) - vim.g.font_step), 1)
-        table.insert(changed, new)
-    end
-
-    opt.guifont = changed
 end)
 
 vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")

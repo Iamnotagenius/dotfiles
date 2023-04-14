@@ -2,6 +2,24 @@ local function link(dest, source)
     vim.api.nvim_set_hl(0, dest, { link = source })
 end
 
+local bg0 = "none"
+local bg1 = "none"
+
+local DiagnosticVirtualTextError = { fg = "$dark_red" }
+local DiagnosticVirtualTextWarn = { fg = "$dark_yellow" }
+local DiagnosticVirtualTextInfo = { fg = "$dark_cyan" }
+local DiagnosticVirtualTextHint = { fg = "$dark_purple" }
+
+if vim.g.neovide then
+    bg0 = "$bg0"
+    bg1 = "$bg1"
+else
+    DiagnosticVirtualTextHint.bg = 'none'
+    DiagnosticVirtualTextInfo.bg = 'none'
+    DiagnosticVirtualTextWarn.bg = 'none'
+    DiagnosticVirtualTextError.bg = 'none'
+end
+
 require('onedark').setup {
     colors = {
         light_red = "#eebbbe",
@@ -13,10 +31,16 @@ require('onedark').setup {
         indent_context = "#596169"
     },
     highlights = {
-        CursorLineNr = { fg = '$green', bg = '$bg1', fmt = 'bold' },
+        Normal = { bg = bg0 },
+        EndOfBuffer = { bg = bg0 },
+        CursorLine = { bg = bg1 },
+        CursorLineNr = { bg = bg1, fg = "$green", fmt = "bold" },
+        SignColumn = { bg = bg0 },
+        FloatBorder = { bg = bg1 },
+        NormalFloat = { bg = bg1 },
         IncSearch = { fg = 'transparent', bg = '$bg3', fmt = 'italic,bold,reverse' },
         Search = { fg = 'transparent', bg = '$bg3', fmt = 'italic,bold' },
-        TreesitterContextLineNumber = { fg = "$blue", bg = "$bg1", fmt = "bold" },
+        TreesitterContextLineNumber = { fg = "$blue", bg = bg1, fmt = "bold" },
         IndentBlanklineContextChar = { fg = "$indent_context", fmt = "nocombine" },
         IndentBlanklineContextStart = { sp = "$indent", fmt = "nocombine,underline" },
         ["@constant"] = { fg = "$orange" },
@@ -45,10 +69,10 @@ require('onedark').setup {
         InfoHighlight = { fmt = "undercurl", sp = "$blue" },
         HintHighlight = { fmt = "undercurl", sp = "$green" },
         MenuSel = { bg = "$grey" },
-        DiagnosticVirtualTextError = { fg = "$dark_red" },
-        DiagnosticVirtualTextWarn = { fg = "$dark_yellow" },
-        DiagnosticVirtualTextInfo = { fg = "$dark_cyan" },
-        DiagnosticVirtualTextHint = { fg = "$dark_purple" },
+        DiagnosticVirtualTextError = DiagnosticVirtualTextError,
+        DiagnosticVirtualTextWarn = DiagnosticVirtualTextWarn,
+        DiagnosticVirtualTextInfo = DiagnosticVirtualTextInfo,
+        DiagnosticVirtualTextHint = DiagnosticVirtualTextHint,
         TSRainbowBlue = { fg = "$blue" },
         TSRainbowCyan = { fg = "$cyan" },
         TSRainbowGreen = { fg = "$green" },

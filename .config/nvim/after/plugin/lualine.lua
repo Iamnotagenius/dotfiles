@@ -1,6 +1,14 @@
+local transparent_onedark = require('lualine.themes.onedark')
+local theme = 'onedark'
+if not vim.g.neovide then
+    transparent_onedark.normal.c.bg = 'none'
+    theme = transparent_onedark
+end
+
+
 require('lualine').setup {
     options = {
-        theme = 'onedark',
+        theme = theme,
     },
     tabline = {
         lualine_a = {
