@@ -1,0 +1,229 @@
+{
+    // Global configuration
+    "layer": "top",
+    "position": "top",
+    //"height": 18,
+    "modules-left": [
+        "hyprland/submap",
+        "wlr/workspaces",
+        "custom/arrow10",
+        "custom/menu",
+        "custom/arrow11",
+        "hyprland/window",
+        "custom/arrow12"
+    ],
+    //"modules-center": [
+    //	"sway/window"
+    //],
+    "modules-right": [
+        "custom/arrow2",
+        "mpd",
+        "custom/arrow3",
+        "memory",
+        "custom/arrow4",
+        "cpu",
+        "custom/arrow6",
+        "pulseaudio",
+        "custom/arrow7",
+        "hyprland/language",
+        "custom/arrow8",
+        "clock#date",
+        "custom/arrow9",
+        "clock#time"
+    ],
+    // Modules
+    "mpd": {
+        "on-click-right": "toggle-ncmpcpp",
+        "on-click": "mpc toggle",
+        "on-scroll-up": "mpc volume +5",
+        "on-scroll-down": "mpc volume -5",
+        "title-len": 20,
+        "format": "  <i>{artist}</i> - {title} {stateIcon}",
+        "format-stopped": "MPD Stopped",
+        "format-disconnected": "ﱙ ",
+        "state-icons": {
+            "paused": "",
+            "playing": ""
+        }
+    },
+    "clock#time": {
+        "interval": 1,
+        "format": "{:%T}",
+        "tooltip": false
+    },
+    "clock#date": {
+        "interval": 20,
+        "format": "{:%a, %d %b %Y}",
+        //"locale": "ru_RU.UTF-8",
+        "tooltip": false,
+        "on-click": "~/scripts/calendar curr",
+        "on-click-right": "~/scripts/calendar next",
+        "on-click-middle": "~/scripts/calendar prev"
+        //"tooltip-format": "{:%e %B %Y}"
+    },
+    "cpu": {
+        "interval": 5,
+        "tooltip": false,
+        "format": " {usage}%",
+        "format-alt": " {load}",
+        "states": {
+            "warning": 70,
+            "critical": 90
+        }
+    },
+    "hyprland/language": {
+        "format": "  {}",
+        "format-en": "EN",
+        "format-ru": "RU",
+        "min-length": 5,
+        "tooltip": false,
+    },
+    "memory": {
+        "interval": 5,
+        "format": " {percentage}%",
+        "states": {
+            "warning": 70,
+            "critical": 90
+        },
+        "tooltip": false,
+        "on-click": "alacritty -e btop"
+    },
+    "network": {
+        "interval": 5,
+        "format-wifi": "  {essid} ({signalStrength}%)",
+        "format-ethernet": " {ifname}",
+        "format-disconnected": "睊",
+        "tooltip-format": "{ipaddr}/{cidr}"
+    },
+    "sway/mode": {
+        "format": "{}",
+        "tooltip": false
+    },
+    "hyprland/window": {
+        "format": "{}",
+        "max-length": 60,
+        "tooltip": false,
+        "on-click": "moveactivetoworkspace",
+        "on-click-middle": "hyprctl dispatch killactive \"\"",
+        "on-click-right": "hyprctl dispatch layoutmsg swapwithmaster"
+    },
+    "wlr/workspaces": {
+        "format": "{icon}",
+        "on-click": "activate",
+        "format-icons": {
+            "1": " ",
+            "2": "",
+            "3": " ",
+            "4": " ",
+            "5": "磊 ",
+            "6": " ",
+            "7": " ",
+            "8": " ",
+        }
+    },
+    "pulseaudio": {
+        "scroll-step": 1,
+        "format": "{icon} {volume}%",
+        "format-bluetooth": "{icon} {volume}%",
+        "format-muted": "婢",
+        "format-icons": {
+            "headphones": "",
+            "handsfree": "",
+            "headset": "",
+            "phone": "",
+            "portable": "",
+            "car": "",
+            "default": [
+                " ",
+                " "
+            ]
+        },
+        "on-click-right": "alacritty -e pulsemixer",
+        "on-click": "pulsemixer --toggle-mute"
+    },
+    "temperature": {
+        "critical-threshold": 90,
+        "interval": 5,
+        "format": "{icon} {temperatureC}°",
+        "format-icons": [
+            "",
+            "",
+            "",
+            "",
+            ""
+        ],
+        "tooltip": false
+    },
+    "custom/menu": {
+        "on-click": "~/.config/rofi/launchers/type-1/launcher.sh -x11 -me-select-entry '' -me-accept-entry MousePrimary",
+        "on-click-right": "~/scripts/choosewindow",
+        "format": "",
+        "tooltip": false
+    },
+    "custom/alsa": {
+        "exec": "amixer get Master | sed -nre 's/.*\\[off\\].*/ muted/p; s/.*\\[(.*%)\\].*/ \\1/p'",
+        "on-click": "amixer set Master toggle",
+        "on-scroll-up": "amixer set Master 1+",
+        "on-scroll-down": "amixer set Master 1-",
+        "signal": 11,
+        "interval": 10,
+        "tooltip": false
+    },
+    "sndio": {
+        "format": " {}%"
+    },
+    "tray": {
+        "icon-size": 18
+        //"spacing": 10
+    },
+    "custom/arrow1": {
+        "format": "",
+        "tooltip": false
+    },
+    "custom/arrow2": {
+        "format": "",
+        "tooltip": false
+    },
+    "custom/arrow3": {
+        "format": "",
+        "tooltip": false
+    },
+    "custom/arrow4": {
+        "format": "",
+        "tooltip": false
+    },
+    "custom/arrow5": {
+        "format": "",
+        "tooltip": false
+    },
+    "custom/arrow6": {
+        "format": "",
+        "tooltip": false
+    },
+    "custom/arrow7": {
+        "format": "",
+        "tooltip": false
+    },
+    "custom/arrow8": {
+        "format": "",
+        "tooltip": false
+    },
+    "custom/arrow9": {
+        "format": "",
+        "tooltip": false
+    },
+    "custom/arrow10": {
+        "format": "",
+        "tooltip": false
+    },
+    "custom/arrow11": {
+        "format": "",
+        "tooltip": false
+    },
+    "custom/arrow12": {
+        "format": "",
+        "tooltip": false
+    }
+}
+
+# vi:ft=jsonc
