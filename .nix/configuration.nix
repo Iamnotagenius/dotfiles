@@ -15,7 +15,7 @@
 # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
     networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
 
-    nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
   nix.nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
 
 # Set your time zone.
@@ -104,6 +104,9 @@
           gp = "git pull";
           gP = "git push";
           vim = "nvim";
+          sc = "systemctl";
+          scu = "systemctl --user";
+          mail = "neomutt";
         };
         history.path = "~/.histfile";
         sessionVariables = {
@@ -124,75 +127,64 @@
           file = "share/zsh-nix-shell/nix-shell.plugin.zsh";
         }
         ];
-        initExtra = ''
-          bindkey '^ ' autosuggest-accept
-
-          zstyle :compinstall filename '/home/iamnotagenius/.zshrc'
-          zstyle ':completion:*' menu select
-          zmodload zsh/complist
-          _comp_options+=(globdots)
-
-# tab complete mod
-          bindkey -M menuselect 'h' vi-backward-char
-          bindkey -M menuselect 'k' vi-up-line-or-history
-          bindkey -M menuselect 'l' vi-forward-char
-          bindkey -M menuselect 'j' vi-down-line-or-history
-          bindkey -v '^?' backward-delete-char
-
-# cursor shape
-          function zle-keymap-select {
-            if [[ $${KEYMAP} == vicmd ]] ||
-              [[ $1 = 'block' ]]; then
-                echo -ne '\e[1 q'
-                  elif [[ $${KEYMAP} == main ]] ||
-                  [[ $${KEYMAP} == viins ]] ||
-                  [[ $${KEYMAP} == \'\' ]] ||
-                    [[ $1 = 'beam' ]]; then
-                      echo -ne '\e[5 q'
-                        fi
-          }
-        zle -N zle-keymap-select
-          zle-line-init() {
-            echo -ne "\e[5 q"
-          }
-
-        _fix_cursor() {
-          echo -ne '\e[5 q'
-        }
-        precmd_functions+=(_fix_cursor)
-
-          source ~/.p10k.zsh
-          '';
+        initExtra = builtins.readFile ./zsh-extra.zsh;
       };
     };
-    home.packages = with pkgs; [
-      brave
-      cargo
-      isync
-      libreoffice
-      imv
-      msmtp
-      neomutt
-      neovide
-      nix-zsh-completions
-      nodejs
-      pass
-      pinentry-bemenu
-      qutebrowser
-      ranger
-      sway-contrib.grimshot
-      kotatogram-desktop
-      yadm
-      wbg
+    services = {
+      syncthing.enable = true;
+    };
+    xdg.mimeApps.defaultApplications = {
+      "www-browser" = [ "brave-browser.desktop" ];
+      "x-www-browser" = [ "brave-browser.desktop" ];
+      "application/pdf" = [ "org.pwmt.zathura.desktop" ];
+    };
+    home = {
+      sessionVariables = {
+        BEMENU_OPTS = "-n --fn 'Iosevka 16' -H 30 \
+                       --cw 2 --ch 22 \
+                       --hp 10 \
+                       --tb #282C34 --tf #56B6C2 \
+                       --fb #282C34 --ff #ABB2BF \
+                       --nb #282C34 --nf #ABB2BF \
+                       --ab #282C34 --af #ABB2BF \
+                       --hb #383B41 --hf #98C379 \
+                       --sb #E06C75";
+      };
+      packages = with pkgs; [
+        brave
+          calc
+          cargo
+          isync
+          libreoffice
+          imv
+          jupyter
+          lua-language-server
+          msmtp
+          neomutt
+          neovide
+          nix-zsh-completions
+          nodejs
+          pass
+          pinentry-bemenu
+          python311Packages.pygments
+          qutebrowser
+          ranger
+          sway-contrib.grimshot
+          texlab
+          kotatogram-desktop
+          yadm
+          wbg
 
-      # List latex packages here
-      (texlive.combine {
-        inherit (texlive)
-        scheme-tetex
-        collection-binextra;
-      })
-    ];
-    home.stateVersion = "22.11";
+# List latex packages here
+          (texlive.combine {
+           inherit (texlive)
+           scheme-tetex
+           collection-binextra
+           minted;
+           })
+      ];
+      stateVersion = "22.11";
+    };
   };
 
   fonts.fonts = with pkgs; [
@@ -230,6 +222,7 @@
     waybar
     wget
     wl-clipboard
+    xdg-utils
     yarn
     zathura
   ];
@@ -242,11 +235,19 @@
 
   # List services that you want to enable:
   services = { 
+    tlp.enable = true;
     pipewire.enable = true;
     openssh.enable = true;
     getty.autologinUser = "iamnotagenius";
     udisks2.enable = true;
     udev.extraRules = "ENV{ID_FS_USAGE}==\"filesystem|other|crypto\", ENV{UDISKS_FILESYSTEM_SHARED}=\"1\"";
+    autossh.sessions = [
+      {
+        name = "syncthing-tunnel";
+        user = "iamnotagenius";
+        extraArguments = "-N -L 127.0.0.1:22001:127.0.0.1:22000 -R 127.0.0.1:22001:127.0.0.1:22000 main";
+      }
+    ];
   };
 
   # Copy the NixOS configuration file and link it from the resulting system
