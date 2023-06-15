@@ -1,51 +1,41 @@
-local lfs = require("lfs")
-local xml2lua = require("xml2lua")
-local xmlhandler = require("xmlhandler.tree")
+local tokens_map = {
+    ["excluded code"] = "@excluded",
+    ["keyword - control"] = "@conditional",
+    ["operator - overloaded"] = "@operator",
+    ["preprocessor keyword"] = "@macro",
+    ["static symbol"] = "@lsp.mod.controlFlow",
+    ["preprocessor text"] = "@macro",
+    ["string - verbatim"] = "@function",
+    ["string - escape character"] = "@constant",
+    ["class name"] = "@type",
+    ["delegate name"] = "@type",
+    ["enum name"] = "@enum",
+    ["interface name"] = "@interface",
+    ["module name"] = "@namespace",
+    ["struct name"] = "@type",
+    ["type parameter name"] = "@type.parameter",
+    ["field name"] = "@field",
+    ["enum member name"] = "@constant",
+    ["constant name"] = "@constant",
+    ["local name"] = "@variable",
+    ["parameter name"] = "@parameter",
+    ["method name"] = "@function",
+    ["extension method name"] = "@ext.method",
+    ["property name"] = "@property",
+    ["event name"] = "@type",
+    ["namespace name"] = "@namespace",
+    ["label name"] = "@label",
+}
 
-local function up_dirs(path)
-    return
-    function (unused, path)
-        if path:find("/") then
-            local remaining, last = path:match("^(.*)/(.+)$")
-            if not remaining then
-                return nil
-            elseif remaining:len() == 0 then
-                return '/', last
-            end
-            return remaining, last
-        end
+
+vim.api.nvim_create_autocmd('LspTokenUpdate', {
+    callback = function(args)
+        local token = args.data.token
+        vim.lsp.semantic_tokens.highlight_token(
+            token,
+            args.buf,
+            args.data.client_id,
+            tokens_map[token.type]
+        )
     end,
-    nil,
-    path
-end
-
-local function set_csproj(context)
-    if vim.b[context.buf].csproj ~= nil then
-        vim.g.cs_exe_proj = vim.b[context.buf].csproj
-        return
-    end
-
-    local csproj = {}
-    for dir, comp in up_dirs(context.match:gsub("(.*)/.+", "%1")) do
-        for filename in lfs.dir(dir .. '/' .. comp) do
-            local name = filename:match("(.+)%.csproj$")
-            if name then
-                csproj.dir = dir .. '/' .. comp
-                csproj.file = csproj.dir .. '/' .. filename
-                csproj.name = name
-                local handler = xmlhandler:new()
-                local xml = xml2lua.loadFile(csproj.file)
-                xml2lua.parser(handler):parse(xml)
-                local PropertyGroup = handler.root.Project.PropertyGroup
-                csproj.framework = PropertyGroup.TargetFramework
-                csproj.output_type = PropertyGroup.OutputType
-            end
-        end
-    end
-
-    vim.b[context.buf].csproj = csproj
-    vim.g.cs_exe_proj = csproj
-end
-
-
-vim.api.nvim_create_autocmd({ "BufEnter", "BufAdd" }, { pattern = {"*.cs", "*.csproj"}, callback = set_csproj })
+})
