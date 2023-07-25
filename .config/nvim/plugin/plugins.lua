@@ -5,12 +5,39 @@ return require('packer').startup(function(use)
     use_rocks 'luafilesystem'
     use_rocks { 'xml2lua 1.5-1' }
 
+    use 'dstein64/vim-startuptime'
+
+    use {
+        'yorickpeterse/nvim-pqf',
+        config = function ()
+            require('pqf').setup {
+                error = ' ',
+                warn = ' ',
+                hint = ' ',
+                info = ' '
+            }
+        end
+    }
+
     use "lukas-reineke/indent-blankline.nvim"
     use 'glepnir/dashboard-nvim'
     use 'lervag/vimtex'
+
+    use {
+        "iurimateus/luasnip-latex-snippets.nvim",
+        -- replace "lervag/vimtex" with "nvim-treesitter/nvim-treesitter" if you're
+        -- using treesitter.
+        requires = { "L3MON4D3/LuaSnip", "lervag/vimtex" },
+        config = function()
+            require 'luasnip-latex-snippets'.setup { use_treesitter = true }
+            -- or setup({ use_treesitter = true })
+        end,
+    }
     use 'windwp/nvim-autopairs'
     use 'NvChad/nvim-colorizer.lua'
     use 'nvim-telescope/telescope-ui-select.nvim'
+
+    use { 'joeveiga/ng.nvim' }
 
     vim.g.neo_tree_remove_legacy_commands = true
     use {
@@ -48,8 +75,9 @@ return require('packer').startup(function(use)
         'untitled-ai/jupyter_ascending.vim',
         ft = 'python',
         config = function()
-            vim.api.nvim_set_keymap('n', '<leader>e', '<Plug>(JupyterExecuteAll)', {})
-            vim.api.nvim_set_keymap('n', '<leader>j', '<Plug>(JupyterExecute)', {})
+            vim.api.nvim_set_keymap('n', '<leader>J', '<Plug>JupyterExecuteAll', {})
+            vim.api.nvim_set_keymap('n', '<leader>j', '<Plug>JupyterExecute', {})
+            vim.api.nvim_set_keymap('n', '<leader>r', '<Plug>JupyterRestart', {})
         end
     }
 
@@ -79,7 +107,12 @@ return require('packer').startup(function(use)
             { 'hrsh7th/cmp-path' },
             { 'hrsh7th/cmp-nvim-lsp' }, -- Required
             { 'hrsh7th/cmp-nvim-lua' }, -- Required
-            { 'L3MON4D3/LuaSnip' },     -- Required
+            { 'saadparwaiz1/cmp_luasnip' },
+            {
+                'L3MON4D3/LuaSnip',
+                tag = 'v1.2.*',
+                run = 'make install_jsregexp'
+            }, -- Required
             { 'onsails/lspkind.nvim' }
         }
     }
@@ -153,6 +186,14 @@ return require('packer').startup(function(use)
 
     use 'hkupty/iron.nvim'
 
+    use {
+        'akinsho/git-conflict.nvim', tag = "*",
+        config = function()
+            require('git-conflict').setup()
+        end
+    }
+
     -- Kid's stuff
     use 'wakatime/vim-wakatime'
+    use 'andweeb/presence.nvim'
 end)

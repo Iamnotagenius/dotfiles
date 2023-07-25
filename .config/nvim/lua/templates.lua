@@ -1,6 +1,7 @@
 local M = {}
 local api = vim.api
 
+
 local function up_dirs(path)
     return
         function(unused, path)

@@ -1,5 +1,6 @@
 local telescope = require('telescope')
 local fb_actions = telescope.extensions.file_browser.actions
+local action_state = require('telescope.actions.state')
 local create_with_template = function(prompt_bufnr)
     local templates = require('templates')
     fb_actions.create_from_prompt(prompt_bufnr)
@@ -27,10 +28,14 @@ telescope.setup {
             end
         },
         file_browser = {
-            hijack_netrw = true,
+            hijack_netrw = false,
             mappings = {
                 n = {
-                    c = create_with_template
+                    c = create_with_template,
+                    ["<C-d>"] = function(prompt_bufnr)
+                        local entry = action_state.get_selected_entry()
+                        vim.fn.jobstart({ "dragon-drop", entry[1] }, { detach = true })
+                    end
                 },
                 i = {
                     ["<A-c>"] = create_with_template

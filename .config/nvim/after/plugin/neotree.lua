@@ -1,4 +1,5 @@
 local cmd = require('neo-tree.command')
+local neotree = require('neo-tree')
 vim.keymap.set('n', "<leader>o", function()
     cmd.execute {
         toggle = true,
@@ -6,7 +7,8 @@ vim.keymap.set('n', "<leader>o", function()
     }
 end)
 
-require("neo-tree").setup({
+neotree.setup({
+    close_if_last_window = true, -- Close Neo-tree if it is the last window left in the tab
     window = {
         mappings = {
             h = function(state)
@@ -26,6 +28,13 @@ require("neo-tree").setup({
                         require("neo-tree.ui.renderer").focus_node(state, node:get_child_ids()[1])
                     end
                 end
+                if node.type == "file" then
+                    neotree.config.filesystem.commands.open(state)
+                end
+            end,
+            ["<C-d>"] = function (state)
+                local node = state.tree:get_node()
+                vim.fn.jobstart({ "ripdrag", "-x",  node.path }, { detach = true })
             end,
         }
     },
@@ -37,7 +46,7 @@ require("neo-tree").setup({
                 local succuss, index = pcall(Marked.get_index_of, path)
                 if succuss and index and index > 0 then
                     return {
-                        text = string.format(" ⥤ %d", index), -- <-- Add your favorite harpoon like arrow here
+                        text = string.format("⥤ %d", index), -- <-- Add your favorite harpoon like arrow here
                         highlight = config.highlight or "NeoTreeDirectoryIcon",
                     }
                 else
@@ -49,19 +58,10 @@ require("neo-tree").setup({
             file = {
                 { "icon" },
                 { "name",         use_git_status_colors = true },
-                { "harpoon_index" }, --> This is what actually adds the component in where you want it
-                { "diagnostics" },
                 { "git_status",   highlight = "NeoTreeDimText" },
+                { "diagnostics" },
+                { "harpoon_index" }, --> This is what actually adds the component in where you want it
             }
         }
     },
 })
-
--- -- CoC diagnostics (does not work at the moment)
--- local events = require("neo-tree.events")
--- local utils = require('neo-tree.utils')
--- events.destroy_event(events.VIM_DIAGNOSTIC_CHANGED)
--- events.define_autocmd_event(events.VIM_DIAGNOSTIC_CHANGED, { "User CocDiagnosticChange" }, 500, function(args)
---     args.diagnostics_lookup = utils.get_diagnostic_counts() -- <-- your handler here
---     return args
--- end)

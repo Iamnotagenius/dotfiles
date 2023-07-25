@@ -17,10 +17,9 @@ opt.updatetime = 50
 opt.showmode = false
 opt.wrap = false
 opt.cursorline = true
-opt.clipboard = 'unnamedplus'
 opt.langmap =
 'ФИСВУАПРШОЛДЬТЩЗЙКЫЕГМЦЧНЯ;ABCDEFGHIJKLMNOPQRSTUVWXYZ,фисвуапршолдьтщзйкыегмцчня;abcdefghijklmnopqrstuvwxyz'
-opt.guifont = { 'Hack Nerd Font:h14' }
+opt.guifont = { 'ComicCodeLigatures Nerd Font:h12' }
 opt.background = 'dark'
 g.netrw_liststyle = 3
 env.NVIM_TUI_ENABLE_TRUE_COLOR = true
@@ -116,6 +115,9 @@ vim.keymap.set({ 'i', 'n', 'v' }, '<m-l>', function()
         api.nvim_feedkeys('a', 'nt', false)
     end
 end)
+
+vim.keymap.set({'n', 'v'}, '<leader>y', '"+y')
+vim.keymap.set({'n', 'v'}, '<leader>p', '"+p')
 
 vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
 vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")

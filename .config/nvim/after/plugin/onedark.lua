@@ -54,14 +54,15 @@ require('onedark').setup {
         ["@conditional"] = { fg = "$purple", fmt = "italic" },
         ["@method"] = { fg = "$blue" },
         ["@macro"] = { fg = "$blue", fmt = "bold" },
-        ["@ext.method"] = { fg = "$blue", fmt = "italic" },
+        ["@ext.method"] = { fg = "$blue", fmt = "bold" },
         ["@enum"] = { fg = "$saturated_yellow" },
         ["@struct"] = { fg = "$yellow" },
         ["@lsp.type.annotation"] = { fg = "$purple", fmt = "italic" },
         ["@lsp.type.lifetime"] = { fg = "$orange", fmt = "italic" },
-        ["@lsp.typemod.property.declaration"] = { fg = "$red", fmt = "italic" },
+        ["@lsp.type.record"] = { fg = "$yellow" },
         ["@lsp.mod.controlFlow"] = { fmt = "italic" },
         ["@lsp.mod.deprecated"] = { fmt = "strikethrough" },
+        ["@lsp.mod.declaration"] = { fmt = "bold" },
         InlayHint = { fg = "$light_purple", fmt = "italic" },
         WarningHighlight = { fmt = "undercurl", sp = "$orange" },
         ErrorHighlight = { fmt = "undercurl", sp = "$red" },
@@ -85,6 +86,7 @@ require('onedark').setup {
 
 require('onedark').load()
 
+link('@lsp.type.extensionMethod', '@ext.method')
 link('@lsp.type.namespace', '@namespace')
 link('@lsp.type.keyword', '@keyword')
 link('@lsp.type.macro', '@macro')

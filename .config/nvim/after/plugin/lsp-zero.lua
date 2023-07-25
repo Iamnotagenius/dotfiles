@@ -23,7 +23,6 @@ end)
 
 lsp.format_on_save({
     servers = {
-        ['lua_ls'] = { 'lua' },
         ['rust_analyzer'] = { 'rust' },
     }
 })
@@ -45,36 +44,36 @@ lsp.configure('omnisharp', {
                 tokenModifiers = { "static" },
                 tokenTypes = {
                     "comment",
-                    "excluded_code",
+                    "excludedCode",
                     "identifier",
                     "keyword",
-                    "keyword_control",
+                    "keywordControl",
                     "number",
                     "operator",
-                    "operator_overloaded",
-                    "preprocessor_keyword",
+                    "operatorOverloaded",
+                    "preprocessorKeyword",
                     "string",
                     "whitespace",
                     "text",
                     "static",
                     "preprocessor_text",
                     "punctuation",
-                    "string_verbatim",
-                    "string_escape_character",
+                    "stringVerbatim",
+                    "stringEscapeCharacter",
                     "class",
                     "delegate",
                     "enum",
                     "interface",
                     "module",
                     "struct",
-                    "type_parameter",
+                    "typeParameter",
                     "field",
-                    "enum_member",
+                    "enumMember",
                     "constant",
                     "local",
                     "parameter",
                     "method",
-                    "extension_method",
+                    "extensionMethod",
                     "property",
                     "event",
                     "namespace",
@@ -126,10 +125,10 @@ local cmp = require('cmp')
 local cmp_action = require('lsp-zero').cmp_action()
 local cmp_autopairs = require('nvim-autopairs.completion.cmp')
 lsp.set_sign_icons({
-    error = '✘',
-    warn = '▲',
-    hint = '⚑',
-    info = '»'
+    error = ' ',
+    warn = ' ',
+    hint = ' ',
+    info = ' '
 })
 cmp.event:on(
     'confirm_done',
@@ -140,7 +139,7 @@ cmp.setup({
     sources = {
         { name = 'nvim_lsp' },
         { name = 'nvim_lua' },
-        { name = 'luasnip', keyword_length = 2 },
+        { name = 'luasnip' },
         { name = 'buffer',  keyword_length = 3 },
         { name = 'path' },
     },
