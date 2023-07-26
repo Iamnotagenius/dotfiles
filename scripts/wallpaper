@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+WALLPAPER_DIR=~/Pictures/Wallpapers
+
+chosen=$(find $WALLPAPER_DIR -type f ! -name HDMI-A-1 -a ! -name DP-1 -printf '%f\n' | \
+    fzf --preview="mpv --loop --wayland-app-id=preview $WALLPAPER_DIR/{}")
+
+mon=$(hyprctl -j monitors | gojq -r '.[].name' | fzf --prompt 'Choose output: ' --preview \
+    "hyprctl -j monitors | gojq -r '.[] | select(.name == \"{}\") | \"[ID \(.id)] \(.description)\n\
+    \(.width)x\(.height)@\(.refreshRate) at \(.x)x\(.y)\n\
+    Reserved: \(.reserved)\n\
+    Active workspace: \(.activeWorkspace.name)\(if .focused then \" (focused)\" else \"\" end)\"'")
+
+ln -sf "$chosen" "$WALLPAPER_DIR/$mon"
+swww img -o "$mon" "$WALLPAPER_DIR/$mon"

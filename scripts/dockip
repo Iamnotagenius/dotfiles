@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+docker container inspect "$1" | gojq -r '.[0].NetworkSettings.IPAddress'

@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+if [[ "$(hyprctl -j clients | \
+         gojq -r '.[] | select(.title == "calc").address' | \
+         xargs -IAdr hyprctl dispatch closewindow address:Adr)" != ok ]]; then
+    exec alacritty --option=font.size=16 --title=calc -e calc -d
+fi

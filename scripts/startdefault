@@ -1,0 +1,13 @@
+#!/bin/sh
+
+#workspace="$(swaymsg -t get_workspaces | jq -r '..|try select(.focused == true)|.num')"
+workspace="$(hyprctl -j monitors | gojq -r '.[] | select(.focused == true).activeWorkspace.name')"
+
+case "$workspace" in
+    1) exec alacritty ;;
+    2) exec manpdf ;;
+    4) exec discord-screenaudio ;;
+    6) exec virt-manager ;;
+    7) exec steam ;;
+    8) exec browsers ;;
+esac

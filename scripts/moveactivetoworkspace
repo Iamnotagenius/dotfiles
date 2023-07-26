@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+title="$(hyprctl -j activewindow | gojq -r .title | sed 's/^\(.\{70\}\).*/\1.../')"
+seq 1 8 | rofi -x11 -dmenu -theme ~/.config/rofi/applets/type-2/style-2.rasi -p "Move $title to:" -hover-select -me-select-entry '' -me-accept-entry MousePrimary | xargs hyprctl dispatch movetoworkspacesilent

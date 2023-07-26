@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+monitor=$(hyprctl -j workspaces | gojq -r ".[] | select(.id == $1).monitor")
+monitor_dest_id=$(hyprctl -j monitors | gojq -r ".[] | (select(.name == \"$monitor\").id + 1) % 2")
+echo $monitor_dest_id
+hyprctl dispatch moveworkspacetomonitor "$1" "$monitor_dest_id"

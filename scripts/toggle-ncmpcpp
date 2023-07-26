@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+if [[ "$(hyprctl -j clients | \
+         gojq -r '.[] | select(.title == "ncmpcpp").address' | \
+         xargs -IAdr hyprctl dispatch closewindow address:Adr)" != ok ]]; then
+    exec alacritty --option=font.size=10 --title=ncmpcpp -e ncmpcpp
+fi
