@@ -6,5 +6,5 @@ for item in "${browsers[@]}"; do
     if command -v "$item"; then existing+=("$item"); fi
 done
 
-choose=$(printf "%s\n" "${existing[@]}" | dmenu -l ${#browsers[@]})
+choose=$(printf "%s\n" "${existing[@]}" | "$DMENU" -l ${#browsers[@]})
 $choose

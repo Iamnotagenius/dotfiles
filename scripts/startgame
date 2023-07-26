@@ -8,12 +8,12 @@ overrides=$(echo "$overrides" | jq -c -c '[.[] | {(.): "NULL"}] | add')
 
 json=$(lutris -loj | jq -c "[.[] | {(.name): .slug}] | add | . + $overrides")
 
-selected=$(echo "$json" | jq -c -r "keys | .[]" | dmenu -l 30 -fn Iosevka:size=20)
+selected=$(echo "$json" | jq -c -r "keys | .[]" | "$DMENU" -l 30 -fn Iosevka:size=20)
 
 if [[ -n "$selected" ]]; then 
     case $selected in
         'Minecraft')
-            picomc instance list | dmenu -fn Minecraft:size=35 | xargs -r -Iver picomc instance launch "ver"
+            picomc instance list | "$DMENU" -fn Minecraft:size=35 | xargs -r -Iver picomc instance launch "ver"
             ;;
         *)
             slug=$(echo "$json" | jq -cr ".[\"$selected\"]")

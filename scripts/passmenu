@@ -1,13 +1,8 @@
 #!/bin/bash
 
-if [ -z "$DMENU" ]; then
-    command -v dmenu > /dev/null && DMENU=dmenu
-    command -v rofi > /dev/null && DMENU="rofi -dmenu"
-fi
-
 DB_FILE=~/.passwords.kdbx
 
-if ! password="$($DMENU -p "Enter password to unlock ${DB_FILE/$HOME/\~}:" -P)"; then
+if ! password="$($DMENU -p "Enter password to unlock ${DB_FILE/$HOME/\~}:" -x)"; then
     exit 1;
 fi
 

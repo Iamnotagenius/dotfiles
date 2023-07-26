@@ -40,6 +40,8 @@ EOF
 esac; shift; done
 if [[ "$1" == '--' ]]; then shift; fi
 
+echo "${1:-1} $base_cur is..."
+
 curl -s "$BASE_API/latest?base=$base_cur&symbols=$dest_curs" | \
     gojq -r ".rates | to_entries.[] | . |= {\
     "code": .key, \

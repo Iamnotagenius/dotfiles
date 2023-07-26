@@ -1,6 +1,3 @@
 #!/bin/sh
-if [ ! -e /tmp/docs.xid ] || ! xprop -id "$(cat /tmp/docs.xid)"; then
-    tabbed -d > /tmp/docs.xid
-fi
 echo $(cat /tmp/docs.xid)
-curl https://texdoc.org/serve/"$1"/0 | zathura -e "$(cat /tmp/docs.xid)" --fork - && notify-send "Opened documentation" "for $1"
+curl https://texdoc.org/serve/"$1"/0 | zathura --fork - && notify-send "Opened documentation" "for $1"
