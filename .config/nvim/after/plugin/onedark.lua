@@ -10,14 +10,22 @@ local DiagnosticVirtualTextWarn = { fg = "$dark_yellow" }
 local DiagnosticVirtualTextInfo = { fg = "$dark_cyan" }
 local DiagnosticVirtualTextHint = { fg = "$dark_purple" }
 
+local DiffAdd
+local DiffDelete
+
 if vim.g.neovide then
     bg0 = "$bg0"
     bg1 = "$bg1"
+    DiffAdd = 'DiffAdd'
+    DiffDelete = 'DiffDelete'
+
 else
     DiagnosticVirtualTextHint.bg = 'none'
     DiagnosticVirtualTextInfo.bg = 'none'
     DiagnosticVirtualTextWarn.bg = 'none'
     DiagnosticVirtualTextError.bg = 'none'
+    DiffAdd = 'DiffAdded'
+    DiffDelete = 'DiffRemoved'
 end
 
 require('onedark').setup {
@@ -79,7 +87,28 @@ require('onedark').setup {
         TSRainbowOrange = { fg = "$orange" },
         TSRainbowRed = { fg = "$red" },
         TSRainbowViolet = { fg = "$purple" },
-        TSRainbowYellow = { fg = "$yellow" }
+        TSRainbowYellow = { fg = "$yellow" },
+        NeogitObjectId = { fg = "$orange" },
+        NeogitPopupSectionTitle = { fg = "$yellow", fmt = "bold" },
+        NeogitPopupSwitchKey = { fg = "$cyan" },
+        NeogitPopupSwitchEnabled = { fg = "$green" },
+        NeogitPopupSwitchDisabled = { fg = "$red" },
+        NeogitPopupOptionKey = { fg = "$cyan" },
+        NeogitPopupOptionEnabled = { fg = "$green" },
+        NeogitPopupOptionDisabled = { fg = "$red" },
+        NeogitPopupActionKey = { fg = "$purple" },
+        NeogitPopupActionDisabled = { fg = "$red" },
+        NeogitPopupConfigKey = { fg = "$purple" },
+        NeogitPopupConfigDisabled = { fg = "$red" },
+        NeogitPopupConfigEnabled = { fg = "$green" },
+        NeogitUnstagedChanges = { fg = "$red" },
+        NeogitUnmergedChanges = { fg = "$yellow" },
+        NeogitUnpulledChanges = { fg = "$blue" },
+        NeogitStagedChanges = { fg = "$green" },
+        NeogitRecentCommits = { fg = "$cyan" },
+        NeogitBranch = { fg = "$blue" },
+        NeogitRemote = { fg = "$purple" },
+        NeogitCommitMessage = { fg = "$grey", fmt = "italic" }
     }
 }
 
@@ -103,3 +132,5 @@ link('@lsp.type.enumMember', '@constant')
 link('@lsp.type.modifier', '@keyword')
 link('CmpItemKindInterface', '@interface')
 link('CmpItemEnumMember', '@constant')
+link('NeogitDiffAdd', DiffAdd)
+link('NeogitDiffDelete', DiffDelete)
