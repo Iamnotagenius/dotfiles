@@ -5,7 +5,7 @@ export ASPNETCORE_Kestrel__Certificates__Default__Path=~/.aspnet/https/localhost
 export ASPNETCORE_Kestrel__Certificates__Default__Password=aspnetisshit
 
 export QT_STYLE_OVERRIDE=kvantum
-export PATH=$PATH:~/.local/bin:~/go/bin
+export PATH=$PATH:~/.local/bin:~/go/bin:~/.yarn/bin
 export TEXMFHOME=~/.texmf/
 export NEOVIDE_MULTIGRID=true
 export GDK_CORE_DEVICE_EVENTS=1
