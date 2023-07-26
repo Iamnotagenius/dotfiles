@@ -321,12 +321,12 @@
     timeout = 9
 
 [telegram]
-    appname = "Kotatogram Desktop"
+    appname = "org.telegram.desktop"
     background = "#2B5278AF"
     foreground = "#ABB2BFCF"
 
 [discord]
-    appname = "discord"
+    appname = "WebCord"
     background = "#2F3136AF"
     foreground = "#ABB2BFCF"
 
