@@ -103,7 +103,7 @@
         "format": "{}",
         "max-length": 60,
         "tooltip": false,
-        "on-click": "moveactivetoworkspace",
+        "on-click": "~/.config/waybar/toggle_move.sh",
         "on-click-middle": "hyprctl dispatch killactive \"\"",
         "on-click-right": "hyprctl dispatch layoutmsg swapwithmaster"
     },
@@ -155,7 +155,7 @@
         "tooltip": false
     },
     "custom/menu": {
-        "on-click": "~/.config/rofi/launchers/type-1/launcher.sh -x11 -me-select-entry '' -me-accept-entry MousePrimary",
+        "on-click": "~/.config/waybar/toggle_launcher.sh",
         "on-click-right": "~/scripts/choosewindow",
         "format": "",
         "tooltip": false
