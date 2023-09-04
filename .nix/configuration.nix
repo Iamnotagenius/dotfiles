@@ -10,10 +10,31 @@
       inputs.home-manager.nixosModule
     ];
 
-  networking.hostName = "NixOSBook"; # Define your hostname.
-  # Pick only one of the below networking options.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-  networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
+  networking = {
+    hostName = "NixOSBook"; # Define your hostname.
+    # Pick only one of the below networking options.
+    # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+    networkmanager.enable = true;  # Easiest to use and most distros use this by default.
+    wireguard.enable = false;
+    wg-quick.interfaces = {
+      wg0 = let secrets = builtins.import ./wireguard-secret.nix; in {
+        address = [
+          "10.8.0.3/32"
+        ];
+        peers = [
+          {
+            allowedIPs = [
+              "0.0.0.0/0"
+            ];
+            endpoint = secrets.endpoint;
+            publicKey = secrets.publicKey;
+          }
+        ];
+        privateKey = secrets.privateKey;
+        autostart = false;
+      };
+    };
+  };
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   nix.nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
@@ -106,6 +127,9 @@
           sc = "systemctl";
           scu = "systemctl --user";
           mail = "neomutt";
+          vpnenable = "doas systemctl start wg-quick-wg0.service";
+          vpndisable = "doas systemctl stop wg-quick-wg0.service";
+          myip = "curl ip.me";
         };
         history.path = "~/.histfile";
         sessionVariables = {
