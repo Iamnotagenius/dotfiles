@@ -37,7 +37,13 @@ require('mason-lspconfig').setup_handlers {
                     hotcodereplace = 'auto'
                 }
                 require('jdtls.dap').setup_dap_main_class_configs()
-            end
+            end,
+            settings = {
+                java = {
+                    signatureHelp = {enabled = true},
+                    contentProvider = {preferred = 'fernflower'}
+                }
+            }
         }
     end
 }

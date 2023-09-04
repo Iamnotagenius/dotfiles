@@ -67,7 +67,7 @@ return require('packer').startup(function(use)
     }
 
     use {
-        'TimUntersberger/neogit',
+        'NeogitOrg/neogit',
         requires = 'nvim-lua/plenary.nvim'
     }
 
@@ -113,7 +113,8 @@ return require('packer').startup(function(use)
                 tag = 'v1.2.*',
                 run = 'make install_jsregexp'
             }, -- Required
-            { 'onsails/lspkind.nvim' }
+            { 'onsails/lspkind.nvim' },
+            { 'ray-x/lsp_signature.nvim' }
         }
     }
 
@@ -150,7 +151,7 @@ return require('packer').startup(function(use)
     }
 
     use {
-        'nvim-telescope/telescope.nvim', tag = '0.1.0',
+        'nvim-telescope/telescope.nvim',
         requires = {
             { 'nvim-lua/plenary.nvim' },
             {

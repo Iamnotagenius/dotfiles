@@ -35,10 +35,12 @@ telescope.setup {
                     ["<C-d>"] = function(prompt_bufnr)
                         local entry = action_state.get_selected_entry()
                         vim.fn.jobstart({ "dragon-drop", entry[1] }, { detach = true })
-                    end
+                    end,
+                    I = fb_actions.toggle_respect_gitignore
                 },
                 i = {
-                    ["<A-c>"] = create_with_template
+                    ["<A-c>"] = create_with_template,
+                    ["<C-i>"] = fb_actions.toggle_respect_gitignore
                 }
             }
         },
@@ -86,9 +88,7 @@ vim.keymap.set('n', '<leader>fg',
 vim.keymap.set('n', '<leader>fG',
     function()
         require('telescope.builtin').live_grep {
-            search_dirs = {
-                '.', require('telescope.utils').buffer_dir()
-            }
+            grep_open_files = false
         }
     end, opts)
 vim.keymap.set('n', '<leader>fb', funcs.buffers, opts)

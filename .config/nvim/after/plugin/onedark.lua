@@ -71,6 +71,7 @@ require('onedark').setup {
         ["@lsp.mod.controlFlow"] = { fmt = "italic" },
         ["@lsp.mod.deprecated"] = { fmt = "strikethrough" },
         ["@lsp.mod.declaration"] = { fmt = "bold" },
+        LspSignatureActiveParameter = { fmt = "underdotted" },
         InlayHint = { fg = "$light_purple", fmt = "italic" },
         WarningHighlight = { fmt = "undercurl", sp = "$orange" },
         ErrorHighlight = { fmt = "undercurl", sp = "$red" },

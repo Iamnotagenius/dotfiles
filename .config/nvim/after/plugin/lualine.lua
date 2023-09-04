@@ -48,7 +48,16 @@ require('lualine').setup {
         },
         lualine_c = {
             {
-                'filename',
+                function()
+                    local fn = vim.fn.expand('%:~:.')
+                    if vim.startswith(fn, "jdt://") then
+                        fn = string.sub(fn, 0, string.find(fn, "?") - 1)
+                    end
+                    if fn == '' then
+                        fn = '[No Name]'
+                    end
+                    return fn
+                end,
                 newfile_status = true,
                 path = 1,
                 symbols = {

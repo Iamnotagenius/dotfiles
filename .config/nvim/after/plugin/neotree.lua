@@ -36,6 +36,10 @@ neotree.setup({
                 local node = state.tree:get_node()
                 vim.fn.jobstart({ "ripdrag", "-x",  node.path }, { detach = true })
             end,
+            o = function (state)
+                local node = state.tree:get_node()
+                vim.fn.jobstart({ "xdg-open", node.path }, { detach = true })
+            end
         }
     },
     filesystem = {
