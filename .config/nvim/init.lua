@@ -14,6 +14,8 @@ opt.rnu = true
 opt.showcmd = true
 opt.scrolloff = 10
 opt.updatetime = 50
+opt.linebreak = true
+opt.showbreak = '> '
 opt.showmode = false
 opt.wrap = false
 opt.cursorline = true
@@ -33,6 +35,13 @@ au!
 autocmd VimEnter * :normal :startInsert :stopInsert
 augroup END
 ]])
+
+vim.api.nvim_create_user_command('WordMode', 'set invwrap invspell', {
+    desc = "Toggle wrap and spell for MS Word like editing"
+})
+vim.api.nvim_create_user_command('WordModeRussian', 'set invwrap invspell spelllang=ru', {
+    desc = "Same as WordMode but set spelllang to russian"
+})
 
 if g.neovide then
     opt.mouse = 'a'

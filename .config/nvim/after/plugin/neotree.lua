@@ -27,6 +27,10 @@ require("neo-tree").setup({
                     end
                 end
             end,
+            o = function (state)
+                local node = state.tree:get_node()
+                vim.fn.jobstart({ "xdg-open", node.path }, { detach = true })
+            end
         }
     },
     filesystem = {

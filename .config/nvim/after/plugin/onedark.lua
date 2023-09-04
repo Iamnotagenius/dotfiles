@@ -18,7 +18,6 @@ if vim.g.neovide then
     bg1 = "$bg1"
     DiffAdd = 'DiffAdd'
     DiffDelete = 'DiffDelete'
-
 else
     DiagnosticVirtualTextHint.bg = 'none'
     DiagnosticVirtualTextInfo.bg = 'none'
@@ -70,6 +69,8 @@ require('onedark').setup {
         ["@lsp.typemod.property.declaration"] = { fg = "$red", fmt = "italic" },
         ["@lsp.mod.controlFlow"] = { fmt = "italic" },
         ["@lsp.mod.deprecated"] = { fmt = "strikethrough" },
+        ["@lsp.mod.declaration"] = { fmt = "bold" },
+        LspSignatureActiveParameter = { fmt = "underdotted" },
         InlayHint = { fg = "$light_purple", fmt = "italic" },
         WarningHighlight = { fmt = "undercurl", sp = "$orange" },
         ErrorHighlight = { fmt = "undercurl", sp = "$red" },

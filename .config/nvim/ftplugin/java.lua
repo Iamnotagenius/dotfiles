@@ -14,6 +14,25 @@ require('mason-lspconfig').setup_handlers {
                     require("mason-registry").get_package("jdtls"):get_install_path() .. "/lombok.jar"
                 ),
             },
+            init_options = {
+                bundles = {
+                    vim.fn.glob(
+                    "~/Sources/java-debug/com.microsoft.java.debug.plugin/target/com.microsoft.java.debug.plugin-*.jar",
+                        1)
+                }
+            },
+            on_attach = function()
+                jdtls.setup_dap {
+                    hotcodereplace = 'auto'
+                }
+                require('jdtls.dap').setup_dap_main_class_configs()
+            end,
+            settings = {
+                java = {
+                    signatureHelp = { enabled = true },
+                    contentProvider = { preferred = 'fernflower' }
+                }
+            }
         }
     end
 }

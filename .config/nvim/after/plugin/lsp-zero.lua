@@ -92,3 +92,10 @@ cmp.setup({
         end
     }
 })
+
+require("lsp_signature").setup {
+    hint_prefix = "",
+    toggle_key = '<M-x>',
+    select_signature_key = '<M-k>',
+    transparency = 40
+}
