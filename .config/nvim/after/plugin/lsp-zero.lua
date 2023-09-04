@@ -36,6 +36,8 @@ lsp.configure('jdtls', {
     autostart = false,
 })
 
+lsp.configure('texlab', {})
+
 lsp.setup()
 
 vim.diagnostic.config {

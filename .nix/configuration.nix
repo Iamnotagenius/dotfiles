@@ -6,14 +6,14 @@
 {
   imports =
     [ # Include the results of the hardware scan.
-    ./hardware-configuration.nix
+      ./hardware-configuration.nix
       inputs.home-manager.nixosModule
     ];
 
   networking.hostName = "NixOSBook"; # Define your hostname.
-# Pick only one of the below networking options.
-# networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-    networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
+  # Pick only one of the below networking options.
+  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+  networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   nix.nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
@@ -28,7 +28,7 @@
     defaultLocale = "en_US.UTF-8";
     supportedLocales = [
       "en_US.UTF-8/UTF-8"
-        "ru_RU.UTF-8/UTF-8"
+      "ru_RU.UTF-8/UTF-8"
     ];
     extraLocaleSettings = {
       LC_TIME = "ru_RU.UTF-8";
@@ -50,7 +50,6 @@
   programs = {
     hyprland = {
       enable = true;
-      xwayland.hidpi = true;
     };
     waybar.enable = true;
     light.enable = true;
@@ -84,7 +83,7 @@
   users.users.iamnotagenius = {
     isNormalUser = true;
     extraGroups = [ "wheel" "networkmanager" "video" ]; # Enable ‘sudo’ for the user.
-      shell = pkgs.zsh;
+    shell = pkgs.zsh;
   };
 
   home-manager.useGlobalPkgs = true;
@@ -94,7 +93,7 @@
         enable = true;
         enableAutosuggestions = true;
         enableCompletion = true;
-        enableSyntaxHighlighting = true;
+        syntaxHighlighting.enable = true;
         defaultKeymap = "viins";
         shellAliases = {
           ll = "ls -l";
@@ -152,42 +151,46 @@
       };
       packages = with pkgs; [
         brave
-          calc
-          cargo
-          isync
-          libreoffice
-          imv
-          jupyter
-          lua-language-server
-          msmtp
-          neomutt
-          neovide
-          nix-zsh-completions
-          nodejs
-          pass
-          pinentry-bemenu
-          python311Packages.pygments
-          qutebrowser
-          ranger
-          sway-contrib.grimshot
-          texlab
-          kotatogram-desktop
-          yadm
-          wbg
+        calc
+        cargo
+        isync
+        libreoffice
+        imv
+        jupyter
+        lua-language-server
+        msmtp
+        neomutt
+        neovide
+        nix-zsh-completions
+        nodejs
+        pass
+        pinentry-bemenu
+        python311Packages.pygments
+        python311Packages.pandas
+        python311Packages.numpy
+        python311Packages.scipy
+        python311Packages.matplotlib
+        qutebrowser
+        ranger
+        sway-contrib.grimshot
+        texlab
+        kotatogram-desktop
+        yadm
+        wbg
 
-# List latex packages here
-          (texlive.combine {
-           inherit (texlive)
-           scheme-tetex
-           collection-binextra
-           minted;
-           })
+        # List latex packages here
+        (texlive.combine {
+         inherit (texlive)
+         scheme-tetex
+         collection-binextra
+         minted;
+         })
       ];
-      stateVersion = "22.11";
+      stateVersion = "23.05";
     };
   };
 
-  fonts.fonts = with pkgs; [
+  fonts.packages = with pkgs; [
     (nerdfonts.override { fonts = [ "FiraMono" "Iosevka" "Hack" "Hermit" ]; })
   ];
 
@@ -261,5 +264,5 @@
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "22.11"; # Did you read the comment?
+  system.stateVersion = "23.05"; # Did you read the comment?
 }

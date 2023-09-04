@@ -10,6 +10,16 @@ return require('packer').startup(function(use)
     use 'lervag/vimtex'
     use 'windwp/nvim-autopairs'
     use 'NvChad/nvim-colorizer.lua'
+    use {
+        "iurimateus/luasnip-latex-snippets.nvim",
+        -- replace "lervag/vimtex" with "nvim-treesitter/nvim-treesitter" if you're
+        -- using treesitter.
+        requires = { "L3MON4D3/LuaSnip", "lervag/vimtex" },
+        config = function()
+            require 'luasnip-latex-snippets'.setup { use_treesitter = true }
+            -- or setup({ use_treesitter = true })
+        end,
+    }
     use 'nvim-telescope/telescope-ui-select.nvim'
 
     vim.g.neo_tree_remove_legacy_commands = true
@@ -79,7 +89,12 @@ return require('packer').startup(function(use)
             { 'hrsh7th/cmp-path' },
             { 'hrsh7th/cmp-nvim-lsp' }, -- Required
             { 'hrsh7th/cmp-nvim-lua' }, -- Required
-            { 'L3MON4D3/LuaSnip' },     -- Required
+            { 'saadparwaiz1/cmp_luasnip' },
+            {
+                'L3MON4D3/LuaSnip',
+                tag = 'v1.2.*',
+                run = 'make install_jsregexp'
+            }, -- Required
             { 'onsails/lspkind.nvim' }
         }
     }
