@@ -115,7 +115,7 @@ vim.keymap.set({ 'n', 't' }, '<M-=>', function()
 end)
 
 -- Switch between vim keymaps
-vim.keymap.set({ 'i', 'n', 'v' }, '<m-l>', function ()
+vim.keymap.set({ 'i', 'n', 'v' }, '<m-l>', function()
     opt.keymap = opt.keymap:get() == '' and 'russian-jcukenwin' or ''
     require('lualine').refresh {
         scope = 'tabpage',

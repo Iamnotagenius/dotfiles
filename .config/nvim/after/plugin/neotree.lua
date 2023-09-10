@@ -1,3 +1,5 @@
+local neotree = require("neo-tree")
+
 local cmd = require('neo-tree.command')
 vim.keymap.set('n', "<leader>o", function()
     cmd.execute {
@@ -6,7 +8,7 @@ vim.keymap.set('n', "<leader>o", function()
     }
 end)
 
-require("neo-tree").setup({
+neotree.setup({
     window = {
         mappings = {
             h = function(state)
@@ -26,8 +28,11 @@ require("neo-tree").setup({
                         require("neo-tree.ui.renderer").focus_node(state, node:get_child_ids()[1])
                     end
                 end
+                if node.type == "file" then
+                    neotree.config.filesystem.commands.open(state)
+                end
             end,
-            o = function (state)
+            o = function(state)
                 local node = state.tree:get_node()
                 vim.fn.jobstart({ "xdg-open", node.path }, { detach = true })
             end
