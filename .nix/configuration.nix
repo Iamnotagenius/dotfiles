@@ -69,10 +69,7 @@
   };
 
   programs = {
-    hyprland = {
-      enable = true;
-    };
-    waybar.enable = true;
+    hyprland.enable = true;
     light.enable = true;
     zsh = {
       enable = true;
@@ -108,8 +105,11 @@
   };
 
   home-manager.useGlobalPkgs = true;
-  home-manager.users.iamnotagenius = { pkgs, ... }: { 
+  home-manager.users.iamnotagenius = { pkgs, ... }: {
     programs = {
+      waybar = {
+        systemd.enable = true;
+      };
       zsh = {
         enable = true;
         enableAutosuggestions = true;
@@ -124,6 +124,7 @@
           gp = "git pull";
           gP = "git push";
           vim = "nvim";
+          gvim = "neovide";
           sc = "systemctl";
           scu = "systemctl --user";
           mail = "neomutt";
@@ -132,12 +133,6 @@
           myip = "curl ip.me";
         };
         history.path = "~/.histfile";
-        sessionVariables = {
-          PATH = "$PATH:~/scripts";
-          VISUAL = "nvim";
-          EDITOR = "nvim";
-          LS_COLORS = "rs=0;35:di=01;35:ln=01;36:mh=00:pi=40;33:so=01;34:do=01;35:bd=01;33;04:cd=33;04:or=41;30;01;05:mi=00:su=37;41:sg=30;43:ca=30;41:tw=35;01:ow=35;01:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;34:*.jpeg=01;34:*.mjpg=01;34:*.mjpeg=01;34:*.gif=01;34:*.bmp=01;34:*.pbm=01;34:*.pgm=01;34:*.ppm=01;34:*.tga=01;34:*.xbm=01;34:*.xpm=01;34:*.tif=01;34:*.tiff=01;34:*.png=01;34:*.svg=01;34:*.svgz=01;34:*.mng=01;34:*.pcx=01;34:*.mov=01;34:*.mpg=01;34:*.mpeg=01;34:*.m2v=01;34:*.mkv=01;34:*.webm=01;34:*.webp=01;34:*.ogm=01;34:*.mp4=01;34:*.m4v=01;34:*.mp4v=01;34:*.vob=01;34:*.qt=01;34:*.nuv=01;34:*.wmv=01;34:*.asf=01;34:*.rm=01;34:*.rmvb=01;34:*.flc=01;34:*.avi=01;34:*.fli=01;34:*.flv=01;34:*.gl=01;34:*.dl=01;34:*.xcf=01;34:*.xwd=01;34:*.yuv=01;34:*.cgm=01;34:*.emf=01;34:*.ogv=01;34:*.ogx=01;34:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:*rc=04;35:*.log=04;35;02";
-        };
         plugins = [
         {
           name = "powerlevel10k";
@@ -153,8 +148,19 @@
         initExtra = builtins.readFile ./zsh-extra.zsh;
       };
     };
+    wayland.windowManager.hyprland = {
+      enable = true;
+      systemdIntegration = true;
+      extraConfig = builtins.readFile ./configs/hyprland.conf;
+    };
     services = {
       syncthing.enable = true;
+      udiskie = {
+        enable = true;
+        automount = true;
+        notify = true;
+        tray = "never";
+      };
     };
     xdg.mimeApps.defaultApplications = {
       "www-browser" = [ "brave-browser.desktop" ];
@@ -163,6 +169,11 @@
     };
     home = {
       sessionVariables = {
+        PATH = "$PATH:~/scripts";
+        VISUAL = "nvim";
+        EDITOR = "nvim";
+        NEOVIDE_MULTIGRID = "1";
+        LS_COLORS = "rs=0;35:di=01;35:ln=01;36:mh=00:pi=40;33:so=01;34:do=01;35:bd=01;33;04:cd=33;04:or=41;30;01;05:mi=00:su=37;41:sg=30;43:ca=30;41:tw=35;01:ow=35;01:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;34:*.jpeg=01;34:*.mjpg=01;34:*.mjpeg=01;34:*.gif=01;34:*.bmp=01;34:*.pbm=01;34:*.pgm=01;34:*.ppm=01;34:*.tga=01;34:*.xbm=01;34:*.xpm=01;34:*.tif=01;34:*.tiff=01;34:*.png=01;34:*.svg=01;34:*.svgz=01;34:*.mng=01;34:*.pcx=01;34:*.mov=01;34:*.mpg=01;34:*.mpeg=01;34:*.m2v=01;34:*.mkv=01;34:*.webm=01;34:*.webp=01;34:*.ogm=01;34:*.mp4=01;34:*.m4v=01;34:*.mp4v=01;34:*.vob=01;34:*.qt=01;34:*.nuv=01;34:*.wmv=01;34:*.asf=01;34:*.rm=01;34:*.rmvb=01;34:*.flc=01;34:*.avi=01;34:*.fli=01;34:*.flv=01;34:*.gl=01;34:*.dl=01;34:*.xcf=01;34:*.xwd=01;34:*.yuv=01;34:*.cgm=01;34:*.emf=01;34:*.ogv=01;34:*.ogx=01;34:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:*rc=04;35:*.log=04;35;02";
         BEMENU_OPTS = "-n --fn 'Iosevka 16' -H 30 \
                        --cw 2 --ch 22 \
                        --hp 10 \
@@ -176,12 +187,14 @@
       packages = with pkgs; [
         brave
         calc
+        calcurse
         cargo
         isync
         libreoffice
         imv
         jupyter
         lua-language-server
+        mpv
         msmtp
         neomutt
         neovide
@@ -229,9 +242,9 @@
     fzf
     gcc
     gh
-    gojq
     gnumake
     gnupg
+    gojq
     htop
     indent
     keepassxc
@@ -239,12 +252,12 @@
     neovim
     nodejs
     pinentry-curses
+    pulsemixer
     python311
     ripgrep
     seatd
     socat
     tor-browser-bundle-bin
-    udiskie
     vimiv-qt
     waybar
     wget
@@ -263,7 +276,11 @@
   # List services that you want to enable:
   services = { 
     tlp.enable = true;
-    pipewire.enable = true;
+    pipewire = {
+      enable = true;
+      audio.enable = true;
+      pulse.enable = true;
+    };
     openssh.enable = true;
     getty.autologinUser = "iamnotagenius";
     udisks2.enable = true;

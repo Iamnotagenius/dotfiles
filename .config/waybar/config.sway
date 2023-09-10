@@ -6,11 +6,11 @@
 	//"height": 18,
 
 	"modules-left": [
-		"hyprland/submap",
-		"wlr/workspaces",
-		"custom/arrow11",
-		"hyprland/window",
-        "custom/arrow12"
+		"sway/mode",
+		"sway/workspaces",
+		"custom/arrow10",
+		"sway/window",
+        "custom/arrow11"
 	],
 
 	//"modules-center": [
@@ -18,20 +18,16 @@
 	//],
 
 	"modules-right": [
-		"custom/arrow1",
-		"network",
 		"custom/arrow2",
-		"memory",
+		"network",
 		"custom/arrow3",
+		"memory",
+		"custom/arrow4",
 		"cpu",
-        "custom/arrow4",
-        "backlight",
-		"custom/arrow5",
-        "pulseaudio",
-        "custom/arrow6",
+		"custom/arrow6",
 		"battery",
 		"custom/arrow7",
-		"hyprland/language",
+		"sway/language",
 		"custom/arrow8",
 		"clock#date",
 		"custom/arrow9",
@@ -47,33 +43,19 @@
 			"critical": 15
 		},
 		"format": "{icon} {capacity}%",
-		"format-charging": "󰂅 {capacity}%",
+		"format-charging": " {capacity}%",
 		"format-charging-full": " {capacity}%",
 		"format-full": "{icon} {capacity}%",
 		"format-alt": "{icon} {power}W",
 		"format-icons": [
-            "󰂎",
-            "󰁺",
-            "󰁻",
-            "󰁼",
-            "󰁽",
-            "󰁾",
-            "󰁿",
-            "󰂀",
-            "󰂁",
-            "󰂂",
-            "󰁹",
+			" ",
+			" ",
+			" ",
+			" ",
+			" "
 		],
-        "format-charging-icons": [
-            
-        ],
 		"tooltip": false
 	},
-    
-    "backlight": {
-        "format": "{icon} {percent}%",
-        "format-icons": ["󰛩", "󱩎", "󱩏", "󱩐", "󱩑", "󱩒", "󱩓", "󱩔", "󱩕", "󱩖", "󰛨"]
-    },
 
 	"clock#time": {
 		"interval": 1,
@@ -83,36 +65,36 @@
 
 	"clock#date": {
 		"interval": 20,
-		"format": "{:%a, %d %b %Y}",
-        //"locale": "ru_RU.UTF-8",
+		"format": "{:%a, %e %b %Y}",
+        "locale": "ru_RU.UTF-8",
 		"tooltip": false,
-        "on-click": "~/scripts/toggle-tui --option font.size=12 calcurse",
+        "on-click": "~/scripts/calendar curr",
+        "on-click-right": "~/scripts/calendar next",
+        "on-click-middle": "~/scripts/calendar prev"
+		//"tooltip-format": "{:%e %B %Y}"
 	},
 
 	"cpu": {
 		"interval": 5,
 		"tooltip": false,
 		"format": " {usage}%",
+		"format-alt": " {load}",
 		"states": {
 			"warning": 70,
 			"critical": 90
-		},
-        "on-click": "~/scripts/toggle-tui --option font.size=12 btop"
+		}
 	},
 
-	"hyprland/language": {
+	"sway/language": {
 		"format": "  {}",
-        "format-en": "EN",
-        "format-ru": "RU",
 		"min-length": 5,
-		"on-click": "hyprctl switchxkblayout at-translated-set-2-keyboard next",
-		"tooltip": false,
+		"on-click": "swaymsg 'input * xkb_switch_layout next'",
+		"tooltip": false
 	},
 
 	"memory": {
 		"interval": 5,
-		"format": "󰍛 {percentage}%",
-		"format-alt": "󰍛 {used:0.1f}G/{total:0.1f}G",
+		"format": " {percentage}%",
 		"states": {
 			"warning": 70,
 			"critical": 90
@@ -133,15 +115,14 @@
 		"tooltip": false
 	},
 
-	"hyprland/window": {
+	"sway/window": {
 		"format": "{}",
 		"max-length": 30,
 		"tooltip": false
 	},
 
-	"wlr/workspaces": {
+	"sway/workspaces": {
 		"format": "{icon}",
-        "on-click": "activate",
         "persistent_workspaces": {
             "1": [], // Always show a workspace with name '3', on all outputs if it does not exists
             "2": [], // Always show a workspace with name '3', on all outputs if it does not exists
@@ -161,7 +142,7 @@
 		"scroll-step": 1,
 		"format": "{icon} {volume}%",
 		"format-bluetooth": "{icon} {volume}%",
-		"format-muted": "󰖁",
+		"format-muted": "",
 		"format-icons": {
 			"headphones": "",
 			"handsfree": "",
@@ -169,9 +150,9 @@
 			"phone": "",
 			"portable": "",
 			"car": "",
-			"default": [" ", " ", " "]
+			"default": ["", ""]
 		},
-		"on-click": "~/scripts/toggle-tui pulsemixer"
+		"on-click": "pavucontrol"
 	},
 
 	"temperature": {
@@ -253,21 +234,11 @@
 	},
 
 	"custom/arrow10": {
-		"format": "",
-		"tooltip": false
-	},
-
-	"custom/arrow10": {
-		"format": "",
-		"tooltip": false
-	},
-
-	"custom/arrow11": {
 		"format": "",
 		"tooltip": false
 	},
 
-	"custom/arrow12": {
+	"custom/arrow11": {
 		"format": "",
 		"tooltip": false
 	}

@@ -37,13 +37,14 @@
 @define-color focused	#1a1d27;
 @define-color hovered	@gray;
 @define-color inactive	@purple;
-@define-color sound	@brpurple;
+@define-color sound	@aqua;
 @define-color network	@red;
 @define-color memory	@blue;
-@define-color cpu	@aqua;
+@define-color cpu	@blue;
+@define-color backlight	@yellow;
 @define-color temp	@brgreen;
 @define-color layout	@purple;
-@define-color battery	@yellow;
+@define-color battery	@green;
 @define-color date	@black;
 @define-color time	@white;
 @define-color window @green;
@@ -69,6 +70,7 @@
 }
 
 /* Each module */
+#backlight,
 #battery,
 #clock,
 #cpu,
@@ -178,6 +180,16 @@
 	color: @black;
 }
 
+#backlight {
+  background: @backlight;
+  color: @black;
+}
+
+#pulseaudio {
+  background: @sound;
+  color: @black;
+}
+
 #language {
 	background: @layout;
 	color: @black;
@@ -213,33 +225,39 @@
 #custom-arrow8,
 #custom-arrow9,
 #custom-arrow10,
-#custom-arrow11 {
+#custom-arrow11,
+#custom-arrow12 {
     font-size: 22px;
 }
 
-#custom-arrow2 {
+#custom-arrow1 {
 	color: @network;
 	background: transparent;
 }
 
-#custom-arrow3 {
+#custom-arrow2 {
 	color: @memory;
 	background: @network;
 }
 
-#custom-arrow4 {
+#custom-arrow3 {
 	color: @cpu;
 	background: @memory;
 }
 
-#custom-arrow5 {
-	color: @temp;
+#custom-arrow4 {
+	color: @backlight;
 	background: @cpu;
+}
+
+#custom-arrow5 {
+	color: @sound;
+	background: @backlight;
 }
 
 #custom-arrow6 {
 	color: @battery;
-	background: @cpu;
+	background: @sound;
 }
 
 #custom-arrow7 {
@@ -257,12 +275,12 @@
 	background: @date;
 }
 
-#custom-arrow10 {
+#custom-arrow11 {
 	color: @unfocused;
 	background: @window;
 }
 
-#custom-arrow11 {
+#custom-arrow12 {
 	color: @window;
 	background: transparent;
 }
