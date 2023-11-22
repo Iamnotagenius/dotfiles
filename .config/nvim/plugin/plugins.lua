@@ -2,9 +2,6 @@
 return require('packer').startup(function(use)
     use 'wbthomason/packer.nvim'
 
-    use_rocks 'luafilesystem'
-    use_rocks { 'xml2lua 1.5-1' }
-
     use 'dstein64/vim-startuptime'
 
     use {
@@ -161,12 +158,6 @@ return require('packer').startup(function(use)
             {
                 'nvim-telescope/telescope-fzf-native.nvim',
                 run = 'make'
-            },
-            {
-                '/home/iamnotagenius/Sources/mvnsearch.nvim',
-                rocks = {
-                    'http', { 'xml2lua 1.5-1' }, 'Lua-cURL'
-                }
             }
         },
     }
