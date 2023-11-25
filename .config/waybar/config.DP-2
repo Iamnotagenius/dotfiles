@@ -2,8 +2,8 @@
     // Global configuration
     "layer": "top",
     "position": "top",
-    "output": "HDMI-A-1",
-    "name": "right",
+    "output": "DP-2",
+    "name": "left",
     //"height": 18,
     "modules-left": [
         "hyprland/submap",
@@ -18,16 +18,16 @@
     //	"sway/window"
     //],
     "modules-right": [
-        // "custom/arrow2",
-        // "mpd",
-        "custom/arrow3",
-        "memory",
-        "custom/arrow4",
-        "cpu",
-        "custom/arrow6",
-        "pulseaudio",
-        "custom/arrow7",
-        "hyprland/language",
+        "custom/arrow2",
+        "mpd",
+        // "custom/arrow3",
+        // "memory",
+        // "custom/arrow4",
+        // "cpu",
+        // "custom/arrow6",
+        // "pulseaudio",
+        // "custom/arrow7",
+        // "hyprland/language",
         "custom/arrow8",
         "clock#date",
         "custom/arrow9",
@@ -35,7 +35,7 @@
     ],
     // Modules
     "mpd": {
-        "on-click-right": "toggle-tui ncmpcpp",
+        "on-click-right": "toggle-tui --option font.size=10 ncmpcpp ",
         "on-click": "mpc toggle",
         "on-scroll-up": "mpc volume +5",
         "on-scroll-down": "mpc volume -5",
@@ -58,7 +58,7 @@
         "format": "{:%a, %d %b %Y}",
         //"locale": "ru_RU.UTF-8",
         "tooltip": false,
-        "on-click": "toggle-tui calcurse",
+        "on-click": "~/scripts/calendar curr",
         "on-click-right": "~/scripts/calendar next",
         "on-click-middle": "~/scripts/calendar prev"
         //"tooltip-format": "{:%e %B %Y}"
@@ -88,7 +88,7 @@
             "critical": 90
         },
         "tooltip": false,
-        "on-click": "toggle-tui --option font.size=10 btop -p 1"
+        "on-click": "alacritty -e btop"
     },
     "network": {
         "interval": 5,
@@ -114,7 +114,7 @@
         "format": "{icon}",
         "on-click": "activate",
         "on-click-middle": "close",
-        "on-click-right": "exec hyprctl dispatch movecurrentworkspacetomonitor +1",
+        "on-click-right": "hyprctl dispatch workspace +1",
         "format-icons": {
             "1": " ",
             "2": "",
@@ -143,8 +143,8 @@
                 " "
             ]
         },
-        "on-click": "toggle-window pavucontrol",
-        "on-click-right": "pulsemixer --toggle-mute"
+        "on-click-right": "alacritty -e pulsemixer",
+        "on-click": "pulsemixer --toggle-mute"
     },
     "temperature": {
         "critical-threshold": 90,

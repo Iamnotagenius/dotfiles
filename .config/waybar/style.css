@@ -36,7 +36,7 @@
 @define-color unfocused @black;
 @define-color focused #1a1d27;
 @define-color hovered @gray;
-@define-color inactive @purple;
+@define-color inactive @black;
 @define-color sound @yellow;
 @define-color network @red;
 @define-color memory @red;
@@ -65,13 +65,13 @@
     background: transparent;
     /* #282828e0 */
     color: @white;
-    font-family: Monocraft, Iosevka Nerd Font;
-    font-size: 12pt;
+    font-family: Monocraft Nerd Font;
+    font-size: 16px;
     /*font-weight: bold;*/
 }
 
 /* Each module */
-#custom-menu #battery,
+#battery,
 #clock,
 #cpu,
 #language,
@@ -121,13 +121,8 @@
 }
 
 /* Workspaces stuff */
-#custom-menu,
 #workspaces button {
-    /*font-weight: bold;*/
-    letter-spacing: -2pt;
-    min-width: 16pt;
-    padding-left: 2pt;
-    padding-right: 4pt;
+    padding-left: 7px;
     color: @white;
     background: @unfocused;
 }
@@ -135,32 +130,35 @@
 /* Inactive (on unfocused output) */
 #workspaces button.visible {
     color: @white;
-    background: @inactive;
+    background: @focused;
+    border-bottom: 3px solid @red;
 }
-
-/* Active (on focused output) */
 #workspaces button.active {
     color: @white;
     background: @focused;
-    border-bottom: 1pt solid @green;
+    border-bottom: 3px solid @green;
 }
-
 /* Contains an urgent window */
 #workspaces button.urgent {
     color: @black;
     background: @white;
 }
-
 /* Style when cursor is on the button */
 #workspaces button:hover {
     background: @hovered;
     color: @white;
-    border-bottom: 1pt solid @green;
+    border-bottom: 3px solid @yellow;
+}
+#workspaces button.active:hover {
+    background: @hovered;
+    border-bottom: 3px solid @green;
 }
 
 #custom-menu {
     color: @black;
     background: @white;
+    padding-left: 4pt;
+    padding-right: 6pt;
 }
 
 #mpd {
@@ -243,7 +241,7 @@
 #custom-arrow10,
 #custom-arrow11,
 #custom-arrow12 {
-    font-size: 20px;
+    font-size: 1.3em;
 }
 
 #custom-arrow2 {
@@ -253,7 +251,7 @@
 
 #custom-arrow3 {
     color: @memory;
-    background: @mpd;
+    background: transparent;
 }
 
 #custom-arrow4 {
@@ -299,4 +297,9 @@
 #custom-arrow12 {
     color: @window;
     background: transparent;
+}
+
+window.DP-2 #custom-arrow8 {
+    color: @date;
+    background: @mpd;
 }
