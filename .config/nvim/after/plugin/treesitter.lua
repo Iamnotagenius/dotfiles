@@ -11,9 +11,5 @@ require('nvim-treesitter.configs').setup {
             "kotlin",
             "java"
         }
-    },
-    rainbow = {
-        enable = true,
-        extended_mode = true,
     }
 }

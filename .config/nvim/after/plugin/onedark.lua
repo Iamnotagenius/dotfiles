@@ -18,7 +18,6 @@ if vim.g.neovide then
     bg1 = "$bg1"
     DiffAdd = 'DiffAdd'
     DiffDelete = 'DiffDelete'
-
 else
     DiagnosticVirtualTextHint.bg = 'none'
     DiagnosticVirtualTextInfo.bg = 'none'
@@ -49,8 +48,8 @@ require('onedark').setup {
         IncSearch = { fg = 'transparent', bg = '$bg3', fmt = 'italic,bold,reverse' },
         Search = { fg = 'transparent', bg = '$bg3', fmt = 'italic,bold' },
         TreesitterContextLineNumber = { fg = "$blue", bg = bg1, fmt = "bold" },
-        IndentBlanklineContextChar = { fg = "$indent_context", fmt = "nocombine" },
-        IndentBlanklineContextStart = { sp = "$indent", fmt = "nocombine,underline" },
+        iblIndent = { fg = "$indent", fmt = "nocombine" },
+        iblScope = { fg = "$indent_context", fmt = "nocombine" },
         ["@constant"] = { fg = "$orange" },
         ["@variable"] = { fg = "$cyan" },
         ["@property"] = { fg = "$red" },
