@@ -4,6 +4,7 @@
 
 { config, pkgs, inputs, ... }: 
 {
+
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
@@ -38,6 +39,19 @@
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   nix.nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
+
+  nixpkgs.config.packageOverrides = let
+    unstablePkgs = pkgs.fetchFromGitHub {
+      owner = "NixOS";
+      repo = "nixpkgs";
+      rev = "23.11";
+      hash = "sha256-MxCVrXY6v4QmfTwIysjjaX0XUhqBbxTWWB4HXtDYsdk=";
+    };
+  in (pkgs: {
+    unstable = import unstablePkgs {
+      config = config.nixpkgs.config;
+    };
+  });
 
 # Set your time zone.
   time.timeZone = "Europe/Moscow";
@@ -110,6 +124,13 @@
       waybar = {
         systemd.enable = true;
       };
+      tmux = {
+        enable = true;
+        baseIndex = 1;
+        clock24 = true;
+        customPaneNavigationAndResize = true;
+        keyMode = "vi";
+      };
       zsh = {
         enable = true;
         enableAutosuggestions = true;
@@ -117,6 +138,7 @@
         syntaxHighlighting.enable = true;
         defaultKeymap = "viins";
         shellAliases = {
+          lf = "ranger";
           ll = "ls -l";
           la = "ls -a";
           gs = "git status";
@@ -185,7 +207,7 @@
                        --sb #E06C75";
       };
       packages = with pkgs; [
-        brave
+        unstable.brave
         calc
         calcurse
         cargo
@@ -211,7 +233,7 @@
         ranger
         sway-contrib.grimshot
         texlab
-        kotatogram-desktop
+        telegram-desktop
         yadm
         wbg
 
