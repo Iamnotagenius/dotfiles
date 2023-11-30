@@ -1,14 +1,23 @@
-require("indent_blankline").setup {
-    char_blankline = '┊',
-    space_char_blankline = " ",
-    show_current_context = true,
-    filetype_exclude = {
-        "dashboard",
-        "lspinfo",
-        "packer",
-        "checkhealth",
-        "help",
-        "man",
-        "",
+require("ibl").setup {
+    indent = {
+        char = '│'
+    },
+    scope = {
+        show_start = false,
+        show_end = false,
+    },
+    exclude = {
+        filetypes = {
+            "lspinfo",
+            "packer",
+            "checkhealth",
+            "help",
+            "man",
+            "gitcommit",
+            "TelescopePrompt",
+            "TelescopeResults",
+            "dashboard",
+            ""
+        }
     }
 }

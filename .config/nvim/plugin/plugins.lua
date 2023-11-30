@@ -139,7 +139,7 @@ return require('packer').startup(function(use)
 
     use {
         'nvim-treesitter/nvim-treesitter',
-        requires = { 'HiPhish/nvim-ts-rainbow2', 'nvim-treesitter/nvim-treesitter-context' },
+        requires = { 'HiPhish/rainbow-delimiters.nvim', 'nvim-treesitter/nvim-treesitter-context' },
         run = ':TSUpdate',
     }
 
