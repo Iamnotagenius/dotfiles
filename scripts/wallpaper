@@ -2,7 +2,7 @@
 
 WALLPAPER_DIR=~/Pictures/Wallpapers
 
-chosen=$(find $WALLPAPER_DIR -type f ! -name HDMI-A-1 -a ! -name DP-1 -printf '%f\n' | \
+chosen=$(find $WALLPAPER_DIR -type f ! -name HDMI-A-1 -a ! -name DP-2 -printf '%f\n' | \
     fzf --preview="mpv --loop --wayland-app-id=preview $WALLPAPER_DIR/{}")
 
 mon=$(hyprctl -j monitors | gojq -r '.[].name' | fzf --prompt 'Choose output: ' --preview \
