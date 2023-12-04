@@ -1,6 +1,7 @@
 vim.api.nvim_set_hl(0, 'javaExternal', { link = '@macro' })
 
 local install_path = require("mason-registry").get_package("jdtls"):get_install_path()
+local plugin = vim.fn.glob(install_path .. "/plugins/org.eclipse.equinox.launcher_*.jar")
 local jdtls = require('jdtls')
 local proj_name = vim.fn.fnamemodify(require('jdtls.setup').find_root({ '.git', 'mvnw', 'gradlew' }), ':p:h:t')
 
@@ -23,7 +24,7 @@ require('mason-lspconfig').setup_handlers {
                 "-javaagent:" ..
                 require("mason-registry").get_package("jdtls"):get_install_path() .. "/lombok.jar",
 
-                '-jar', install_path .. "/plugins/org.eclipse.equinox.launcher_1.6.400.v20210924-0641.jar",
+                '-jar', plugin,
                 '-configuration', install_path .. "/config_linux",
                 '-data', vim.fn.expand('~/.cache/jdtls/workspace/') .. proj_name
             },
