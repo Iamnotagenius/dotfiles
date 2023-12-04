@@ -1,16 +1,21 @@
 #!/usr/bin/env bash
 
-BASE_API=https://api.exchangerate.host
+API_KEY=$(cat ~/.apikeys/currencyapi)
+BASE_API=https://api.currencyapi.com/v3
 
 base_cur=USD
 dest_curs=RUB
+
+curl_with_apikey() {
+    curl -H "apikey: $API_KEY" "$@"
+}
 
 symbols_pager() {
     bat -pl yaml
 }
 
 show_symbols() {
-    curl -s $BASE_API/symbols | gojq -r ".symbols.[] | \"\(.code): \(.description)\"" | symbols_pager
+    curl_with_apikey -s "$BASE_API/currencies" | gojq -r '.data.[] | "\(.code): \(.name) [\(.name_plural)]"' | symbols_pager
 }
 
 while [[ "$1" =~ ^- && ! "$1" == "--" ]]; do case $1 in
@@ -42,8 +47,8 @@ if [[ "$1" == '--' ]]; then shift; fi
 
 echo "${1:-1} $base_cur is..."
 
-curl -s "$BASE_API/latest?base=$base_cur&symbols=$dest_curs" | \
-    gojq -r ".rates | to_entries.[] | . |= {\
-    "code": .key, \
+curl_with_apikey -s "$BASE_API/latest?base_currency=$base_cur&currencies=$dest_curs" | \
+    gojq -r ".data.[] | {\
+    code, \
     "rate": ( .value * 100 * ${1:-1} | round | . / 100 )} | \
     \"\(.code): \(.rate)\"" | symbols_pager
