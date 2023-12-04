@@ -5,15 +5,15 @@ send_mpd_command() {
 
 yt-dlp -j -f bestaudio "${1:-$(wl-paste)}" | gojq -c '{title, artist: (.artist // .channel), playlist, url}' | while read -r metadata; do
     id=$(send_mpd_command <<< "addid $(gojq .url <<< "$metadata")" | awk '/^Id:/ {print $NF}')
-    artist=$(gojq -r .artist <<< "$metadata")
-    title=$(gojq -r .title <<< "$metadata")
-    playlist=$(gojq --exit-status -r .playlist <<< "$metadata")
+    artist=$(gojq .artist <<< "$metadata")
+    title=$(gojq .title <<< "$metadata")
+    playlist=$(gojq --exit-status .playlist <<< "$metadata")
     has_playlist=$?
     send_mpd_command <<EOF | grep ACK
 command_list_begin
-addtagid $id Artist "$artist"
-addtagid $id Title "$title" \
-$([ $has_playlist -eq 0 ] && printf "\naddtagid %s Album \"%s\"\n" "$id" "$playlist")
+addtagid $id Artist $artist
+addtagid $id Title $title \
+$([ $has_playlist -eq 0 ] && printf "\naddtagid %s Album %s\n" "$id" "$playlist")
 command_list_end
 EOF
     printf "%s + %s - %s\n" "$(tput setaf 2)" "$(tput setaf 3)$artist$(tput sgr0)" "$title"
