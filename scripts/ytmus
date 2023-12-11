@@ -41,7 +41,7 @@ esac
 
 set -o vi
 read -i "$name" -p "Enter track name: " -re name
-new_file=${name}.mp3
+new_file=${name/\//\\}.mp3
 mv "$file" "$new_file"
 file=$new_file
 
