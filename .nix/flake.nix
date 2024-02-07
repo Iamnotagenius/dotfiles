@@ -1,10 +1,11 @@
 {
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/25e9c5bb4854d93a59bddc8b8ce2b8414db7d56b";
-    home-manager.url = "github:nix-community/home-manager/master";
+    nixpkgs.url = "https://channels.nixos.org/nixos-23.11/nixexprs.tar.xz";
+    nixpkgs-unstable.url = "https://channels.nixos.org/nixos-unstable/nixexprs.tar.xz";
+    home-manager.url = "github:nix-community/home-manager/release-23.11";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
   };
-  outputs = { self, nixpkgs, home-manager }@inputs: {
+  outputs = { self, nixpkgs, nixpkgs-unstable, home-manager }@inputs: {
     nixosConfigurations.NixOSBook = nixpkgs.lib.nixosSystem {
       modules = [ ./configuration.nix ];
       specialArgs.inputs = inputs;

@@ -40,18 +40,11 @@
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   nix.nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
 
-  nixpkgs.config.packageOverrides = let
-    unstablePkgs = pkgs.fetchFromGitHub {
-      owner = "NixOS";
-      repo = "nixpkgs";
-      rev = "23.11";
-      hash = "sha256-MxCVrXY6v4QmfTwIysjjaX0XUhqBbxTWWB4HXtDYsdk=";
-    };
-  in (pkgs: {
-    unstable = import unstablePkgs {
-      config = config.nixpkgs.config;
-    };
-  });
+  nixpkgs.config.allowUnfree = true;
+
+  nixpkgs.overlays = [
+    (self: super: { unstable = inputs.nixpkgs-unstable.legacyPackages.${super.system}; })
+  ];
 
 # Set your time zone.
   time.timeZone = "Europe/Moscow";
@@ -172,7 +165,7 @@
     };
     wayland.windowManager.hyprland = {
       enable = true;
-      systemdIntegration = true;
+      systemd.enable = true;
       extraConfig = builtins.readFile ./configs/hyprland.conf;
     };
     services = {
@@ -245,7 +238,7 @@
          minted;
          })
       ];
-      stateVersion = "23.05";
+      stateVersion = "23.11";
     };
   };
 
@@ -327,5 +320,5 @@
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "23.05"; # Did you read the comment?
+  system.stateVersion = "23.11"; # Did you read the comment?
 }
