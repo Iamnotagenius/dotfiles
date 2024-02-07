@@ -217,11 +217,13 @@
         nodejs
         pass
         pinentry-bemenu
-        python311Packages.pygments
-        python311Packages.pandas
-        python311Packages.numpy
-        python311Packages.scipy
-        python311Packages.matplotlib
+        (python311.withPackages (pkgs: with pkgs; [
+          pygments
+          pandas
+          numpy
+          scipy
+          matplotlib
+        ]))
         qutebrowser
         ranger
         sway-contrib.grimshot
