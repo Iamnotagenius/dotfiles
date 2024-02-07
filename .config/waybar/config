@@ -7,7 +7,7 @@
 
 	"modules-left": [
 		"hyprland/submap",
-		"wlr/workspaces",
+		"hyprland/workspaces",
 		"custom/arrow11",
 		"hyprland/window",
         "custom/arrow12"
@@ -139,14 +139,14 @@
 		"tooltip": false
 	},
 
-	"wlr/workspaces": {
+	"hyprland/workspaces": {
 		"format": "{icon}",
         "on-click": "activate",
         "persistent_workspaces": {
-            "1": [], // Always show a workspace with name '3', on all outputs if it does not exists
-            "2": [], // Always show a workspace with name '3', on all outputs if it does not exists
-            "3": [], // Always show a workspace with name '3', on all outputs if it does not exists
-            "4": [], // Always show a workspace with name '3', on all outputs if it does not exists
+            "1": [],
+            "2": [],
+            "3": [],
+            "4": [],
         },
         "format-icons": {
             "1": " ",
