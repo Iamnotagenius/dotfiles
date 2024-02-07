@@ -207,7 +207,6 @@
         isync
         libreoffice
         imv
-        jupyter
         lua-language-server
         mpv
         msmtp
@@ -222,6 +221,7 @@
           pandas
           numpy
           scipy
+          jupyter
           matplotlib
         ]))
         qutebrowser
@@ -270,7 +270,6 @@
     nodejs
     pinentry-curses
     pulsemixer
-    python311
     ripgrep
     seatd
     socat
