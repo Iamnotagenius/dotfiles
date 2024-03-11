@@ -21,6 +21,18 @@ return require('packer').startup(function(use)
     use 'lervag/vimtex'
 
     use {
+        'pwntester/octo.nvim',
+        requires = {
+            'nvim-lua/plenary.nvim',
+            'nvim-telescope/telescope.nvim',
+            'kyazdani42/nvim-web-devicons'
+        },
+        config = function ()
+            require('octo').setup()
+        end
+    }
+
+    use {
         "iurimateus/luasnip-latex-snippets.nvim",
         -- replace "lervag/vimtex" with "nvim-treesitter/nvim-treesitter" if you're
         -- using treesitter.
@@ -148,6 +160,12 @@ return require('packer').startup(function(use)
     }
 
     use {
+        "nvim-treesitter/nvim-treesitter-textobjects",
+        after = "nvim-treesitter",
+        requires = "nvim-treesitter/nvim-treesitter",
+    }
+
+    use {
         'nvim-telescope/telescope.nvim',
         requires = {
             { 'nvim-lua/plenary.nvim' },
@@ -171,7 +189,7 @@ return require('packer').startup(function(use)
 
     use {
         "rcarriga/nvim-dap-ui",
-        requires = { "mfussenegger/nvim-dap" },
+        requires = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" },
     }
 
     use 'fatih/vim-go'
@@ -185,7 +203,25 @@ return require('packer').startup(function(use)
         end
     }
 
+    use {
+        'barrett-ruth/live-server.nvim',
+        run = 'yarn global add live-server',
+        config = function ()
+            require('live-server').setup()
+        end
+    }
+
+    use 'aklt/plantuml-syntax'
+
     -- Kid's stuff
     use 'wakatime/vim-wakatime'
-    use 'andweeb/presence.nvim'
+    use {
+        'IogaMaster/neocord',
+        config = function ()
+            require('neocord').setup {
+                global_timer = true,
+                logo = "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Neovim-mark.svg/1200px-Neovim-mark.svg.png"
+            }
+        end
+    }
 end)

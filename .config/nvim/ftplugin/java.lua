@@ -17,12 +17,13 @@ require('mason-lspconfig').setup_handlers {
                 '-Declipse.product=org.eclipse.jdt.ls.core.product',
                 '-Dlog.protocol=true',
                 '-Dlog.level=ALL',
+                '-Dmixin.debug.export=true',
                 '-Xmx1g',
                 '--add-modules=ALL-SYSTEM',
                 '--add-opens', 'java.base/java.util=ALL-UNNAMED',
                 '--add-opens', 'java.base/java.lang=ALL-UNNAMED',
                 "-javaagent:" ..
-                require("mason-registry").get_package("jdtls"):get_install_path() .. "/lombok.jar",
+                require("mason-registry").get_package("jdtls"):get_install_path() .. "/lombok-1.18.30.jar",
 
                 '-jar', plugin,
                 '-configuration', install_path .. "/config_linux",
@@ -53,3 +54,10 @@ require('mason-lspconfig').setup_handlers {
 vim.keymap.set('n', '<leader>i', jdtls.organize_imports)
 vim.keymap.set('n', '<leader>v', jdtls.extract_variable)
 vim.keymap.set('v', '<leader>e', '<Esc><Cmd>lua require("jdtls").extract_method(true)<CR>')
+
+vim.api.nvim_create_autocmd('User', {
+    pattern = 'NeogitBranchCheckout',
+    callback = function ()
+        vim.cmd('JdtUpdateConfig')
+    end
+})

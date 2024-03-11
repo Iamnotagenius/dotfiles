@@ -44,35 +44,20 @@ vim.api.nvim_create_user_command('WordModeRussian', 'set invwrap invspell spelll
 
 if g.neovide then
     opt.mouse = 'a'
-    g.neovide_cursor_vfx_mode = "torpedo"
-    g.neovide_refresh_rate = 60
-    g.neovide_cursor_vfx_opacity = 120.0
-    g.neovide_cursor_vfx_particle_density = 20.0
-    g.neovide_cursor_vfx_particle_lifetime = 2.3
+    g.neovide_cursor_vfx_mode = "ripple"
     g.neovide_transparency = 1.0
+    g.neovide_scroll_animation_length = 0.14
     opt.pumblend = 40
 
-    vim.g.font_step = 1
-
-    vim.keymap.set('n', '<C-->', function()
-        local changed = {}
-        for _, font in ipairs(opt.guifont:get()) do
-            local size = string.match(font, ":h(%d+)")
-            local new = string.gsub(font, size, tostring(tonumber(size) - vim.g.font_step), 1)
-            table.insert(changed, new)
-        end
-
-        opt.guifont = changed
+    g.neovide_scale_factor = 1.0
+    local change_scale_factor = function(delta)
+        vim.g.neovide_scale_factor = vim.g.neovide_scale_factor * delta
+    end
+    vim.keymap.set("n", "<C-=>", function()
+        change_scale_factor(1.25)
     end)
-    vim.keymap.set('n', '<C-=>', function()
-        local changed = {}
-        for _, font in ipairs(opt.guifont:get()) do
-            local size = string.match(font, ":h(%d+)")
-            local new = string.gsub(font, size, tostring(tonumber(size) + vim.g.font_step), 1)
-            table.insert(changed, new)
-        end
-
-        opt.guifont = changed
+    vim.keymap.set("n", "<C-->", function()
+        change_scale_factor(1/1.25)
     end)
 end
 

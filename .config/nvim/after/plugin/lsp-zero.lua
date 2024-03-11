@@ -37,6 +37,14 @@ lsp.configure('jdtls', {
     autostart = false
 })
 
+lsp.configure('tsserver', {
+    settings = {
+        implicitProjectConfiguration = {
+            checkJs = true
+        }
+    }
+})
+
 lsp.configure('omnisharp', {
     enable_import_completion = true,
     on_attach = function(client)
@@ -117,6 +125,10 @@ lsp.configure('omnisharp', {
     end
 })
 
+lsp.configure('kotlin_language_server', {
+    cmd = { '/home/iamnotagenius/Sources/kotlin-language-server/server/build/install/server/bin/kotlin-language-server' }
+})
+
 lsp.setup()
 
 vim.diagnostic.config {
@@ -178,3 +190,5 @@ require("lsp_signature").setup {
     select_signature_key = '<M-k>',
     transparency = 40
 }
+
+vim.lsp.set_log_level('debug')
