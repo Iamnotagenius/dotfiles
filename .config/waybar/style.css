@@ -228,6 +228,13 @@
     color: @black;
 }
 
+tooltip {
+    padding: 1em;
+    background: rgba(40, 44, 52, 0.76);
+    font-family: Hack Nerd Font;
+    font-size: 16px;
+}
+
 
 #custom-arrow1,
 #custom-arrow2,
