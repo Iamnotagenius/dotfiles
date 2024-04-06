@@ -74,21 +74,6 @@
         "format": "{icon} {percent}%",
         "format-icons": ["󰛩", "󱩎", "󱩏", "󱩐", "󱩑", "󱩒", "󱩓", "󱩔", "󱩕", "󱩖", "󰛨"]
     },
-
-	"clock#time": {
-		"interval": 1,
-		"format": "{:%T}",
-		"tooltip": false
-	},
-
-	"clock#date": {
-		"interval": 20,
-		"format": "{:%a, %d %b %Y}",
-        //"locale": "ru_RU.UTF-8",
-		"tooltip": false,
-        "on-click": "~/scripts/toggle-tui --option font.size=12 calcurse",
-	},
-
 	"cpu": {
 		"interval": 5,
 		"tooltip": false,
@@ -100,8 +85,37 @@
         "on-click": "~/scripts/toggle-tui --option font.size=12 btop"
 	},
 
-	"hyprland/language": {
-		"format": "  {}",
+    "clock#time": {
+        "interval": 1,
+        "format": "{:%T}",
+        "tooltip": false
+    },
+    "clock#date": {
+        "interval": 20,
+        "format": "{:L%a, %d %B %Y}",
+        "locale": "ru_RU.UTF-8",
+        "tooltip-format": "{calendar}",
+        "calendar": {
+            "mode": "month",
+            "mode-mon-col": 3,
+            "on-scroll": 1,
+            "format": {
+                "months":   "<span color='#61AFEF'><b>{}</b></span>",
+                "days":     "<span color='#ABB2BF'><b>{}</b></span>",
+                "weekdays": "<span color='#C678DD'><b>{}</b></span>",
+                "today":    "<span color='#98C379'><b><i>{}</i></b></span>"
+            }
+        },
+        "actions": {
+            "on-click-right": "mode",
+            "on-scroll-up": "shift_up",
+            "on-scroll-down": "shift_down"
+        },
+        "on-click": "toggle-tui calcurse"
+        //"tooltip-format": "{:%e %B %Y}"
+    },
+    "hyprland/language": {
+        "format": "  {}",
         "format-en": "EN",
         "format-ru": "RU",
 		"min-length": 5,
