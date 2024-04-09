@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+PID_FILE="/tmp/screencast.pid"
+SCREENCAST_FILE="/tmp/screencast.mp4"
+
+if [ -e $PID_FILE ]; then
+    pid=$(cat $PID_FILE)
+    rm $PID_FILE
+    kill -s INT "$pid"
+    notify-send " Screencast stopped  "
+    dragon-drop -x $SCREENCAST_FILE
+else
+    geom=$(slurp -o)
+    dims=${geom#* }
+    x=${dims%x*}
+    y=${dims#*x}
+
+    [[ "$x" -ge 256 && "$y" -ge 128 ]] && use_codec=--codec=h264_vaapi
+
+    rm $SCREENCAST_FILE
+    wf-recorder "$use_codec" \
+                --audio=alsa_output.pci-0000_2a_00.4.analog-stereo.monitor \
+                --geometry="$geom" \
+                -f $SCREENCAST_FILE -l > /tmp/screencast.log 2> /tmp/screencast-err.log&
+    pid=$!
+    echo $pid > $PID_FILE
+    notify-send " Screencast started  "
+    wait $pid
+    [ -e $PID_FILE ] && rm $PID_FILE && notify-send -u critical " Process recording stopped abruptly  " "$(tail /tmp/screencast-err.log)"
+fi
