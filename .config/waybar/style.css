@@ -7,6 +7,12 @@
 	}
 }
 
+@keyframes blink-urgent {
+    30% {
+        background: @yellow;
+        color: @black;
+    }
+}
 
 /* Styles */
 
@@ -62,11 +68,11 @@
 
 /* The whole bar */
 #waybar {
-	background: transparent; /* #282828e0 */
-	color: @white;
-	font-family: Iosevka Nerd Font;
-	font-size: 14pt;
-	/*font-weight: bold;*/
+    background: transparent;
+    /* #282828e0 */
+    color: @white;
+    font-family: Comic Code Ligatures Medium, ComicCode NerdFont;
+    font-size: 14px;
 }
 
 /* Each module */
@@ -77,15 +83,22 @@
 #language,
 #memory,
 #mode,
+#mpd,
+#custom-mpd,
 #network,
 #pulseaudio,
 #temperature,
 #custom-alsa,
 #sndio,
-#window,
+#pulseaudio,
 #tray {
-	padding-left: 8pt;
-	padding-right: 8pt;
+    padding-left: 4pt;
+    padding-right: 6pt;
+}
+#window,
+#custom-menu {
+    padding-left: 6pt;
+    padding-right: 4pt;
 }
 
 /* Each critical module */
@@ -123,10 +136,11 @@
 	/*font-weight: bold;*/
     letter-spacing: -2pt;
     min-width: 16pt;
-	padding-left: 4pt;
-	padding-right: 6pt;
 	color: @white;
 	background: @unfocused;
+    padding: 0 2px 0 6px;
+    color: @white;
+    background: @unfocused;
 }
 
 /* Inactive (on unfocused output) */
@@ -144,15 +158,41 @@
 
 /* Contains an urgent window */
 #workspaces button.urgent {
-	color: @black;
-	background: @warning;
+    animation-timing-function: ease-out;
+    animation-name: blink-urgent;
+    animation-iteration-count: infinite;
+    animation-duration: 1.5s;
 }
 
 /* Style when cursor is on the button */
 #workspaces button:hover {
-	background: @hovered;
-	color: @white;
-    border-bottom: 1pt solid @green;
+    background: @hovered;
+    color: @white;
+    border-bottom: 3px solid @yellow;
+}
+#workspaces button.active:hover {
+    background: @hovered;
+    border-bottom: 3px solid @green;
+}
+
+#custom-menu {
+    color: @black;
+    background: @white;
+    padding-left: 4pt;
+    padding-right: 6pt;
+}
+
+#mpd, #custom-mpd {
+    background: @mpd;
+    color: @black;
+}
+
+#mpd.stopped {
+    color: @bryellow;
+}
+
+#mpd.disconnected {
+    color: @red;
 }
 
 #window {
@@ -234,7 +274,7 @@ tooltip {
 #custom-arrow10,
 #custom-arrow11,
 #custom-arrow12 {
-    font-size: 22px;
+    font-size: 1.15em;
 }
 
 #custom-arrow1 {
