@@ -7,6 +7,12 @@
     }
 }
 
+@keyframes blink-urgent {
+    30% {
+        background: @yellow;
+        color: @black;
+    }
+}
 
 /* Styles */
 
@@ -65,9 +71,8 @@
     background: transparent;
     /* #282828e0 */
     color: @white;
-    font-family: Monocraft Nerd Font;
-    font-size: 16px;
-    /*font-weight: bold;*/
+    font-family: Comic Code Ligatures Medium, ComicCode NerdFont;
+    font-size: 14px;
 }
 
 /* Each module */
@@ -78,16 +83,21 @@
 #memory,
 #mode,
 #mpd,
+#custom-mpd,
 #network,
 #pulseaudio,
 #temperature,
 #custom-alsa,
 #sndio,
-#window,
 #pulseaudio,
 #tray {
-    padding-left: 8pt;
-    padding-right: 8pt;
+    padding-left: 4pt;
+    padding-right: 6pt;
+}
+#window,
+#custom-menu {
+    padding-left: 6pt;
+    padding-right: 4pt;
 }
 
 /* Each critical module */
@@ -122,7 +132,7 @@
 
 /* Workspaces stuff */
 #workspaces button {
-    padding-left: 7px;
+    padding: 0 2px 0 6px;
     color: @white;
     background: @unfocused;
 }
@@ -140,8 +150,10 @@
 }
 /* Contains an urgent window */
 #workspaces button.urgent {
-    color: @black;
-    background: @white;
+    animation-timing-function: ease-out;
+    animation-name: blink-urgent;
+    animation-iteration-count: infinite;
+    animation-duration: 1.5s;
 }
 /* Style when cursor is on the button */
 #workspaces button:hover {
@@ -161,7 +173,7 @@
     padding-right: 6pt;
 }
 
-#mpd {
+#mpd, #custom-mpd {
     background: @mpd;
     color: @black;
 }
@@ -248,7 +260,7 @@ tooltip {
 #custom-arrow10,
 #custom-arrow11,
 #custom-arrow12 {
-    font-size: 1.3em;
+    font-size: 1.15em;
 }
 
 #custom-arrow2 {

@@ -19,7 +19,7 @@
     //],
     "modules-right": [
         "custom/arrow2",
-        "mpd",
+        "custom/mpd",
         // "custom/arrow3",
         // "memory",
         // "custom/arrow4",
@@ -34,19 +34,14 @@
         "clock#time"
     ],
     // Modules
-    "mpd": {
-        "on-click-right": "toggle-tui --option font.size=10 ncmpcpp ",
-        "on-click": "mpc toggle",
+    "custom/mpd": {
+        "on-click-right": "toggle-tui ncmpcpp",
+        "on-click": "mpc toggle > /dev/null",
         "on-scroll-up": "mpc volume +5",
         "on-scroll-down": "mpc volume -5",
-        "title-len": 20,
-        "format": "  <i>{artist}</i> - {title} {stateIcon}",
-        "format-stopped": "MPD Stopped",
-        "format-disconnected": "ﱙ ",
-        "state-icons": {
-            "paused": "",
-            "playing": ""
-        }
+        "exec": "mg --mpd -l \"{\\\"text\\\":\\\" \" -R \" [{elapsedTime}/{totalTime}] {stateIcon}\\\",\\\"tooltip\\\":\\\"{artist} - {title}: [{album} ({date})] ({randomIcon:1}{repeatIcon:1}{singleIcon:1}{consumeIcon:1}) {{{songPosition}/{queueLength}}}\\\"}}\" -w 30 -s \"  \" -1 -e \"&=&amp;\" run -d 100ms -n",
+        "restart-interval": 1,
+        "return-type": "json"
     },
     "clock#time": {
         "interval": 1,
