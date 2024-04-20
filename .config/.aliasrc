@@ -27,14 +27,31 @@ alias \
     gvim="neovide" \
     dcam="droidcam-cli" \
     mail="neomutt" \
-    jq="gojq"
+    jq="gojq" \
+    mv="mv -i" \
+    rm="rm -i" \
+    cp="cp -i" \
+    la="ls -a" \
+    ll="ls -l" \
+    lf=". ranger" \
+    ga="git add" \
+    gs="git status" \
+    gc="git checkout" \
+    gcm="git commit -m" \
+    gb="git branch" \
+    py="python" \
+    ipy="ptipython" \
+    pip="python -m pip" \
+    mount="udiskie-mount" \
+    umount="udiskie-umount" \
+    ta="tmux attach" \
+    sctl="systemctl" \
+    sctlu="systemctl --user" \
+    curtimeoutoff="hyprctl keyword general:cursor_inactive_timeout 0" \
+    curtimeouton="hyprctl keyword general:cursor_inactive_timeout 3"
 
 mkcd() {
     mkdir "$1" && cd "$1"
-}
-topdf () {
-	[ $2 ] && dir=$2 || [ $pdfdir ] && dir=$pdfdir || dir=compiled 
-	pdflatex --output-directory=$dir $1 && rm $dir/${1%.tex}.aux $dir/${1%.tex}.log
 }
 alias \
 	grep="grep --color=auto" \
@@ -54,10 +71,7 @@ function br {
         return "$code"
     fi
 }
-ftp () {
-	doas ftp $1
-	if [[ $1 == "start" ]]; then
-		mylip=$(ip -brief addr | grep UP | awk '{ print $3 }' | cut -d'/' -f1)
-		echo -e "Your ip is \e[32;4m$mylip"
-	fi
+
+weather() {
+	curl wttr.in/"$1"
 }
