@@ -33,3 +33,5 @@ set recolor-keephue
 set recolor true
 
 map i set recolor
+
+set double-click-follow false
