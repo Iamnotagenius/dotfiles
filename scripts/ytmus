@@ -19,7 +19,7 @@ file=${file%.*}.mp3
 # download file (if it is not present)
 if [ -f "$file" ]; then 
     echo "File '$file' has already been downloaded"
-elif ! yt-dlp -x --audio-format mp3 -f bestaudio "$url"; then
+elif ! yt-dlp -x --audio-format mp3 -f bestaudio --sponsorblock-remove music_offtopic "$url"; then
     echo "Error downloaing file from '$1'"
     exit 1
 fi
