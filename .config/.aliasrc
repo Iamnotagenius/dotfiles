@@ -43,14 +43,12 @@ alias \
     umount="udiskie-umount" \
     ta="tmux attach" \
     sctl="systemctl" \
-    sctlu="systemctl --user"
+    sctlu="systemctl --user" \
+    curtimeoutoff="hyprctl keyword general:cursor_inactive_timeout 0" \
+    curtimeouton="hyprctl keyword general:cursor_inactive_timeout 3"
 
 mkcd() {
     mkdir "$1" && cd "$1"
-}
-topdf () {
-	[ $2 ] && dir=$2 || [ $pdfdir ] && dir=$pdfdir || dir=compiled 
-	pdflatex --output-directory=$dir $1 && rm $dir/${1%.tex}.aux $dir/${1%.tex}.log
 }
 alias \
 	grep="grep --color=auto" \
@@ -61,10 +59,6 @@ alias \
     lt="ls --tree" \
     lu="ll --total-size" \
 	diff="diff --color=auto"
-
-ympc() {
-    mpc add `yt-dlp -f b -g "$1"`
-}
 
 function br {
     local cmd cmd_file code
@@ -79,20 +73,7 @@ function br {
         return "$code"
     fi
 }
-ftp () {
-	doas ftp $1
-	if [[ $1 == "start" ]]; then
-		mylip=$(ip -brief addr | grep UP | awk '{ print $3 }' | cut -d'/' -f1)
-		echo -e "Your ip is \e[32;4m$mylip"
-	fi
-}
-
-alias mpcrw="curl http://retrowave.ru/api/v1/tracks?limit=1 | jq .body.tracks[0].streamUrl | xargs -iid mpc add https://retrowave.ruid"
-
-pcmslab() {
-    curl http://neerc.ifmo.ru/teaching/disalgo/problems/problems$1.pdf | zathura --fork -
-}
 
 weather() {
-	curl wttr.in/$1
+	curl wttr.in/"$1"
 }
