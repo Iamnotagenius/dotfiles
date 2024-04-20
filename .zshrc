@@ -201,6 +201,6 @@ function drop() {
 source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
 source ~/.p10k.zsh
 
+source ~/.local/share/zsh/zsh-nix-shell/nix-shell.plugin.zsh
 
-# Load Angular CLI autocompletion.
-source <(ng completion script)
+source /home/iamnotagenius/.config/broot/launcher/bash/br
