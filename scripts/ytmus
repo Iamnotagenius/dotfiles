@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+
+# where music files should go
+LIB_DIR=~/EARGASM
+
+url="${1:-$(wl-paste)}"
+json=$(yt-dlp --no-warnings -x --audio-format mp3 -f bestaudio -j "$url" | \
+    gojq '{
+        filename,
+        title: (if .track then "\(.uploader | rtrimstr(" - Topic")) - \(.track)" else .title end),
+        uploader,
+        extractor
+    }')
+[[ -z "$json" ]] && exit 1
+
+file="$(gojq -r '.filename' <<< "$json")"
+file=${file%.*}.mp3
+
+# download file (if it is not present)
+if [ -f "$file" ]; then 
+    echo "File '$file' has already been downloaded"
+elif ! yt-dlp -x --audio-format mp3 -f bestaudio --sponsorblock-remove music_offtopic "$url"; then
+    echo "Error downloaing file from '$1'"
+    exit 1
+fi
+
+case $(gojq -r .extractor <<< "$json") in
+    youtube)
+        name="$(gojq -r '.title' <<< "$json")"
+    ;;
+    *)
+        artist=$(id3-json "$file" | gojq -r .data.artist)
+        song=$(id3-json "$file" | gojq -r .data.title)
+        if [ "$song" == "null" ]; then
+            name="$(gojq -r '.title' <<< "$json")"
+        else
+            name="$artist - $song"
+        fi
+    ;;
+esac
+
+set -o vi
+read -i "$name" -p "Enter track name: " -re name
+new_file=${name/\//\\}.mp3
+mv "$file" "$new_file"
+file=$new_file
+
+artist=${name%% - *}
+song=${name#* - }
+id3tag -a"$artist" -s"$song" "$file"
+mp3unicode -s utf8 -2 unicode "$file" || echo Something wrong with "$file"
+
+find "$LIB_DIR" -maxdepth 1 -type d -printf '%P\0' | fzf --read0 --print0 --filepath-word --prompt="Where to put this song? > " \
+    --header-first --header="$artist - $song" | xargs -r -Idir -0 mv "$file" "$LIB_DIR/dir"
