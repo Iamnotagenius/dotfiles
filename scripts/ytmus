@@ -1,54 +1,97 @@
-#!/usr/bin/env bash
+#!/usr/bin/env -S bash -x
 
+# First argument is a json with song info
+download_and_save() {
+    url="$(gojq -r '.url' <<< "$1")"
+    file="$(gojq -r '.filename' <<< "$1")"
+    file=${file%.*}.mp3
+
+    # download file (if it is not present)
+    if [ -f "$file" ]; then 
+        echo "File '$file' has already been downloaded"
+    elif ! yt-dlp -x --audio-format mp3 -f bestaudio --sponsorblock-remove music_offtopic "${args[@]}" "$url"; then
+        echo "Error downloaing file from '$1'"
+        exit 1
+    fi
+
+    case $(gojq -r .extractor <<< "$1") in
+        youtube)
+            name="$(gojq -r '.name' <<< "$1")"
+            artist="$(gojq -r '.artist' <<< "$1")"
+            song="$(gojq -r '.title' <<< "$1")"
+            ;;
+        *)
+            artist=$(id3-json "$file" | gojq -r .data.artist)
+            song=$(id3-json "$file" | gojq -r .data.title)
+            if [ "$song" == "null" ]; then
+                name="$(gojq -r '.title' <<< "$1")"
+            else
+                name="$artist - $song"
+            fi
+            ;;
+    esac
+
+    set -o vi
+    [[ -z $autoname ]] && read -i "$name" -p "Enter track name: " -re name <&3
+    new_file=${name/\//\\}.mp3
+    mv "$file" "$new_file"
+    file=$new_file
+
+    id3tag -a"$artist" -s"$song" "$file"
+    mp3unicode -s utf8 -2 unicode "$file" || echo Something wrong with "$file"
+
+    mv "$file" $LIB_DIR/"${playlist:-$(find "$LIB_DIR" -maxdepth 1 -type d -printf '%P\0' | fzf --read0 --print0 --filepath-word --prompt="Where to put this song? > " \
+        --header-first --header="$artist - $song")}"
+}
+
+args=()
+autoname=
+while [[ -n "$1" && ! "$1" == "--" ]]; do case $1 in
+    -d)
+        shift && playlist="$1"
+    ;;
+    -a | --autoname)
+        autoname=1
+    ;;
+    *)
+        if [[ "$1" =~ ^- ]]; then
+            args+=("$1")
+        else
+            url="$1"
+        fi
+    ;;
+esac; shift; done
+if [[ "$1" == '--' ]]; then shift; fi
 # where music files should go
 LIB_DIR=~/EARGASM
 
 url="${1:-$(wl-paste)}"
-json=$(yt-dlp --no-warnings -x --audio-format mp3 -f bestaudio -j "$url" | \
-    gojq '{
-        filename,
-        title: (if .track then "\(.uploader | rtrimstr(" - Topic")) - \(.track)" else .title end),
-        uploader,
-        extractor
-    }')
-[[ -z "$json" ]] && exit 1
 
-file="$(gojq -r '.filename' <<< "$json")"
-file=${file%.*}.mp3
-
-# download file (if it is not present)
-if [ -f "$file" ]; then 
-    echo "File '$file' has already been downloaded"
-elif ! yt-dlp -x --audio-format mp3 -f bestaudio --sponsorblock-remove music_offtopic "$url"; then
-    echo "Error downloaing file from '$1'"
-    exit 1
-fi
-
-case $(gojq -r .extractor <<< "$json") in
-    youtube)
-        name="$(gojq -r '.title' <<< "$json")"
-    ;;
-    *)
-        artist=$(id3-json "$file" | gojq -r .data.artist)
-        song=$(id3-json "$file" | gojq -r .data.title)
-        if [ "$song" == "null" ]; then
-            name="$(gojq -r '.title' <<< "$json")"
-        else
-            name="$artist - $song"
-        fi
-    ;;
-esac
-
-set -o vi
-read -i "$name" -p "Enter track name: " -re name
-new_file=${name/\//\\}.mp3
-mv "$file" "$new_file"
-file=$new_file
-
-artist=${name%% - *}
-song=${name#* - }
-id3tag -a"$artist" -s"$song" "$file"
-mp3unicode -s utf8 -2 unicode "$file" || echo Something wrong with "$file"
-
-find "$LIB_DIR" -maxdepth 1 -type d -printf '%P\0' | fzf --read0 --print0 --filepath-word --prompt="Where to put this song? > " \
-    --header-first --header="$artist - $song" | xargs -r -Idir -0 mv "$file" "$LIB_DIR/dir"
+read -r -d '' JQUERY <<EOJ
+(if .artist then
+    .artist
+elif .uploader | endswith(" - Topic") then
+    .uploader | rtrimstr(" - Topic")
+else
+    .title | sub(" - .*"; "")
+end) as \$artist |
+(if .track then
+    .track
+elif .title | contains(" - ") then
+    .title | sub(".*? - "; "")
+else
+    .title
+end) as \$title |
+{
+    filename,
+    url: .original_url,
+    \$artist,
+    \$title,
+    name: "\(\$artist) - \(\$title)",
+    extractor
+}
+EOJ
+exec 3<&0
+yt-dlp --no-warnings -x --audio-format mp3 -f bestaudio -j "$url" | jq "$JQUERY" -c | while read -r json; do
+    download_and_save "$json"
+done
