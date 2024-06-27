@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+LIB_DIR=~/EARGASM
+
+files=()
+while [[ -n "$1" && ! "$1" == "--" ]]; do case $1 in
+    -d)
+        shift && playlist="$1"
+    ;;
+    *)
+        files+=("$1")
+    ;;
+esac; shift; done
+if [[ "$1" == '--' ]]; then shift; fi
+
+for file in "${files[@]}"; do
+    artist=${file%% - *}
+    song=${file#* - }
+    song=${song%.*}
+    id3tag -a"$artist" -s"$song" "$file"
+    
+    if ! mp3unicode -s utf8 -2 unicode "$file"; then
+        echo Something wrong with "$file"
+    fi
+    mv "$file" $LIB_DIR/"${playlist:-$(find "$LIB_DIR" -maxdepth 1 -type d -printf '%P\0' | fzf --read0 --print0 --filepath-word --prompt="Where to put this song? > " \
+        --header-first --header="$artist - $song")}"
+done
