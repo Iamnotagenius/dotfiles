@@ -36,6 +36,9 @@ download_and_save() {
     new_file=${name/\//\\}.mp3
     mv "$file" "$new_file"
     file=$new_file
+    artist=${file%% - *}
+    song=${file#* - }
+    song=${song%.*}
 
     id3tag -a"$artist" -s"$song" "$file"
     mp3unicode -s utf8 -2 unicode "$file" || echo Something wrong with "$file"
