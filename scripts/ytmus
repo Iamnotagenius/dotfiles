@@ -40,7 +40,9 @@ download_and_save() {
     song=${file#* - }
     song=${song%.*}
 
-    id3tag -a"$artist" -s"$song" "$file"
+    readarray -t tag_args < <(gojq -r '(.album | if . then "-A\(.)" else "" end),
+                                       (.release_year | if . then "-y\(.)" else "" end)' <<< "$1")
+    id3tag -a"$artist" -s"$song" "${tag_args[@]}" "$file"
     mp3unicode -s utf8 -2 unicode "$file" || echo Something wrong with "$file"
 
     mv "$file" $LIB_DIR/"${playlist:-$(find "$LIB_DIR" -maxdepth 1 -type d -printf '%P\0' | fzf --read0 --print0 --filepath-word --prompt="Where to put this song? > " \
@@ -91,7 +93,9 @@ end) as \$title |
     \$artist,
     \$title,
     name: "\(\$artist) - \(\$title)",
-    extractor
+    extractor,
+    album,
+    release_year
 }
 EOJ
 exec 3<&0
