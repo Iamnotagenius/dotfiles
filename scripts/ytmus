@@ -49,9 +49,23 @@ download_and_save() {
         --header-first --header="$artist - $song")}"
 }
 
+# where music files should go
+LIB_DIR=~/EARGASM
 args=()
 autoname=
 while [[ -n "$1" && ! "$1" == "--" ]]; do case $1 in
+    -h | --help)
+        cat <<EOH
+Usage: [-a | --autoname] [-d DIR] [URL]
+
+Grabs URL from clipboard if omitted.
+
+Flags:
+  -a | --autoname -- Skip the name prompt and use inferred track name
+  -d DIR          -- Skip the directory prompt and save to DIR (relative to $LIB_DIR)
+EOH
+    exit
+    ;;
     -d)
         shift && playlist="$1"
     ;;
@@ -67,8 +81,6 @@ while [[ -n "$1" && ! "$1" == "--" ]]; do case $1 in
     ;;
 esac; shift; done
 if [[ "$1" == '--' ]]; then shift; fi
-# where music files should go
-LIB_DIR=~/EARGASM
 
 url="${1:-$(wl-paste)}"
 
