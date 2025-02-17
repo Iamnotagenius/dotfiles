@@ -1,0 +1,23 @@
+GTK_THEME=Adwaita:dark
+GTK2_RC_FILES=/usr/share/themes/Adwaita-dark/gtk-2.0/gtkrc
+QT_STYLE_OVERRIDE=Adwaita-Dark
+
+PATH=~/.local/bin:$PATH:~/go/bin:~/.yarn/bin
+JAVA_HOME=/usr/lib/jvm/java-17-openjdk
+QT_STYLE_OVERRIDE=kvantum
+TEXMFHOME=~/.texmf/
+NEOVIDE_MULTIGRID=true
+NEOVIDE_IDLE=false
+GDK_CORE_DEVICE_EVENTS=1
+DMENU="bemenu"
+BEMENU_OPTS="-n --fn 'Iosevka 16' -H 25 \
+    --cw 2 --ch 22 \
+    --hp 10 \
+    --tb #282C34 --tf #56B6C2 \
+    --fb #282C34 --ff #ABB2BF \
+    --nb #282C34 --nf #ABB2BF \
+    --ab #282C34 --af #ABB2BF \
+    --hb #383B41 --hf #98C379 \
+    --sb #E06C75"
+
+MANPAGER='nvim +Man!'

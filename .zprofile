@@ -1,4 +1,3 @@
-if [[ "$(tty)" = "/dev/tty1" && -z "${DISPLAY}"  &&  "${XDG_VTNR}" -eq 1 ]]; then
-	sleep 1	
-	exec Hyprland >> hypr.log
+if uwsm check may-start -v; then
+    exec uwsm start hyprland.desktop
 fi

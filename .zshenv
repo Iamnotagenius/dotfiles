@@ -4,10 +4,13 @@ source ~/.config/.aliasrc
 export ASPNETCORE_Kestrel__Certificates__Default__Path=~/.aspnet/https/localhost.pfx
 export ASPNETCORE_Kestrel__Certificates__Default__Password=aspnetisshit
 
+export JAVA_HOME=/usr/lib/jvm/java-17-openjdk
+
 export QT_STYLE_OVERRIDE=kvantum
-export PATH=$PATH:~/.local/bin:~/go/bin:~/.yarn/bin
+export PATH=~/.local/bin:$PATH:~/go/bin:~/.yarn/bin
 export TEXMFHOME=~/.texmf/
 export NEOVIDE_MULTIGRID=true
+export NEOVIDE_IDLE=false
 export GDK_CORE_DEVICE_EVENTS=1
 export DMENU="bemenu"
 export BEMENU_OPTS="-n --fn 'Iosevka 16' -H 25 \
@@ -21,3 +24,4 @@ export BEMENU_OPTS="-n --fn 'Iosevka 16' -H 25 \
     --sb #E06C75"
 
 export MANPAGER='nvim +Man!'
+mkdir /tmp/lf && export LF_TEMPDIR=/tmp/lf

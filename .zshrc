@@ -198,9 +198,30 @@ function drop() {
     hyprctl dispatch exec -- "[workspace ${workspace:-4}]" dragon-drop -a -x "${files[@]}"
 }
 
+function lf() {
+    tmp="$(mktemp)"
+    command lf --last-dir-path="$tmp" "$@"
+    if [ -f "$tmp" ]; then
+        dir="$(cat "$tmp")"
+        rm -f "$tmp"
+        if [ -d "$dir" ]; then
+            if [ "$dir" != "$(pwd)" ]; then
+                cd "$dir"
+            fi
+        fi
+    fi
+}
+
 source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
 source ~/.p10k.zsh
 
 source ~/.local/share/zsh/zsh-nix-shell/nix-shell.plugin.zsh
 
 source /home/iamnotagenius/.config/broot/launcher/bash/br
+
+# The next line updates PATH for CLI.
+if [ -f '/home/iamnotagenius/yandex-cloud/path.bash.inc' ]; then source '/home/iamnotagenius/yandex-cloud/path.bash.inc'; fi
+
+# The next line enables shell command completion for yc.
+if [ -f '/home/iamnotagenius/yandex-cloud/completion.zsh.inc' ]; then source '/home/iamnotagenius/yandex-cloud/completion.zsh.inc'; fi
+
