@@ -30,7 +30,6 @@ alias \
     cp="cp -i" \
     la="ls -a" \
     ll="ls -l" \
-    lf=". ranger" \
     ga="git add" \
     gs="git status" \
     gc="git checkout" \
