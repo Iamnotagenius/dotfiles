@@ -131,6 +131,10 @@ vim.keymap.set({ 'n', 'i' }, '<C-j>', '<C-w><C-j>')
 vim.keymap.set('n', '<C-g>', '<C-w><C-w>')
 vim.keymap.set('n', '<C-t>', ':tabnew<CR>:Telescope buffers<CR>')
 
-
+vim.api.nvim_create_user_command("LspLogClear", function ()
+    os.remove(vim.lsp.get_log_path())
+end, {
+    desc = "Clear the lsp log file"
+})
 
 require('templates').create_autocmd()

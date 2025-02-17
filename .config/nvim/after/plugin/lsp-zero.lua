@@ -23,14 +23,12 @@ end)
 
 lsp.format_on_save({
     servers = {
-        ['rust_analyzer'] = { 'rust' },
+        ['rust-analyzer'] = { 'rust' },
     }
 })
 
 -- (Optional) Configure lua language server for neovim
 require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
-
-lsp.setup_servers({'rust_analyzer'})
 
 -- Use nvim-jdtls for java lang server
 lsp.configure('jdtls', {
@@ -42,6 +40,24 @@ lsp.configure('tsserver', {
         implicitProjectConfiguration = {
             checkJs = true
         }
+    }
+})
+
+lsp.configure('gopls', {
+    settings = {
+        gopls = {
+            analyses = {
+                unusedparams = true,
+            },
+            semanticTokens = true,
+            staticcheck = true,
+            gofumpt = true,
+            hints = {
+                parameterNames = true,
+                rangeVariableTypes = true,
+                assignVariableTypes = true
+            }
+        },
     }
 })
 
@@ -123,10 +139,6 @@ lsp.configure('omnisharp', {
             range = true,
         }
     end
-})
-
-lsp.configure('kotlin_language_server', {
-    cmd = { '/home/iamnotagenius/Sources/kotlin-language-server/server/build/install/server/bin/kotlin-language-server' }
 })
 
 lsp.setup()
