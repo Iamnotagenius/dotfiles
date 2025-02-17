@@ -18,8 +18,8 @@
     //	"sway/window"
     //],
     "modules-right": [
-        // "custom/arrow2",
-        // "mpd",
+        "custom/arrow1",
+        "tray",
         // "custom/mpd",
         "custom/arrow3",
         "memory",
@@ -27,6 +27,7 @@
         "cpu",
         "custom/arrow6",
         "pulseaudio",
+        "bluetooth",
         "custom/arrow7",
         "hyprland/language",
         "custom/arrow8",
@@ -40,7 +41,7 @@
         "on-click": "mpc toggle > /dev/null",
         "on-scroll-up": "mpc volume +5",
         "on-scroll-down": "mpc volume -5",
-        "exec": "mg --mpd -l \"{\\\"text\\\":\\\" \" -R \" [{elapsedTime}/{totalTime}] {stateIcon}\\\",\\\"tooltip\\\":\\\"{artist} - {title}: [{album} ({date})] ({randomIcon:1}{repeatIcon:1}{singleIcon:1}{consumeIcon:1}) {{{songPosition}/{queueLength}}}\\\"}}\" -w 30 -s \"  \" -1 -e \"&=&amp;\" run -d 100ms -n",
+        "exec": "mg --mpd -l \"{\\\"text\\\":\\\" \" -R \" [{elapsedTime}/{totalTime}] {stateIcon}\\\",\\\"tooltip\\\":\\\"{artist} - {title}: [{album} ({date})] ({randomIcon:1}{repeatIcon:1}{singleIcon:1}{consumeIcon:1}) {{{songPosition}/{queueLength}}}\\\"}}\" -w 30 -s \"  \" -1 -e \"&=&amp;\" -e '\"=&quot;' run -d 100ms -n",
         "restart-interval": 1,
         "return-type": "json"
     },
@@ -153,12 +154,12 @@
     "pulseaudio": {
         "scroll-step": 1,
         "format": "{icon} {volume}%",
-        "format-bluetooth": "{icon} {volume}%",
+        "format-bluetooth": " {icon} {volume}%",
         "format-muted": "婢",
         "format-icons": {
             "headphones": "",
             "handsfree": "",
-            "headset": "",
+            "headset": "",
             "phone": "",
             "portable": "",
             "car": "",
@@ -167,8 +168,12 @@
                 " "
             ]
         },
-        "on-click": "toggle-window pavucontrol",
+        "on-click": "toggle-window org.pulseaudio.pavucontrol pavucontrol",
         "on-click-right": "pulsemixer --toggle-mute"
+    },
+    "bluetooth": {
+        "format": " ",
+        "format-connected-battery": " ( {device_battery_percentage}%)"
     },
     "temperature": {
         "critical-threshold": 90,
@@ -202,8 +207,8 @@
         "format": " {}%"
     },
     "tray": {
-        "icon-size": 18
-        //"spacing": 10
+        "icon-size": 18,
+        "spacing": 7
     },
     "custom/arrow1": {
         "format": "",

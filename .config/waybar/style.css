@@ -46,6 +46,7 @@
 @define-color sound @yellow;
 @define-color network @red;
 @define-color memory @red;
+@define-color tray @blue;
 @define-color mpd @blue;
 @define-color cpu @aqua;
 @define-color temp @brgreen;
@@ -86,10 +87,10 @@
 #custom-mpd,
 #network,
 #pulseaudio,
+#bluetooth,
 #temperature,
 #custom-alsa,
 #sndio,
-#pulseaudio,
 #tray {
     padding-left: 4pt;
     padding-right: 6pt;
@@ -219,6 +220,13 @@
 #pulseaudio {
     background: @sound;
     color: @black;
+    padding-right: 0;
+}
+
+#bluetooth {
+    background: @sound;
+    color: @black;
+    padding-left: 0;
 }
 
 #pulseaudio.muted {
@@ -227,7 +235,7 @@
 }
 
 #tray {
-    background: @date;
+    background: @tray;
 }
 
 #clock.date {
@@ -263,6 +271,11 @@ tooltip {
     font-size: 1.15em;
 }
 
+#custom-arrow1 {
+    color: @tray;
+    background: transparent;
+}
+
 #custom-arrow2 {
     color: @mpd;
     background: transparent;
@@ -270,7 +283,7 @@ tooltip {
 
 #custom-arrow3 {
     color: @memory;
-    background: transparent;
+    background: @tray;
 }
 
 #custom-arrow4 {
