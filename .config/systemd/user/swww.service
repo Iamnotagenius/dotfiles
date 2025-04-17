@@ -1,0 +1,17 @@
+[Unit]
+Description=Efficient animated wallpaper daemon for wayland, controlled at runtime.
+Documentation=man:swww(1)
+PartOf=graphical-session.target
+After=graphical-session.target
+Requisite=graphical-session.target
+
+[Service]
+Type=exec
+# Repurpose XDG Autostart filtering
+ExecCondition=/lib/systemd/systemd-xdg-autostart-condition "wlroots:sway:Wayfire:labwc:Hyprland" ""
+ExecStart=/usr/bin/swww-daemon
+Restart=on-failure
+Slice=app-graphical.slice
+
+[Install]
+WantedBy=graphical-session.target

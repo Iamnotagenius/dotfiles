@@ -1,0 +1,11 @@
+[Unit]
+Description=A media server of my choice
+
+[Service]
+Type=exec
+ExecStart=gerbera -c ${XDG_CONFIG_HOME}/gerbera/config.xml --syslog
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=network.target
