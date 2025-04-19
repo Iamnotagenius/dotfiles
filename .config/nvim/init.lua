@@ -123,13 +123,32 @@ vim.keymap.set('n', '<M-k>', '<cmd>cprev<CR>zz')
 vim.keymap.set("n", "<C-s>", ":%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>")
 vim.keymap.set('n', '<leader>x', ':bd<CR>')
 
-local opts = { silent = true, noremap = true, expr = true }
 vim.keymap.set({ 'n', 'i' }, '<C-h>', '<C-w><C-h>')
 vim.keymap.set({ 'n', 'i' }, '<C-l>', '<C-w><C-l>')
 vim.keymap.set({ 'n', 'i' }, '<C-k>', '<C-w><C-k>')
 vim.keymap.set({ 'n', 'i' }, '<C-j>', '<C-w><C-j>')
 vim.keymap.set('n', '<C-g>', '<C-w><C-w>')
 vim.keymap.set('n', '<C-t>', ':tabnew<CR>:Telescope buffers<CR>')
+vim.keymap.set('n', 'gl', function ()
+    vim.diagnostic.open_float({
+        scope = 'line',
+        border = 'rounded'
+    })
+end)
+vim.keymap.set('n', 'gL', function ()
+    local config = vim.diagnostic.config()
+    vim.diagnostic.config({
+        virtual_lines = not config.virtual_lines,
+        virtual_text = not config.virtual_text
+    })
+end)
+
+vim.keymap.set('n', '<leader>a', function ()
+    vim.lsp.buf.code_action()
+end)
+
+vim.keymap.set({'i', 's' }, '<C-f>', function () vim.snippet.jump(1) end, { silent = true })
+vim.keymap.set({'i', 's' }, '<C-b>', function () vim.snippet.jump(1) end, { silent = true })
 
 vim.api.nvim_create_user_command("LspLogClear", function ()
     os.remove(vim.lsp.get_log_path())
@@ -137,4 +156,21 @@ end, {
     desc = "Clear the lsp log file"
 })
 
+vim.diagnostic.config({
+    underline = true,
+    virtual_text = false,
+    virtual_lines = true,
+    update_in_insert = true,
+    signs = {
+        text = {
+            [vim.diagnostic.severity.ERROR] = ' ',
+            [vim.diagnostic.severity.WARN] = ' ',
+            [vim.diagnostic.severity.HINT] = ' ',
+            [vim.diagnostic.severity.INFO] = ' '
+        },
+    }
+})
+
 require('templates').create_autocmd()
+
+require('config.lazy')

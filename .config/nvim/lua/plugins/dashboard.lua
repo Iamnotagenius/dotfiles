@@ -207,31 +207,37 @@ local girls = {
     },
 }
 
-math.randomseed(os.time())
-local girl = girls[math.random(#girls)]
-require('dashboard').setup {
-    theme = 'hyper',
-    config = {
-        header = girl,
-        shortcut = {
-            {
-                desc = ' Update',
-                group = '@property',
-                action = 'PackerSync',
-                key = 'u'
+local function choose_girl()
+    math.randomseed(os.time())
+    return girls[math.random(#girls)]
+end
+
+return {
+    'glepnir/dashboard-nvim',
+    opts = {
+        theme = 'hyper',
+        config = {
+            header = choose_girl(),
+            shortcut = {
+                {
+                    desc = ' Update',
+                    group = '@property',
+                    action = 'PackerSync',
+                    key = 'u'
+                },
+                {
+                    desc = ' File browser',
+                    group = 'Label',
+                    action = 'Telescope file_browser',
+                    key = 'f',
+                },
+                {
+                    desc = ' More recent files',
+                    group = 'Function',
+                    action = 'Telescope oldfiles',
+                    key = 'r',
+                },
             },
-            {
-                desc = ' File browser',
-                group = 'Label',
-                action = 'Telescope file_browser',
-                key = 'f',
-            },
-            {
-                desc = ' More recent files',
-                group = 'Function',
-                action = 'Telescope oldfiles',
-                key = 'r',
-            },
-        },
+        }
     }
 }
