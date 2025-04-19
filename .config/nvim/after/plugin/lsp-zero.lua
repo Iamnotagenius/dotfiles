@@ -35,7 +35,7 @@ lsp.configure('jdtls', {
     autostart = false
 })
 
-lsp.configure('tsserver', {
+lsp.configure('ts_ls', {
     settings = {
         implicitProjectConfiguration = {
             checkJs = true
