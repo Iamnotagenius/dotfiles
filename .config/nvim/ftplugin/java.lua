@@ -10,7 +10,7 @@ require('mason-lspconfig').setup_handlers {
         jdtls.start_or_attach {
             name = "jdtls",
             cmd = {
-                '/usr/lib/jvm/java-17-openjdk/bin/java',
+                '/usr/lib/jvm/java-21-openjdk/bin/java',
 
                 '-Declipse.application=org.eclipse.jdt.ls.core.id1',
                 '-Dosgi.bundles.defaultStartLevel=4',
@@ -22,17 +22,15 @@ require('mason-lspconfig').setup_handlers {
                 '--add-modules=ALL-SYSTEM',
                 '--add-opens', 'java.base/java.util=ALL-UNNAMED',
                 '--add-opens', 'java.base/java.lang=ALL-UNNAMED',
-                "-javaagent:" ..
-                require("mason-registry").get_package("jdtls"):get_install_path() .. "/lombok-1.18.30.jar",
+                -- "-javaagent:" ..
+                -- require("mason-registry").get_package("jdtls"):get_install_path() .. "/lombok-1.18.30.jar",
 
                 '-jar', plugin,
                 '-configuration', install_path .. "/config_linux",
                 '-data', vim.fn.expand('~/.cache/jdtls/workspace/') .. proj_name
             },
             init_options = {
-                bundles = {
-                    vim.fn.glob("~/Sources/java-debug/com.microsoft.java.debug.plugin/target/com.microsoft.java.debug.plugin-*.jar", 1)
-                }
+                bundles = vim.fn.glob("~/Sources/java-debug/com.microsoft.java.debug.plugin/target/com.microsoft.java.debug.plugin-*.jar", true)
             },
             on_attach = function ()
                 jdtls.setup_dap {
