@@ -180,6 +180,17 @@ return require('packer').startup(function(use)
         },
     }
 
+    use {
+        'Iamnotagenius/mvnsearch.nvim',
+        requires = {
+            { 'nvim-lua/plenary.nvim' },
+            { 'nvim-telescope/telescope.nvim' }
+        },
+        rocks = {
+            'xml2lua 1.6-2'
+        }
+    }
+
     use 'mfussenegger/nvim-jdtls'
 
     use 'ghassan0/telescope-glyph.nvim'
@@ -212,6 +223,15 @@ return require('packer').startup(function(use)
     }
 
     use 'aklt/plantuml-syntax'
+
+    use {
+        'mrcjkb/rustaceanvim',
+        tag = "4.*",
+        ft = { "rust" }
+    }
+
+    use 'jrop/jq.nvim'
+
 
     -- Kid's stuff
     use 'wakatime/vim-wakatime'
