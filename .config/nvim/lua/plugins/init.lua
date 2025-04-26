@@ -181,6 +181,13 @@ return {
         cmd = 'Jq'
     },
 
+    {
+        'klen/nvim-config-local',
+        opts = {
+            lookup_parents = true
+        }
+    },
+
     -- Kid's stuff
     'wakatime/vim-wakatime',
     {

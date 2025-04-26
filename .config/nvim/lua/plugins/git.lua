@@ -38,15 +38,11 @@ return {
                 item = { '', '' },
             }
         }
-        
     },
     {
         'lewis6991/gitsigns.nvim',
         tag = 'release', -- To use the latest release (do not use this if you run Neovim nightly or dev builds!)
         opts = {
-            yadm = {
-                enable = true
-            },
             on_attach = function(bufnr)
                 local gs = package.loaded.gitsigns
 
@@ -110,7 +106,6 @@ return {
                 -- Text object
                 map({ 'o', 'x' }, 'ih', ':<C-U>Gitsigns select_hunk<CR>')
             end
-
         }
     },
     {
