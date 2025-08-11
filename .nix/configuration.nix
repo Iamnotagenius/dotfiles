@@ -38,7 +38,10 @@
   };
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
-  nix.nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
+  nix.nixPath = [
+      "nixpkgs=${inputs.nixpkgs}"
+      "nixpkgs-unstable=${inputs.nixpkgs-unstable}"
+  ];
 
   nixpkgs.config.allowUnfree = true;
 
@@ -75,6 +78,12 @@
     };
   };
 
+  hardware = {
+    sane.enable = true;
+    bluetooth.enable = true;
+    xone.enable = true;
+  };
+
   programs = {
     hyprland.enable = true;
     light.enable = true;
@@ -89,6 +98,7 @@
       withNodeJs = true;
     };
     java.enable = true;
+    steam.enable = true;
   };
 
   security = {
@@ -107,13 +117,46 @@
 # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.iamnotagenius = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "networkmanager" "video" ]; # Enable ‘sudo’ for the user.
+    extraGroups = [ "wheel" "networkmanager" "video" "docker" "scanner" ]; # Enable ‘sudo’ for the user.
     shell = pkgs.zsh;
   };
 
   home-manager.useGlobalPkgs = true;
   home-manager.users.iamnotagenius = { pkgs, ... }: {
+    accounts.email.accounts.main = builtins.import ./mail.nix;
     programs = {
+      neomutt = {
+        enable = true;
+        sidebar.enable = true;
+        vimKeys = true;
+        editor = "nvim";
+        sort = "reverse-threads";
+        binds = [
+          {
+            key = "\\Cj";
+            action = "sidebar-next";
+            map = [ "index" "pager" ];
+          }
+          {
+            key = "\\Ck";
+            action = "sidebar-prev";
+            map = [ "index" "pager" ];
+          }
+          {
+            key = "\\Co";
+            action = "sidebar-open";
+            map = [ "index" "pager" ];
+          }
+          {
+            key = "<Return>";
+            action = "display-message";
+            map = [ "index" ];
+          }
+        ];
+        extraConfig = ''
+          auto_view text/html application/x-gunzip application/postscript image/gif application/x-tar-gz;
+        '';
+      };
       waybar = {
         systemd.enable = true;
       };
@@ -123,10 +166,15 @@
         clock24 = true;
         customPaneNavigationAndResize = true;
         keyMode = "vi";
+        terminal = "screen-256color";
+        mouse = true;
+      };
+      ncmpcpp = {
+        enable = true;
       };
       zsh = {
         enable = true;
-        enableAutosuggestions = true;
+        autosuggestion.enable = true;
         enableCompletion = true;
         syntaxHighlighting.enable = true;
         defaultKeymap = "viins";
@@ -134,8 +182,11 @@
           lf = "ranger";
           ll = "ls -l";
           la = "ls -a";
+          ga = "git add";
+          gb = "git branch";
           gs = "git status";
-          gc = "git commit -m";
+          gc = "git checkout";
+          gcm = "git commit -m";
           gp = "git pull";
           gP = "git push";
           vim = "nvim";
@@ -147,7 +198,7 @@
           vpndisable = "doas systemctl stop wg-quick-wg0.service";
           myip = "curl ip.me";
         };
-        history.path = "~/.histfile";
+        history.path = "$HOME/.histfile";
         plugins = [
         {
           name = "powerlevel10k";
@@ -176,6 +227,13 @@
         notify = true;
         tray = "never";
       };
+      mpd = {
+          enable = true;
+          musicDirectory = "/media/External/EARGASM";
+          network.startWhenNeeded = true;
+      };
+      mpd-mpris.enable = true;
+      playerctld.enable = true;
     };
     xdg.mimeApps.defaultApplications = {
       "www-browser" = [ "brave-browser.desktop" ];
@@ -184,7 +242,7 @@
     };
     home = {
       sessionVariables = {
-        PATH = "$PATH:~/scripts";
+        PATH = "$PTH:$HOME/scripts:$HOME/.cargo/bin";
         VISUAL = "nvim";
         EDITOR = "nvim";
         NEOVIDE_MULTIGRID = "1";
@@ -204,17 +262,20 @@
         calc
         calcurse
         cargo
+        jetbrains.idea-community-bin
         isync
         libreoffice
         imv
         lua-language-server
+        lynx
         mpv
-        msmtp
-        neomutt
+        mpc-cli
+        pavucontrol
         neovide
         nix-zsh-completions
         nodejs
         pass
+        playerctl
         pinentry-bemenu
         (python311.withPackages (pkgs: with pkgs; [
           pygments
@@ -225,12 +286,26 @@
           matplotlib
         ]))
         qutebrowser
+        qbittorrent
         ranger
+        ripdrag
         sway-contrib.grimshot
+        syncplay
         texlab
         telegram-desktop
+        tor
         yadm
         wbg
+        wol
+        (symlinkJoin {
+          name = "webcord";
+          paths = [ webcord ];
+          buildInputs = [ makeWrapper ];
+          postBuild = ''
+            wrapProgram $out/bin/webcord \
+              --add-flags "--proxy-server=socks5://127.0.0.1:10808"
+          '';
+        })
 
         # List latex packages here
         (texlive.combine {
@@ -240,7 +315,7 @@
          minted;
          })
       ];
-      stateVersion = "23.11";
+      stateVersion = "24.11";
     };
   };
 
@@ -251,6 +326,7 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
+    p7zip
     alacritty
     bat
     bemenu
@@ -273,6 +349,7 @@
     ripgrep
     seatd
     socat
+    wireshark
     tor-browser-bundle-bin
     vimiv-qt
     waybar
@@ -289,6 +366,10 @@
   
   environment.pathsToLink = [ "/share/zsh" ];
 
+  virtualisation = {
+    docker.enable = true;
+  };
+
   # List services that you want to enable:
   services = { 
     tlp.enable = true;
@@ -296,6 +377,7 @@
       enable = true;
       audio.enable = true;
       pulse.enable = true;
+      jack.enable = true;
     };
     openssh.enable = true;
     getty.autologinUser = "iamnotagenius";
@@ -308,6 +390,10 @@
         extraArguments = "-N -L 127.0.0.1:22001:127.0.0.1:22000 -R 127.0.0.1:22001:127.0.0.1:22000 main";
       }
     ];
+    xray = {
+      enable = true;
+      settings = builtins.fromJSON (builtins.readFile ./configs/xray.json);
+    };
   };
 
   # Copy the NixOS configuration file and link it from the resulting system
@@ -321,5 +407,5 @@
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "23.11"; # Did you read the comment?
+  system.stateVersion = "24.11"; # Did you read the comment?
 }
