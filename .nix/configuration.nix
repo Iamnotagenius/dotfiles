@@ -8,7 +8,7 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      inputs.home-manager.nixosModule
+      inputs.home-manager.nixosModules.home-manager
     ];
 
   networking = {
@@ -211,7 +211,7 @@
           file = "share/zsh-nix-shell/nix-shell.plugin.zsh";
         }
         ];
-        initExtra = builtins.readFile ./zsh-extra.zsh;
+        initContent = builtins.readFile ./zsh-extra.zsh;
       };
     };
     wayland.windowManager.hyprland = {
@@ -242,7 +242,7 @@
     };
     home = {
       sessionVariables = {
-        PATH = "$PTH:$HOME/scripts:$HOME/.cargo/bin";
+        PATH = "$PATH:$HOME/scripts:$HOME/.cargo/bin";
         VISUAL = "nvim";
         EDITOR = "nvim";
         NEOVIDE_MULTIGRID = "1";
@@ -277,7 +277,7 @@
         pass
         playerctl
         pinentry-bemenu
-        (python311.withPackages (pkgs: with pkgs; [
+        (python313.withPackages (pkgs: with pkgs; [
           pygments
           pandas
           numpy
@@ -315,12 +315,14 @@
          minted;
          })
       ];
-      stateVersion = "24.11";
+      stateVersion = "25.05";
     };
   };
 
-  fonts.packages = with pkgs; [
-    (nerdfonts.override { fonts = [ "FiraMono" "Iosevka" "Hack" "Hermit" ]; })
+  fonts.packages = with pkgs.nerd-fonts; [
+    fira-mono
+    iosevka
+    hack
   ];
 
   # List packages installed in system profile. To search, run:
@@ -407,5 +409,5 @@
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "24.11"; # Did you read the comment?
+  system.stateVersion = "25.05"; # Did you read the comment?
 }
