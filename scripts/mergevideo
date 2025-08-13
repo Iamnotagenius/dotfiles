@@ -1,52 +1,40 @@
 #!/usr/bin/env bash
 
+build_name_filter() {
+    local -n out=$1
+    local mode=$2
+    shift 2
+    out=('(')
+    for name in "$@"; do
+        case "$mode" in
+            prefix)
+                out+=(-name "$(printf '%q\n' "$name")*" -or)
+                ;;
+            suffix)
+                out+=(-name "*$(printf '%q\n' "$name")" -or)
+                ;;
+            *)
+                echo "Unrecognized filter mode."
+                exit 1
+        esac
+    done
+    out[${#out[@]}-1]=')'
+}
+
 BASE_DIR=~/Videos
 OUTPUT_DIR=/tmp/merged
 
-VIDEO_EXTENSIONS=(mkv)
+VIDEO_EXTENSIONS=(.mkv)
 video_name_args=()
-for ext in "${VIDEO_EXTENSIONS[@]}"; do
-    video_name_args+=(-name "*.$ext" -or)
-done
-unset "video_name_args[${#name_args[@]}-1]"
+build_name_filter video_name_args suffix "${VIDEO_EXTENSIONS[@]}"
 
-SUBDUB_EXTENSIONS=(mka ass)
+SUBDUB_EXTENSIONS=(.mka .ass)
 subdub_name_args=()
-for ext in "${SUBDUB_EXTENSIONS[@]}"; do
-    subdub_name_args+=(-name "*.$ext" -or)
-done
-unset "subdub_name_args[${#name_args[@]}-1]"
+build_name_filter subdub_name_args suffix "${SUBDUB_EXTENSIONS[@]}"
 
-ALL_EXTEMSIONS=("${VIDEO_EXTENSIONS[@]}" "${SUBDUB_EXTENSIONS[@]}")
+ALL_EXTENSIONS=("${VIDEO_EXTENSIONS[@]}" "${SUBDUB_EXTENSIONS[@]}")
 name_args=()
-for ext in "${ALL_EXTEMSIONS[@]}"; do
-    name_args+=(-name "*.$ext" -or)
-done
-unset "name_args[${#name_args[@]}-1]"
-
-merge() {
-    out=$1
-    file=$2
-    local -n ffmpeg_cmd=$out
-    find_args=("$(dirname "$file")" -maxdepth 3 -name "$(printf "%q" "$(basename -s ".${file##*.}" "$file")")*" -and '(')
-    find_args+=("${name_args[@]}")
-    find_args+=(')')
-    readarray -t inputs < <(find "${find_args[@]}" | sort)
-
-    ffmpeg_cmd=(ffmpeg)
-    for input in "${inputs[@]}"; do
-        ffmpeg_cmd+=(-i "$input")
-    done
-
-    ffmpeg_cmd+=(-c copy)
-
-    for ((i = 0; i < ${#inputs[@]}; i++)); do
-        ffmpeg_cmd+=(-map "$i")
-    done
-    out_file="${file/#$BASE_DIR/$OUTPUT_DIR}"
-    [[ -d "$(dirname "$out_file")" ]] || mkdir -p "$(dirname "$out_file")"
-    ffmpeg_cmd+=("$out_file")
-}
+build_name_filter name_args suffix "${ALL_EXTENSIONS[@]}"
 
 merge_many() {
     if [[ ! "$(realpath "$1")" =~ $BASE_DIR/.*/.* ]]; then
@@ -57,19 +45,28 @@ merge_many() {
     mkdir -p "${dir/#$BASE_DIR/$OUTPUT_DIR}"
     args_dir=$(mktemp -d 'mergevideo_args.XXXXX')
     mkdir "$args_dir/inputs"
-    find "$(realpath "$1")" -maxdepth 1 \( "${video_name_args[@]}" \) | sort | sed "s#$BASE_DIR#$OUTPUT_DIR#" > "$args_dir/outputs"
+    
+    readarray -t basenames < <(find "$1" -maxdepth 1 "${video_name_args[@]}" -printf '%f\n' | \
+        sed 's#\..*$##' | \
+        fzf -m -0 --prompt "Which episodes to merge? ")
+    if [[ "${#basenames[@]}" -eq 0 ]]; then
+        return
+    fi
+    name_filter=()
+    build_name_filter name_filter prefix "${basenames[@]}"
+
+    find "$(realpath "$1")" -maxdepth 1 "${video_name_args[@]}" -and "${name_filter[@]}" | sort | sed "s#$BASE_DIR#$OUTPUT_DIR#" > "$args_dir/outputs"
     if [[ "$( (wc -l "$args_dir/outputs" | cut -f1 -d' ') )" -eq 0 ]]; then
         echo "Video files were not found."
         return
     fi
 
-    find "$(realpath "$1")" -maxdepth 1 \( "${video_name_args[@]}" \) | sort > "$args_dir/inputs/0"
-
+    find "$1" -maxdepth 1 "${video_name_args[@]}" -and "${name_filter[@]}" | sort > "$args_dir/inputs/0"
     i=1
     find "$1" -maxdepth 3 \
-        \( "${subdub_name_args[@]}" \) \
+        "${subdub_name_args[@]}" -and "${name_filter[@]}" \
         -printf '%h\n' | uniq | sort | while read -r dir; do
-        find "$dir" -maxdepth 1 \( "${name_args[@]}" \) | sort > "$args_dir/inputs/$i"
+        find "$dir" -maxdepth 1 "${name_args[@]}" | sort > "$args_dir/inputs/$i"
         ((i++))
     done 
     readarray -t input_idx < <(find "$args_dir/inputs" -type f -printf "%P\n" | sort -n)
@@ -90,10 +87,4 @@ merge_many() {
     rm -rf "$args_dir"
 }
 
-if [[ -d "$1" ]]; then
-    merge_many "$1"
-else
-    merge cmd "$(realpath "$1")"
-    exec "${cmd[@]}"
-fi
-
+merge_many "$1"
