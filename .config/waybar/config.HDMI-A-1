@@ -11,7 +11,8 @@
         "custom/arrow10",
         "custom/menu",
         "custom/arrow11",
-        "hyprland/window",
+        // "hyprland/window",
+        "custom/window",
         "custom/arrow12"
     ],
     //"modules-center": [
@@ -135,11 +136,17 @@
         "on-click-right": "hyprctl dispatch layoutmsg swapwithmaster",
         "separate-outputs": true
     },
+    "custom/window": {
+        "on-click": "~/.config/waybar/toggle_move.sh",
+        "on-click-middle": "hyprctl dispatch 'hl.dsp.window.close()'",
+        "on-click-right": "hyprctl dispatch layoutmsg swapwithmaster",
+        "exec": "~/.config/waybar/mergneh_hyprland.sh HDMI-A-1",
+        "restart-interval": 1,
+        "return-type": "json"
+    },
     "hyprland/workspaces": {
         "format": "{icon}",
-        "on-click": "activate",
-        "on-click-middle": "close",
-        "on-click-right": "exec hyprctl dispatch movecurrentworkspacetomonitor +1",
+        "tooltip": false,
         "format-icons": {
             "1": " ",
             "2": "",
