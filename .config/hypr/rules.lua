@@ -1,3 +1,5 @@
+-- https://wiki.hypr.land/Configuring/Basics/Window-Rules/
+
 local ws_by_class = {
     [".*zathura.*"] = "2",
     ["(Kotatogram_Desktop|discord|dragon-drop|Electron|webcord|org.telegram.desktop|Element)"] = "4",
@@ -93,4 +95,17 @@ hl.window_rule {
     },
     opacity = "1.0 override",
     keep_aspect_ratio = true,
+}
+
+hl.window_rule {
+    match = {
+        class = "flameshot",
+    },
+    float = true,
+    pin = true,
+    center = true,
+    decorate = false,
+    no_blur = true,
+    no_shadow = true,
+    border_size = 0,
 }
