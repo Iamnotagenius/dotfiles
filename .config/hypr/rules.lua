@@ -37,18 +37,18 @@ hl.window_rule {
     tag = "menu"
 }
 
-local toggleable_matches = {
-    { class = "^(Alacritty-toggleable|org.pulseaudio.pavucontrol)$" },
-    { title = "ncmpcpp" },
-    { title = "btop" },
-    { title = "calcurse" },
-    { title = "calc" },
+local toggleable_sizes = {
+    [{title = "ncmpcpp"}] = "800 350",
+    [{title = "btop"}] = "800 600",
+    [{class = "org.pulseaudio.pavucontrol"}] = "800 400",
+    [{title = "calcurse"}] = "800 800",
+    [{title = "calc"}] = "800 471",
 }
 
-for _, match in ipairs(toggleable_matches) do
+for match, size in pairs(toggleable_sizes) do
     hl.window_rule {
         match = match,
-        tag = "+toggleable",
+        size = size,
     }
 end
 
@@ -59,7 +59,7 @@ hl.window_rule {
     float = true,
     pin = true,
     animation = "slide",
-    move = "monitor_w-window_w-10 37",
+    move = "monitor_w-805 35",
 }
 
 hl.window_rule {
@@ -94,4 +94,3 @@ hl.window_rule {
     opacity = "1.0 override",
     keep_aspect_ratio = true,
 }
-

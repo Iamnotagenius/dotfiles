@@ -36,7 +36,7 @@
     ],
     // Modules
     "custom/mpd": {
-        "on-click-right": "toggle-tui ncmpcpp",
+        "on-click-right": "hyprctl dispatch 'require(\"toggleable\").toggle(\"ncmpcpp\", \"alacritty -T ncmpcpp -e ncmpcpp\")'",
         "on-click": "mpc toggle > /dev/null",
         "on-scroll-up": "mpc volume +5",
         "on-scroll-down": "mpc volume -5",

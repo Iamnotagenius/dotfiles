@@ -114,7 +114,7 @@
             "critical": 90
         },
         "tooltip": false,
-        "on-click": "toggle-tui --option font.size=10 btop -p 1"
+        "on-click": "hyprctl dispatch 'require(\"toggleable\").toggle(\"btop\", \"alacritty --option font.size=10 -T btop -e btop -p 1\")'",
     },
     "network": {
         "interval": 5,
@@ -175,7 +175,7 @@
                 " "
             ]
         },
-        "on-click": "toggle-window org.pulseaudio.pavucontrol pavucontrol",
+        "on-click": "hyprctl dispatch 'require(\"toggleable\").toggle(\"pavucontrol\", \"pavucontrol\")'",
         "on-click-right": "pulsemixer --toggle-mute"
     },
     "bluetooth": {
@@ -196,7 +196,7 @@
         "tooltip": false
     },
     "custom/menu": {
-        "on-click": "~/.config/waybar/toggle_launcher.sh",
+        "on-click": "wofi",
         "on-click-right": "~/scripts/choosewindow",
         "format": "",
         "tooltip": false
