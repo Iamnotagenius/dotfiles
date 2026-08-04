@@ -38,9 +38,26 @@ for ws, cmd in pairs(autostart) do
     hl.workspace_rule { workspace = ws, on_created_empty = "uwsm app -- " .. cmd }
 end
 
+local function move_ws(ws)
+    local ws = hl.get_workspace(ws)
+    if not ws then
+        return hl.dsp.no_op()
+    end
+    local all_mons = hl.get_monitors()
+    for _, mon in ipairs(all_mons) do
+        if mon.id ~= ws.monitor.id then
+            return hl.dsp.workspace.move({ workspace = ws, monitor = mon })
+        end
+    end
+
+    return hl.dsp.no_op()
+end
+
 --  Switch workspaces with mainMod + [0-9]
 for i = 1, WORKSPACE_COUNT do
     hl.bind(mainMod .. i, hl.dsp.focus({ workspace = i }))
     hl.bind(mainMod .. "SHIFT + " .. i, hl.dsp.window.move({ workspace = i }))
-    hl.bind(mainMod .. "ALT + " .. i, hl.dsp.workspace.move({ monitor = "+1" }))
+    hl.bind(mainMod .. "ALT + " .. i, function ()
+        hl.dispatch(move_ws(i))
+    end)
 end
