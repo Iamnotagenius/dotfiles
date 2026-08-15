@@ -6,9 +6,28 @@ hl.bind(mainMod .. "SHIFT + C", hl.dsp.window.close())
 hl.bind(mainMod .. "C", hl.dsp.exec_cmd("hyprpicker -a"))
 hl.bind(mainMod .. "SHIFT + Q", hl.dsp.exit())
 hl.bind(mainMod .. "Space", hl.dsp.window.float({ action = "toggle" }))
-hl.bind(mainMod .. "P", hl.dsp.exec_cmd("~/.config/rofi/launchers/type-1/launcher.sh -run-command uwsm app -- {cmd}"))
+hl.bind(mainMod .. "P", hl.dsp.exec_cmd("wofi -run-command uwsm app -- {cmd}"))
 hl.bind(mainMod .. "SHIFT + F", hl.dsp.window.fullscreen())
-hl.bind(mainMod .. "M", hl.dsp.window.fullscreen())
+hl.bind(mainMod .. "M", function ()
+    local layouts = { "master", "monocle" }
+    local ws = hl.get_active_workspace()
+    if not ws then
+        return
+    end
+
+    local next_layout
+    for i = 1, #layouts do
+        if layouts[i] == ws.tiled_layout then
+            local next_idx = (i % #layouts) + 1
+            next_layout = layouts[next_idx]
+        end
+    end
+
+    hl.workspace_rule {
+        workspace = tostring(ws.id),
+        layout = next_layout,
+    }
+end)
 hl.bind(mainMod .. "SHIFT + P", hl.dsp.window.pin({ action = "toggle" }))
 -- hl.bind(mainMod .. "ALT + C", hl.dsp.exec_cmd("~/scripts/toggle_chat_transparency"))
 --  Move focus with mainMod + arrow keys
